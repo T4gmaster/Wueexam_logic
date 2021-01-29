@@ -4,7 +4,7 @@ WORKDIR /
 
 
 COPY . ./backend
-RUN pip install -r backend/logic/requirements_logic.txt
+RUN pip install -r backend/requirements_logic.txt
 
 ENV PYTHONPATH /
 
