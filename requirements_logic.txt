@@ -2,7 +2,6 @@ flask
 flask-cors
 flask-sqlalchemy
 Flask-SQLAlchemy
-numpy == 1.19.3
 pandas
 mysqlclient
 openpyxl
