@@ -103,7 +103,7 @@ def pruefungsansicht():
     author: Luc
     """
     if request.method == "GET":
-        j_df = md.download_output("json", table="exam_table")
+        j_df = md.download_output("json", table="exam_plan")
 
     return j_df
 
