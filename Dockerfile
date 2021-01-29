@@ -1,4 +1,4 @@
-FROM python:3.10-rc-buster
+FROM python:3
 
 WORKDIR /
 
