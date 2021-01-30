@@ -77,42 +77,29 @@ def download_output(method:str, table:str):
 
 
 
-#Testdaten
-plan = [
-    {
-    'ID': 1,
-    'Pruefung': 'Anwendungsorientierte Informatik',
-    'Teilnehmer': 50,
-    'Aufsicht': 'Kevin Grosskreuz',
-    'Datum': '14.03.2021',
-    'Uhrzeit': '11:00',
-    'Raum': 'Audimax'
-    },
-    {
-    'ID': 2,
-    'Pruefung': 'Einfuehrung BWL',
-    'Teilnehmer': 90,
-    'Aufsicht': 'Hans Sarpei',
-    'Datum': '14.03.2021',
-    'Uhrzeit': '14:00',
-    'Raum': 'Audimax'
-    },
-    {
-    'ID': 3,
-    'Pruefung': 'Einfuehrung VWL',
-    'Teilnehmer': 69,
-    'Aufsicht': 'Peter Bofinger',
-    'Datum': '16.03.2021',
-    'Uhrzeit': '08:00',
-    'Raum': 'Audimax'
-    },
-    {
-    'ID': 4,
-    'Pruefung': 'Externe Unternehmensrechnung',
-    'Teilnehmer': 28,
-    'Aufsicht': 'Sergio Ramos',
-    'Datum': '17.03.2021',
-    'Uhrzeit': '12:00',
-    'Raum': 'Audimax'
-    }
-]
+###############################################
+def command_solver(cmd: str):
+    """Sending command to solver through writing in solver DB"""
+    if cmd == 'start' or cmd == 'stop' or cmd == 'wait':
+        df = pd.DataFrame([[cmd,"this is a comment"]])
+        df.columns = ["cmd","comment"]
+        dbf.write_df("solver_commands", df)
+        print("Sending ", cmd, " command to solver")
+    else:
+        print("Command ", cmd, " could not be processed.")
+
+def start_solver():
+    """lazycall for start of command_solver"""
+    command_solver("start")
+
+def stop_solver():
+    """lazycall for stop of command_solver"""
+    command_solver("stop")
+
+def get_solver_status():
+    """return status of solver"""
+    df_solver = dbf.read_df("solver_commands")
+    cmd = df_solver['cmd'].iloc[0]
+    print("Current Solver Status: ",cmd)
+
+
