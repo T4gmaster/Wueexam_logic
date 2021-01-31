@@ -20,6 +20,7 @@ Die View wird durch Updates vom Controller gefüllt mit Daten, die aus einem ode
 #our selfmade files/functions
 import backend.functions.FileFunctions as ff
 import backend.functions.DbFunctions as dbf
+from datetime import datetime as dt
 
 import os
 print("Models")
@@ -61,6 +62,7 @@ def download_output(method:str, table:str):
     """
     if table == "exam_plan":
         df = dbf.read_table_exam_plan()
+        df["DATE"] = df["DATE"].dt.strftime("%d-%m-%Y %H:%M:%S")
     else:
         df = dbf.read_table_enrollment_table()
     ########################
@@ -74,45 +76,3 @@ def download_output(method:str, table:str):
     else:
         x =print("Some argument was wrong.")
         return jsonify(x)
-
-
-
-#Testdaten
-plan = [
-    {
-    'ID': 1,
-    'Pruefung': 'Anwendungsorientierte Informatik',
-    'Teilnehmer': 50,
-    'Aufsicht': 'Kevin Grosskreuz',
-    'Datum': '14.03.2021',
-    'Uhrzeit': '11:00',
-    'Raum': 'Audimax'
-    },
-    {
-    'ID': 2,
-    'Pruefung': 'Einfuehrung BWL',
-    'Teilnehmer': 90,
-    'Aufsicht': 'Hans Sarpei',
-    'Datum': '14.03.2021',
-    'Uhrzeit': '14:00',
-    'Raum': 'Audimax'
-    },
-    {
-    'ID': 3,
-    'Pruefung': 'Einfuehrung VWL',
-    'Teilnehmer': 69,
-    'Aufsicht': 'Peter Bofinger',
-    'Datum': '16.03.2021',
-    'Uhrzeit': '08:00',
-    'Raum': 'Audimax'
-    },
-    {
-    'ID': 4,
-    'Pruefung': 'Externe Unternehmensrechnung',
-    'Teilnehmer': 28,
-    'Aufsicht': 'Sergio Ramos',
-    'Datum': '17.03.2021',
-    'Uhrzeit': '12:00',
-    'Raum': 'Audimax'
-    }
-]
