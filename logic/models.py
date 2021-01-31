@@ -22,8 +22,6 @@ import backend.functions.FileFunctions as ff
 import backend.functions.DbFunctions as dbf
 
 import os
-print("Models")
-print(os.getcwd())
 
 #########################################
 # import sqllite3
