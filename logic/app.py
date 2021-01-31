@@ -35,21 +35,6 @@ app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456' # config
 def catch_all(path):
     return render_template("index.html")
 
-# Testschnittstelle
-#kann das weg????
-@app.route('/random')
-def random_number():
-    response = {
-        'randomNumber': randint(1, 100),
-        # 'test': "test"
-    }
-    return jsonify(response)
-
-# Route für Testoutput
-#kann das weg???
-@app.route('/plan')
-def get_plan():
-    return jsonify({'plan':plan})
 
 @app.route('/upload')
 def fun_upload_to_db(path, sql_table):
