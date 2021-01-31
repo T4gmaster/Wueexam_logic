@@ -54,7 +54,7 @@ def download(method="excel"):
     author: Luc (16.01.21)
     tested: yes
     """
-    df = md.download_output(method)
+    df = md.download_output(method, table="exam_plan")
     return df
 
 @app.route('/uploader', methods = ['GET', 'POST'])
