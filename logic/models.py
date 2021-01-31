@@ -60,7 +60,8 @@ def download_output(method:str, table:str):
     """
     if table == "exam_plan":
         df = dbf.read_table_exam_plan()
-        df["DATE"] = df["DATE"].dt.strftime("%d-%m-%Y %H:%M")
+        df["DATE"] = df["DATE"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        #df["DATE"] =df["DATE"].isoformat()
     else:
         df = dbf.read_table_enrollment_table()
     ########################
