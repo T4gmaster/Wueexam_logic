@@ -26,16 +26,10 @@ def write_df(sql_table: str, frame):
 
     engine = create_engine(config_mysql_str)
 
+    print("Writing DF into SQL-Table '%s'" % sql_table)
     with engine.begin() as connection:                                          #open Database connection
         frame.to_sql(sql_table,con=connection, if_exists='replace', index=False) #pandas module to upload entire Dataframe
-        print("Uploaded the Dataframe")
-        print("________"*10**2)
-        print("testing the uploaded data")
-        print("________"*10**2)
-        #not necessary
-        #engine.execute("SELECT * FROM {}".format(sql_table)).fetchall()
-
-        print("Dataframe is uploaded!")
+    print("Done writing")
 
 
 #######################################################

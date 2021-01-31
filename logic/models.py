@@ -23,8 +23,6 @@ import backend.functions.DbFunctions as dbf
 from datetime import datetime as dt
 
 import os
-print("Models")
-print(os.getcwd())
 
 #########################################
 # import sqllite3
