@@ -99,7 +99,7 @@ def anmeldeliste():
 
     return j_df
 
-
+"""
 @app.route("/startsolver", methods=["GET", "POST"])
 def startsolver():
     if request.method == "POST":
@@ -121,3 +121,4 @@ def solverstatus():
 # App starten mit $ python app.py
 if __name__ == '__main__':
    app.run(debug = True, host='0.0.0.0')
+"""
