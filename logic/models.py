@@ -80,7 +80,7 @@ def download_output(method:str, table:str):
 ###############################################
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""
-    if cmd == 'start' or cmd == 'stop' or cmd == 'wait':
+    if cmd == 'start' or cmd == 'stop':
         df = pd.DataFrame([[cmd,"this is a comment"]])
         df.columns = ["cmd","comment"]
         dbf.write_df("solver_commands", df)
@@ -101,3 +101,4 @@ def get_solver_status():
     df_solver = dbf.read_df("solver_commands")
     cmd = df_solver['cmd'].iloc[0]
     print("Current Solver Status: ",cmd)
+    return cmd
