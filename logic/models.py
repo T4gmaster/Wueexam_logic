@@ -42,9 +42,8 @@ def upload_to_db(path: str, sql_table:str):
     #df = pd.read_csv(request.files['file'], encoding='cp1252') #encoding damit utf8 mit windows korrekt gelesen werden kann
 
     df = ff.get_excel(path)
-    #df = DataFrame(df)
-    print(df.describe())
-    #perform automated data cleaning
+    if sql_table == "enrollment_table":
+        df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
     dbf.write_df(sql_table, frame=df)
     return df
