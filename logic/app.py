@@ -88,7 +88,7 @@ def pruefungsansicht():
     author: Luc
     """
     if request.method == "GET":
-        j_df = md.download_output("json", table="exam_plan")
+        j_df = md.download_output("json", table="solved_exam_ov")
 
     return j_df
 
@@ -99,7 +99,7 @@ def anmeldeliste():
 
     return j_df
 
-"""
+
 @app.route("/startsolver", methods=["GET", "POST"])
 def startsolver():
     if request.method == "POST":
@@ -117,7 +117,6 @@ def solverstatus():
     if request.method == "GET":
         md.get_solver_status()
         return jsonify (cmd)
-"""
 
 # App starten mit $ python app.py
 if __name__ == '__main__':

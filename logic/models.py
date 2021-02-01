@@ -64,7 +64,7 @@ def download_output(method:str, table:str):
         df["DATE"] = df["DATE"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
         #df["DATE"] =df["DATE"].isoformat()
     else:
-        df = dbf.read_table_enrollment_table()
+        df = dbf.read_df(table)
     ########################
     if method == "json":
         j_df = df.to_json(orient="records")
