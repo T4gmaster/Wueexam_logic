@@ -75,3 +75,29 @@ def download_output(method:str, table:str):
     else:
         x =print("Some argument was wrong.")
         return jsonify(x)
+
+
+###############################################
+def command_solver(cmd: str):
+    """Sending command to solver through writing in solver DB"""
+    if cmd == 'start' or cmd == 'stop' or cmd == 'wait':
+        df = pd.DataFrame([[cmd,"this is a comment"]])
+        df.columns = ["cmd","comment"]
+        dbf.write_df("solver_commands", df)
+        print("Sending ", cmd, " command to solver")
+    else:
+        print("Command ", cmd, " could not be processed.")
+
+def start_solver():
+    """lazycall for start of command_solver"""
+    command_solver("start")
+
+def stop_solver():
+    """lazycall for stop of command_solver"""
+    command_solver("stop")
+
+def get_solver_status():
+    """return status of solver"""
+    df_solver = dbf.read_df("solver_commands")
+    cmd = df_solver['cmd'].iloc[0]
+    print("Current Solver Status: ",cmd)
