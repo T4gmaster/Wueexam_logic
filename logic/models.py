@@ -20,6 +20,7 @@ Die View wird durch Updates vom Controller gefüllt mit Daten, die aus einem ode
 #our selfmade files/functions
 import backend.functions.FileFunctions as ff
 import backend.functions.DbFunctions as dbf
+import pandas as pd
 from datetime import datetime as dt
 
 import os
