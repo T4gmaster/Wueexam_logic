@@ -1,16 +1,16 @@
-FROM python:3 
+FROM python:3
 
 WORKDIR /
 
 
-COPY . ./backend
+COPY . ./wueexam_logic
 RUN pip install --upgrade pip
-RUN pip install -r /backend/requirements_logic.txt
+RUN pip install -r /wueexam_logic/requirements_logic.txt
 
 ENV PYTHONPATH /
 
 
-WORKDIR /backend/logic
+WORKDIR /wueexam_logic/logic
 
 
 

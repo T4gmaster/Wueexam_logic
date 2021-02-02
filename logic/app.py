@@ -99,7 +99,7 @@ def anmeldeliste():
 
     return j_df
 
-"""
+
 @app.route("/startsolver", methods=["GET", "POST"])
 def startsolver():
     if request.method == "POST":
@@ -112,13 +112,12 @@ def stopsolver():
         md.stop_solver()
         return ('solver was stopped'), 200
 
-@app.route("solverstatus", methods=["GET", "POST"])
+@app.route("/solverstatus", methods=["GET", "POST"])
 def solverstatus():
     if request.method == "GET":
         md.get_solver_status()
         return jsonify (cmd)
-"""
+
 # App starten mit $ python app.py
 if __name__ == '__main__':
    app.run(debug = True, host='0.0.0.0')
-
