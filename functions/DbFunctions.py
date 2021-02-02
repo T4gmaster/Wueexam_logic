@@ -3,7 +3,7 @@
 from sqlalchemy import create_engine
 import pandas as pd
 #need numpy == 1.19.3 , so install it
-from backend.functions import FileFunctions as ff
+from Wueexam_logic.functions import FileFunctions as ff
 import pandas as pd
 
 """for local testing only"""
