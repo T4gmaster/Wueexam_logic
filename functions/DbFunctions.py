@@ -13,7 +13,7 @@ import pandas as pd
 
 #config = ff.read_json_to_dict('../db_config.json')
 #######################################################
-conn_url = "mysql+pymysql://root:root@db/wueexam"  #changed from container name to service name
+conn_url = "mysql://root:root@db/wueexam"  #changed from container name to service name
 engine = create_engine(conn_url)
 #######################################################
 
