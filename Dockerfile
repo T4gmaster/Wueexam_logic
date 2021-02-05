@@ -2,15 +2,14 @@ FROM python:3
 
 WORKDIR /
 
-
-COPY . ./wueexam_logic
+COPY . ./Wueexam_logic
 RUN pip install --upgrade pip
-RUN pip install -r /wueexam_logic/requirements_logic.txt
+RUN pip install -r /Wueexam_logic/requirements_logic.txt
 
 ENV PYTHONPATH /
 
 
-WORKDIR /wueexam_logic/logic
+WORKDIR /Wueexam_logic/logic
 
 
 

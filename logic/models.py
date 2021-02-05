@@ -18,9 +18,9 @@ Die View wird durch Updates vom Controller gefüllt mit Daten, die aus einem ode
 #algorithmus = algorithmus ('./optimization/algorithm.py')
 
 #our selfmade files/functions
-import wueexam_logic.functions.FileFunctions as ff
-import wueexam_logic.functions.DbFunctions as dbf
-import wueexam_logic as pd
+import Wueexam_logic.functions.FileFunctions as ff
+import Wueexam_logic.functions.DbFunctions as dbf
+import Wueexam_logic as pd
 from datetime import datetime as dt
 
 import os
