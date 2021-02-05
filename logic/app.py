@@ -18,7 +18,8 @@ import pandas as pd
 #from werkzeug.utils import secure_filename
 
 
-
+######################################################
+######################################################
 # Output Dateien werden im Frontend gesucht
 app = Flask(__name__,
             static_folder = "../frontend/dist/static", # Verweis auf build server Pfad von FE
@@ -36,16 +37,8 @@ def catch_all(path):
     return render_template("index.html")
 
 
-@app.route('/upload')
-def fun_upload_to_db(path, sql_table):
-    """
-    Takes a path of an excel and turns that into a Dataframe.
-    Then writes the Dataframe to WueExam.sql_table
-    author: Luc (16.01.21)
-    """
-    x= md.upload_to_db(path="C:/Users/becke/Desktop/PrüfungsanmeldungFINAL.xlsx",sql_table="Student_Test")
-    return x
-
+######################################################
+######################################################
 @app.route("/download")
 def download(method="excel"):
     """Return either one of the two:
@@ -57,6 +50,8 @@ def download(method="excel"):
     df = md.download_output(method, table="solved_exam_ov")
     return df
 
+
+######################################################
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_to_df():
     """
@@ -79,7 +74,7 @@ def upload_to_df():
 
         return result
 
-
+######################################################
 @app.route("/pruefungsansicht", methods = ["GET","POST"])
 def pruefungsansicht():
     """Shows all entries from the WueExam.Output and returns it as a json
@@ -92,6 +87,8 @@ def pruefungsansicht():
 
     return j_df
 
+
+######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
 def anmeldeliste():
     if request.method == "GET":
@@ -100,24 +97,34 @@ def anmeldeliste():
     return j_df
 
 
+######################################################
 @app.route("/startsolver", methods=["GET", "POST"])
 def startsolver():
     if request.method == "POST":
         md.start_solver()
         return ('solver has been started'), 202
 
+
+######################################################
 @app.route("/stopsolver", methods=["GET", "POST"])
 def stopsolver():
     if request.method == "POST":
         md.stop_solver()
         return ('solver was stopped'), 200
 
+
+######################################################
 @app.route("/solverstatus", methods=["GET", "POST"])
 def solverstatus():
     if request.method == "GET":
         md.get_solver_status()
         return jsonify (cmd)
 
+
+
+
+######################################################
+######################################################
 # App starten mit $ python app.py
 if __name__ == '__main__':
    app.run(debug = True, host='0.0.0.0')

@@ -29,7 +29,7 @@ def df_to_xls(frame):
     Author:Luc (16.01.21)
     """
     file_name = "Prüfungsplan.xlsx"
-    frame.to_excel(file_name, sheet_name ='Adrian')
+    frame.to_excel(file_name, sheet_name ='Sheet_1')
     print('DataFrame is written to Excel File successfully.')
 
 def df_to_json(dataframe):

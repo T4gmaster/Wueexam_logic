@@ -6,3 +6,5 @@ pandas
 mysqlclient
 openpyxl
 datetime
+pymysql
+cryptography
