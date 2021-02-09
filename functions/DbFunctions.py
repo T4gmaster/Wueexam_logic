@@ -7,14 +7,20 @@ from Wueexam_logic.functions import FileFunctions as ff
 import pandas as pd
 
 """for local testing only"""
-#import pymysql
-#pymysql.install_as_MySQLdb()
+local = False
 
-
-#config = ff.read_json_to_dict('../db_config.json')
 #######################################################
-conn_url = "mysql://root:root@db/wueexam"  #changed from container name to service name
-engine = create_engine(conn_url)
+if not local:
+    conn_url = "mysql://root:root@db/wueexam"
+    engine = create_engine(conn_url)
+else:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+    config = ff.read_json_to_dict('../db_config.json')
+    config_mysql_str = str(config["type"])+str(config["user"])+":"+str(config["password"])+"@"+str(config["host"])+":"+str(config["port"])+"/"+str(config["database"])
+    engine = create_engine(config_mysql_str)
+
+
 #######################################################
 
 def write_df(sql_table: str, frame):
@@ -23,9 +29,6 @@ def write_df(sql_table: str, frame):
         > sql_table: specifies table to be used
         > dataframe: is the dataframe to be uploaded
     """
-    #config_mysql_str = str(config["type"])+str(config["user"])+":"+str(config["password"])+"@"+str(config["host"])+":"+str(config["port"])+"/"+str(config["database"])
-
-    #engine = create_engine(config_mysql_str)
 
     print("Writing DF into SQL-Table '%s'" % sql_table)
     with engine.begin() as connection:                                       #open Database connection
@@ -38,10 +41,6 @@ def write_df(sql_table: str, frame):
 ######################################################
 def read_df(tablename: str):
     """reads from the DB a table defined by str argument into pd.DF and returns it"""
-
-    #config_mysql_str = str(config["type"])+str(config["user"])+":"+str(config["password"])+"@"+str(config["host"])+":"+str(config["port"])+"/"+str(config["database"])
-
-    #engine = create_engine(config_mysql_str)
 
     with engine.connect() as connection:
 

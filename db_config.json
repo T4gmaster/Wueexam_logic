@@ -1,0 +1,7 @@
+{"type" :"mysql://",
+          "user" : "admin",
+          "host" : "aws-wueexam.cgtzaq3jgld6.us-east-2.rds.amazonaws.com",
+          "password" : "WueExam21",
+          "database" : "Wue_Exam",
+          "raise_on_warnings":true,
+          "port": "3306"}
