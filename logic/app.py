@@ -90,36 +90,32 @@ def pruefungsansicht():
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
+"""Gibt eine Json der Anmeldeliste wieder
+"""
 def anmeldeliste():
     if request.method == "GET":
         j_df = md.download_output("json", table= "enrollment_table")
 
     return j_df
 
-
 ######################################################
-@app.route("/startsolver", methods=["GET", "POST"])
-def startsolver():
+#used stuff:
+#request.json https://stackoverflow.com/questions/10434599/get-the-data-received-in-a-flask-request
+@app.route("/update_parameter",methods=["GET","POST"])
+"""Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters .
+input: JSON mit {days, days_before, solver_msg, timelimit}
+output: Werte an die Tabelle wueexam.solver_parameters
+athor: Luc
+"""
+def update_parameter():
     if request.method == "POST":
-        md.start_solver()
-        return ('solver has been started'), 202
+        j = request.json
+        j_df = pd.read_json(j, orient="records")
+        md.upload_to_db(sql_table="solver_parameters",frame=j_df)
 
+        message = print("Parameters updated into solver_parameters")
 
-######################################################
-@app.route("/stopsolver", methods=["GET", "POST"])
-def stopsolver():
-    if request.method == "POST":
-        md.stop_solver()
-        return ('solver was stopped'), 200
-
-
-######################################################
-@app.route("/solverstatus", methods=["GET", "POST"])
-def solverstatus():
-    if request.method == "GET":
-        md.get_solver_status()
-        return jsonify (cmd)
-
+    return message
 
 
 

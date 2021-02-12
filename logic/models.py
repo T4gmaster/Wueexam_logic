@@ -30,7 +30,7 @@ import os
 
 ##########################################
 #Upload Excel to Database
-def upload_to_db(path: str, sql_table:str):
+def upload_to_db(path: str, sql_table:str, *frame):
     """Takes in a local path of an excel.
     Converts that excel to a Dataframe.
     Then upload the dataframe to the WueExam.sql_table-Argument
@@ -41,13 +41,17 @@ def upload_to_db(path: str, sql_table:str):
     """
     #df = pd.read_csv(request.files['file'], encoding='cp1252') #encoding damit utf8 mit windows korrekt gelesen werden kann
 
-    df = ff.get_excel(path)
     if sql_table == "enrollment_table":
+        df = ff.get_excel(path)
         df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
+    df = frame
+    
     dbf.write_df(sql_table, frame=df)
     return df
-
+##########################################
+#Update an existing table
+def update_a_table(sql_table:str)
 
 
 
