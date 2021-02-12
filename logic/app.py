@@ -98,6 +98,32 @@ def anmeldeliste():
 
 
 ######################################################
+@app.route("/startsolver", methods=["GET", "POST"])
+def startsolver():
+    if request.method == "POST":
+        md.start_solver()
+        return ('solver has been started'), 202
+
+
+######################################################
+@app.route("/stopsolver", methods=["GET", "POST"])
+def stopsolver():
+    if request.method == "POST":
+        md.stop_solver()
+        return ('solver was stopped'), 200
+
+
+######################################################
+@app.route("/solverstatus", methods=["GET", "POST"])
+def solverstatus():
+    if request.method == "GET":
+        md.get_solver_status()
+        return jsonify (cmd)
+
+
+
+
+######################################################
 ######################################################
 # App starten mit $ python app.py
 if __name__ == '__main__':
