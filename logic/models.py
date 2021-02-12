@@ -46,13 +46,10 @@ def upload_to_db(path: str, sql_table:str, *frame):
         df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
     df = frame
-    
+
     dbf.write_df(sql_table, frame=df)
     return df
 ##########################################
-#Update an existing table
-def update_a_table(sql_table:str)
-
 
 
 ##########################################

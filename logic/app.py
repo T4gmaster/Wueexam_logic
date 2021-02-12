@@ -90,9 +90,9 @@ def pruefungsansicht():
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
-"""Gibt eine Json der Anmeldeliste wieder
-"""
 def anmeldeliste():
+    """Gibt eine Json der Anmeldeliste wieder
+    """
     if request.method == "GET":
         j_df = md.download_output("json", table= "enrollment_table")
 
@@ -102,12 +102,12 @@ def anmeldeliste():
 #used stuff:
 #request.json https://stackoverflow.com/questions/10434599/get-the-data-received-in-a-flask-request
 @app.route("/update_parameter",methods=["GET","POST"])
-"""Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters .
-input: JSON mit {days, days_before, solver_msg, timelimit}
-output: Werte an die Tabelle wueexam.solver_parameters
-athor: Luc
-"""
 def update_parameter():
+    """Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters
+    input: JSON mit {days, days_before, solver_msg, timelimit}
+    output: Werte an die Tabelle wueexam.solver_parameters
+    athor: Luc
+    """
     if request.method == "POST":
         j = request.json
         j_df = pd.read_json(j, orient="records")
