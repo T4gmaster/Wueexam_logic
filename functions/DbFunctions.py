@@ -1,4 +1,5 @@
-
+#import docker compose environment variable
+import os
 #requirements
 from sqlalchemy import create_engine
 import pandas as pd
@@ -11,7 +12,13 @@ local = False
 
 #######################################################
 if not local:
-    conn_url = "mysql://root:root@db/wueexam"
+    #conn_url = "mysql://root:root@db/wueexam"
+    #conn_url = os.environ["DATABASE_URL"]
+    user = os.environ["MYSQL_USER"]
+    password = os.environ["MYSQL_PASSWORD"]
+    database = os.environ["MYSQL_DATABASE"]
+    host = os.environ["MYSQL_HOST"]
+    conn_url = "mysql://"+user+":"+password+"@"+host+"/"+database
     engine = create_engine(conn_url)
 else:
     import pymysql

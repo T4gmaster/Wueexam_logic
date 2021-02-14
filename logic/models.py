@@ -22,15 +22,23 @@ import Wueexam_logic.functions.FileFunctions as ff
 import Wueexam_logic.functions.DbFunctions as dbf
 import Wueexam_logic as pd
 from datetime import datetime as dt
+import pandas as pd
 
 import os
 
 #########################################
 # import sqllite3
 
+
+
+
+##########################################
+# Part up to the DB
+##########################################
+
 ##########################################
 #Upload Excel to Database
-def upload_to_db(path: str, sql_table:str, *frame):
+def upload_to_db(path: str, sql_table:str):
     """Takes in a local path of an excel.
     Converts that excel to a Dataframe.
     Then upload the dataframe to the WueExam.sql_table-Argument
@@ -45,13 +53,29 @@ def upload_to_db(path: str, sql_table:str, *frame):
         df = ff.get_excel(path)
         df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
-    df = frame
 
     dbf.write_df(sql_table, frame=df)
     return df
+
+
+##########################################
+#Update an existing Table and its values
+def update_table(sql_table:str, json):
+    """Update a table from a Frontend JSON Object entirely
+    """
+
+    df = pd.read_json(json, orient="records")
+
+    dbf.write_df(sql_table, frame=df)
+
+
+
+
+##########################################
+# Part down from the DB
 ##########################################
 
-
+##########################################
 ##########################################
 #get WueExam.Output from db
 def download_output(method:str, table:str):

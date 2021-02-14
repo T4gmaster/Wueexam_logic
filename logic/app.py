@@ -39,19 +39,14 @@ def catch_all(path):
 
 ######################################################
 ######################################################
-@app.route("/download")
-def download(method="excel"):
-    """Return either one of the two:
-    method=json: Then a dataframe is taken from WueExam.Output and changed to json
-    method=excel: Then a dataframe is taken from WueExam.Output and outputted as excel to the root directory.
-    author: Luc (16.01.21)
-    tested: yes
-    """
-    df = md.download_output(method, table="solved_exam_ov")
-    return df
+######################################################
 
 
 ######################################################
+#upload stuff
+######################################################
+
+
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_to_df():
     """
@@ -74,6 +69,31 @@ def upload_to_df():
 
         return result
 
+
+######################################################
+@app.route("/update_parameter",methods=["GET","POST"])
+def update_parameter():
+    """Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters
+    input: JSON mit {days, days_before, solver_msg, timelimit}
+    output: Werte an die Tabelle wueexam.solver_parameters
+    athor: Luc
+    """
+    if request.method == "POST":
+        j = request.json
+        md.update_table(sql_table= "solver_parameters", json=j)
+
+
+    message = print("JSON uploaded to table sucessfully")
+
+    return message
+######################################################
+######################################################
+######################################################
+
+
+
+######################################################
+#Download stuff
 ######################################################
 @app.route("/pruefungsansicht", methods = ["GET","POST"])
 def pruefungsansicht():
@@ -91,11 +111,29 @@ def pruefungsansicht():
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
 def anmeldeliste():
+    """Gibt eine Json der Anmeldeliste wieder
+    """
     if request.method == "GET":
         j_df = md.download_output("json", table= "enrollment_table")
 
     return j_df
 
+######################################################
+@app.route("/download")
+def download(method="excel"):
+    """Return either one of the two:
+    method=json: Then a dataframe is taken from WueExam.Output and changed to json
+    method=excel: Then a dataframe is taken from WueExam.Output and outputted as excel to the root directory.
+    author: Luc (16.01.21)
+    tested: yes
+    """
+    df = md.download_output(method, table="solved_exam_ov")
+    return df
+
+
+
+
+######################################################
 ######################################################
 ######################################################
 # App starten mit $ python app.py
