@@ -13,4 +13,4 @@ WORKDIR /Wueexam_logic/logic
 
 
 
-CMD ["python3","app.py"]
+CMD ["python3","-u","app.py"]
