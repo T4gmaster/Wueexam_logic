@@ -107,6 +107,18 @@ def pruefungsansicht():
 
     return j_df
 
+######################################################
+@app.route("/studentenansicht", methods = ["GET","POST"])
+def studentenansicht():
+    """Shows all entries from the solved Enrollment table and returns it as a json
+    input:
+    output: json object
+    author: Adrian
+    """
+    if request.method == "GET":
+        j_df = md.download_output("json", table="solved_enrollment_table")
+
+    return j_df
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
