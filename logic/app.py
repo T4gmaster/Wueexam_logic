@@ -144,41 +144,53 @@ def download(method="excel"):
     return df
 
 ######################################################
-@app.route("/Anmeldungen_Distribution")
+@app.route("/Anmeldungen_Distribution", methods=["GET", "POST"])
 def anmeldungen_distribution():
     """Test für Ausgabe an Graphen"""
-    df = md.download_output("dataframe", table="enrollment_table")
+    if request.method == "GET":
+        df = md.download_output("dataframe", table="enrollment_table")
 
-    df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
-    df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
+        df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
+        df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
 
-    anzahl_je_anmeldungen = df_exam_grouped.to_dict(orient="list")
-    json_anm = json.dumps(anzahl_je_anmeldungen)
+        anzahl_je_anmeldungen = df_exam_grouped.to_dict(orient="list")
+        json_anm = json.dumps(anzahl_je_anmeldungen)
 
-    return json_anm
+        return json_anm
 
 ######################################################
-@app.route("/Anzahl_Studenten")
+@app.route("/Anzahl_Studenten", methods=["GET", "POST"])
 def anzahl_studenten():
     """String for the amount of students enrolled"""
 
-    df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-    anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
-    j_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
+    if request.method == "GET":
 
-    return json_anzahl
+        df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
+        anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
+        j_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
+
+        return json_anzahl
 
 ######################################################
-@app.route("/Anzahl_Studenten>10")
+@app.route("/Anzahl_Studenten_10", methods=["GET", "POST"])
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
-    df = md.download_output("dataframe", table="enrollment_table")
-    df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')
-    students_over_10 = df_grouped[df_grouped["Anmeldungen"] >= 10]
-    json_students_over_10 = students_over_10.to_json(orient="records")
 
-    return json_students_over_10
+    if request.method == "GET":
+        df = md.download_output("dataframe", table="enrollment_table")
+        df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')
+        students_over_10 = df_grouped[df_grouped["Anmeldungen"] >= 10]
+        json_students_over_10 = students_over_10.to_json(orient="records")
 
+        return json_students_over_10
+
+######################################################
+@app.route("/Fächerliste", methods=["GET", "POST"])
+def faecherliste():
+    """Liste aller Prüfungen mit Teilnehmeranzahl"""
+
+    if request.method == "GET":
+        print("x")
 ######################################################
 ######################################################
 ######################################################
