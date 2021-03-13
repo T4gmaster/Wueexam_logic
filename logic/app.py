@@ -162,9 +162,9 @@ def anzahl_studenten():
     """String über die Anzhal der Studenten"""
 
     df = md.download_output("dataframe", table="enrollment_table")
-    anzahl = df["MATRICULATION_NUMBER"].nunique()
+    anzahl = str(df["MATRICULATION_NUMBER"].nunique())
 
-    return str(anzahl)
+    return anzahl
 ######################################################
 ######################################################
 ######################################################
