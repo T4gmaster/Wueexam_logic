@@ -177,7 +177,7 @@ def anzahl_studenten():
 
 ######################################################
 @app.route("/Anzahl_Pruefungen", methods=["GET", "POST"])
-def anzahl_studenten():
+def anzahl_pruefungen():
     """String for the amount of students enrolled"""
 
     if request.method == "GET":
