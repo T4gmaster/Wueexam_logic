@@ -100,7 +100,7 @@ def download_output(method:str, table:str):
         return confirmation
 
     elif method == "dataframe":
-        df = dbf.read_table_enrollment_table()
+        df = dbf.read_df(table)
         return df
 
     else:
