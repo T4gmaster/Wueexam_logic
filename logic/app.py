@@ -156,6 +156,15 @@ def anmeldungen_distribution():
     json_anm = json.dumps(anzahl_je_anmeldungen)
 
     return json_anm
+
+@app.route("/Anzahl_Studenten")
+def anzahl_studenten():
+    """String über die Anzhal der Studenten"""
+
+    df = md.download_output("dataframe", table="enrollment_table")
+    anzahl = df["MATRICULATION_NUMBER"].nunique()
+
+    return anzahl
 ######################################################
 ######################################################
 ######################################################
