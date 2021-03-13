@@ -104,7 +104,7 @@ def pruefungsansicht():
     author: Luc
     """
     if request.method == "GET":
-        j_df = md.download_output("json", table="solved_exam_ov")
+        json_df = md.download_output("json", table="solved_exam_ov")
 
     return json_df
 
@@ -117,7 +117,7 @@ def studentenansicht():
     author: Adrian
     """
     if request.method == "GET":
-        j_df = md.download_output("json", table="solved_enrollment_table")
+        json_df = md.download_output("json", table="solved_enrollment_table")
 
     return json_df
 
@@ -127,7 +127,7 @@ def anmeldeliste():
     """Gibt eine Json der Anmeldeliste wieder
     """
     if request.method == "GET":
-        j_df = md.download_output("json", table= "enrollment_table")
+        json_df = md.download_output("json", table= "enrollment_table")
 
     return json_df
 
@@ -167,7 +167,7 @@ def anzahl_studenten():
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
         anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
-        j_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
+        json_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
 
         return json_anzahl
 
@@ -190,7 +190,8 @@ def faecherliste():
     """Liste aller Prüfungen mit Teilnehmeranzahl"""
 
     if request.method == "GET":
-        print("x")
+        df = md.download_output("dataframe", table="enrollment_table")
+        df_grouped = df.groupby(["EXAM","EXAM_ID","COURSE"]).size().reset_index(name='Exam')
 ######################################################
 ######################################################
 ######################################################
