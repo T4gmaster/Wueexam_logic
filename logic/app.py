@@ -179,19 +179,24 @@ def anzahl_studenten_10():
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
         df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')
-        students_over_10 = df_grouped[df_grouped["Anmeldungen"] >= 10]
+        students_over_10 = df_grouped[df_grouped["Anmeldungen"] > 5]
         json_students_over_10 = students_over_10.to_json(orient="records")
 
         return json_students_over_10
 
 ######################################################
-@app.route("/Fächerliste", methods=["GET", "POST"])
+@app.route("/Faecherliste", methods=["GET", "POST"])
 def faecherliste():
     """Liste aller Prüfungen mit Teilnehmeranzahl"""
 
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
-        df_grouped = df.groupby(["EXAM","EXAM_ID","COURSE"]).size().reset_index(name='Exam')
+        df_grouped = df.groupby(["EXAM","EXAM_ID","COURSE"]).size().reset_index(name='Teilnehmer')
+        json_df_grouped = df_grouped.to_json(orient="records")
+
+        return json_df_grouped
+
+
 ######################################################
 ######################################################
 ######################################################
