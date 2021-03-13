@@ -10,8 +10,11 @@ from flask import jsonify
 from flask import request
 from flask_cors import CORS
 import pandas as pd
-import json
 
+
+#move to models
+import json
+from datetime import datetime, timedelta
 
 #from flask_sqlalchemy import SQLAlchemy # für DB später
 #from random import * # für Testrouting
@@ -203,6 +206,24 @@ def faecherliste():
 
         return json_df_grouped
 
+######################################################
+@app.route("/Calendar", methods=["GET", "POST"])
+def calendar():
+    df = md.download_output("dataframe", table="solved_exam_ov")
+
+    df["start_date"] = df["day_date"] #+ timedelta(hours=-4)
+    df["end_date"] = df["start_date"] + timedelta(hours=2)      #exam takes 2 hours
+
+    df["start_date"] = df["start_date"].astype(str)
+    df["end_date"]  = df["end_date"].astype(str)
+    df = df.sort_values(by="start_date").reset_index(drop=True)
+    df["text"] = df["exam_name"]
+    df["id"] = df.index
+
+
+    json_exam_plan = df[["id","start_date","end_date","text"]].to_json(orient="records")
+
+    return json_exam_plan
 
 ######################################################
 ######################################################
