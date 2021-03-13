@@ -207,8 +207,8 @@ def faecherliste():
         return json_df_grouped
 
 ######################################################
-@app.route("/Calendar", methods=["GET", "POST"])
-def calendar():
+@app.route("/Kalender", methods=["GET", "POST"])
+def kalender():
     df = md.download_output("dataframe", table="solved_exam_ov")
 
     df["start_date"] = df["day_date"] #+ timedelta(hours=-4)
