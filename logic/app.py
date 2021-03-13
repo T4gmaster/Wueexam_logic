@@ -224,18 +224,18 @@ def faecherliste():
 def kalender():
     df = md.download_output("dataframe", table="solved_exam_ov")
 
-    #df["start_date"] = df["day_date"]
-    #df["end_date"] = df["day_date"] + timedelta(hours=2)      #exam takes 2 hours
+    df["start_date"] = df["day_date"]
+    df["end_date"] = df["day_date"] + timedelta(hours=2)      #exam takes 2 hours
 
-    #df["start_date"] = df["start_date"].astype(str)
-    #df["end_date"]  = df["end_date"].astype(str)
-    #df = df.sort_values(by="start_date").reset_index(drop=True)
-    #df["text"] = df["exam_name"]
-    #df["id"] = df.index
+    df["start_date"] = df["start_date"].astype(str)
+    df["end_date"]  = df["end_date"].astype(str)
+    df = df.sort_values(by="start_date").reset_index(drop=True)
+    df["text"] = df["exam_name"]
+    df["id"] = df.index
 
 
-    #json_exam_plan = df[["id","start_date","end_date","text"]].to_json(orient="records")
-    json_exam_plan = df.to_json(orient="records")
+    json_exam_plan = df[["id","start_date","end_date","text"]].to_json(orient="records")
+    #json_exam_plan = df.to_json(orient="records")
     return json_exam_plan
 
 ######################################################
