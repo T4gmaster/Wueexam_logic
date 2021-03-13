@@ -179,7 +179,8 @@ def anzahl_studenten_10():
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
         df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')
-        students_over_10 = df_grouped[df_grouped["Anmeldungen"] > 5]
+        datat_grouped2 = datat_grouped.rename(columns={"MATRICULATION_NUMBER":"Matrikelnummer","LAST_NAME":"Nachname","FIRST_NAME":"Vorname"})
+        students_over_10 = df_grouped[df_grouped["Anmeldungen"] > 5].sort_values(by="Anmeldungen", ascending = False)
         json_students_over_10 = students_over_10.to_json(orient="records")
 
         return json_students_over_10
