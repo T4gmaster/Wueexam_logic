@@ -106,7 +106,7 @@ def pruefungsansicht():
     if request.method == "GET":
         j_df = md.download_output("json", table="solved_exam_ov")
 
-    return j_df
+    return json_df
 
 ######################################################
 @app.route("/studentenansicht", methods = ["GET","POST"])
@@ -119,7 +119,7 @@ def studentenansicht():
     if request.method == "GET":
         j_df = md.download_output("json", table="solved_enrollment_table")
 
-    return j_df
+    return json_df
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
@@ -129,7 +129,7 @@ def anmeldeliste():
     if request.method == "GET":
         j_df = md.download_output("json", table= "enrollment_table")
 
-    return j_df
+    return json_df
 
 ######################################################
 @app.route("/download")
@@ -166,7 +166,7 @@ def anzahl_studenten():
     anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
     j_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
 
-    return j_anzahl
+    return json_anzahl
 
 ######################################################
 @app.route("/Anzahl_Studenten>10")
