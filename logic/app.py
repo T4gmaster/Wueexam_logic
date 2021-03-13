@@ -150,8 +150,9 @@ def anmeldungen_distribution():
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
 
-        df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
-        df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
+        #df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
+        #df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
+        md.group_by(column="MATRICULATION_NUMBER", index_name="Anmeldungen", df)
 
         anzahl_je_anmeldungen = df_exam_grouped.to_dict(orient="list")
         json_anm = json.dumps(anzahl_je_anmeldungen)

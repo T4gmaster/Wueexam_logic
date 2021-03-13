@@ -102,10 +102,23 @@ def download_output(method:str, table:str):
     elif method == "dataframe":
         df = dbf.read_table_enrollment_table()
         return df
-        
+
     else:
         x =print("Some argument was wrong.")
         return jsonify(x)
+
+##########################################
+#Group a table by certain values
+
+def group_by(column: list, index_name:str, frame):
+    """Groups a table in a dataframe by column(s)
+    """
+    df_grouped = frame.groupby(column).size().reset_index(name=index_name)
+    df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
+
+    return df_exam_grouped
+
+
 
 
 ###############################################
