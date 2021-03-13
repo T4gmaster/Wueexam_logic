@@ -179,13 +179,17 @@ def anzahl_studenten_10():
 
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
-        df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')   #grozup by the 3 columns and name the new one "Anmeldungen"
-        df_grouped2 = df_grouped.rename(columns={"MATRICULATION_NUMBER":"Matrikelnummer","LAST_NAME":"Nachname","FIRST_NAME":"Vorname"}) #rename the 3 first columns
-        
-        students_over_10 = df_grouped2[df_grouped2["Anmeldungen"] > 5].sort_values(by="Anmeldungen", ascending = False)               #order and filter the second grouped data
-        json_students_over_10 = students_over_10.to_json(orient="records")                  #convert to json
+        df = md.anzahl_studenten_10_md(df)
 
-        return json_students_over_10
+        return df
+
+        #df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')   #grozup by the 3 columns and name the new one "Anmeldungen"
+        #df_grouped2 = df_grouped.rename(columns={"MATRICULATION_NUMBER":"Matrikelnummer","LAST_NAME":"Nachname","FIRST_NAME":"Vorname"}) #rename the 3 first columns
+
+        #students_over_10 = df_grouped2[df_grouped2["Anmeldungen"] > 5].sort_values(by="Anmeldungen", ascending = False)               #order and filter the second grouped data
+        #json_students_over_10 = students_over_10.to_json(orient="records")                  #convert to json
+
+        #return json_students_over_10
 
 ######################################################
 @app.route("/Faecherliste", methods=["GET", "POST"])
