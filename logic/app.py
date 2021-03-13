@@ -161,18 +161,11 @@ def anmeldungen_distribution():
 def anzahl_studenten():
     """String for the amount of students enrolled"""
 
-<<<<<<< Updated upstream
-    df = md.download_output("dataframe", table="enrollment_table")
-    anzahl = str(df["MATRICULATION_NUMBER"].nunique())
-
-    return anzahl
-=======
     df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
     anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
     j_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
 
     return j_anzahl
->>>>>>> Stashed changes
 ######################################################
 ######################################################
 ######################################################
