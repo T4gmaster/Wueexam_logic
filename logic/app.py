@@ -191,7 +191,7 @@ def faecherliste():
 
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
-        df_grouped = df.groupby(["EXAM","EXAM_ID","COURSE"]).size().reset_index(name='Teilnehmer')
+        df_grouped = df.groupby(["EXAM","EXAM_ID"]).size().reset_index(name='Teilnehmer')
         json_df_grouped = df_grouped.to_json(orient="records")
 
         return json_df_grouped
