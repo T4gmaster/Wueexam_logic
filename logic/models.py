@@ -92,11 +92,17 @@ def download_output(method:str, table:str):
     ########################
     if method == "json":
         j_df = df.to_json(orient="records")
-        return j_df                           #der output kommt direkt als json und musst nicht mit jsonify geändert werden (@philip)
+        return j_df
+                            #der output kommt direkt als json und musst nicht mit jsonify geändert werden (@philip)
     elif method == "excel":
         ff.df_to_xls(df)
         confirmation = "The File was generated and can be found in the root folder"
         return confirmation
+
+    elif method == "dataframe":
+        df = dbf.read_table_enrollment_table()
+        return df
+        
     else:
         x =print("Some argument was wrong.")
         return jsonify(x)

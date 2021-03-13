@@ -10,6 +10,7 @@ from flask import jsonify
 from flask import request
 from flask_cors import CORS
 import pandas as pd
+import json
 
 
 #from flask_sqlalchemy import SQLAlchemy # für DB später
@@ -142,9 +143,19 @@ def download(method="excel"):
     df = md.download_output(method, table="solved_exam_ov")
     return df
 
+######################################################
+@app.route("/Anmeldungen_Distribution")
+def anmeldungen_distribution():
+    """Test für Ausgabe an Graphen"""
+    df = md.download_output("dataframe", table="enrollment_table")
 
+    df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
+    df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
 
+    anzahl_je_anmeldungen = df_exam_grouped.to_dict(orient="list")
+    json_anm = json.dumps(anzahl_je_anmeldungen)
 
+    return json_anm
 ######################################################
 ######################################################
 ######################################################
