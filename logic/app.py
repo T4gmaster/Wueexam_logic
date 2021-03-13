@@ -167,7 +167,7 @@ def anzahl_studenten():
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
         anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
-        json_anzahl = json.dumps([str(anzahl)])            #convert to string, to list and finally to json
+        json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
 
         return json_anzahl
 
