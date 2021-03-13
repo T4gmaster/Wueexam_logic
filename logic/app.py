@@ -224,8 +224,8 @@ def faecherliste():
 def kalender():
     df = md.download_output("dataframe", table="solved_exam_ov")
 
-    df["start_date"] = df["day_date"]
-    df["end_date"] = df["day_date"] + timedelta(hours=2)      #exam takes 2 hours
+    df["start_date"] = df["day_date"] + timedelta(hours=1)
+    df["end_date"] = df["day_date"] + timedelta(hours=3)      #exam takes 2 hours
 
     df["start_date"] = df["start_date"].astype(str)
     df["end_date"]  = df["end_date"].astype(str)
