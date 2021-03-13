@@ -172,12 +172,12 @@ def anzahl_studenten():
 @app.route("/Anzahl_Studenten>10")
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
-        df = md.download_output("dataframe", table="enrollment_table")
-        df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')
-        students_over_10 = df_grouped[df_grouped["Anmeldungen"] >= 10]
-        json_students_over_10 = students_over_10.to_json(orient="records")
+    df = md.download_output("dataframe", table="enrollment_table")
+    df_grouped = df.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')
+    students_over_10 = df_grouped[df_grouped["Anmeldungen"] >= 10]
+    json_students_over_10 = students_over_10.to_json(orient="records")
 
-        return json_students_over_10
+    return json_students_over_10
 
 ######################################################
 ######################################################
