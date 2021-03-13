@@ -164,7 +164,7 @@ def anzahl_studenten():
     df = md.download_output("dataframe", table="enrollment_table")
     anzahl = df["MATRICULATION_NUMBER"].nunique()
 
-    return anzahl
+    return str(anzahl)
 ######################################################
 ######################################################
 ######################################################
