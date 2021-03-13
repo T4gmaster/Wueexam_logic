@@ -176,6 +176,19 @@ def anzahl_studenten():
         return json_anzahl
 
 ######################################################
+@app.route("/Anzahl_Pruefungen", methods=["GET", "POST"])
+def anzahl_pruefungen():
+    """String for the amount of students enrolled"""
+
+    if request.method == "GET":
+
+        df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
+        anzahl = df["EXAM_ID"].nunique()                      #count unique values of exams
+        json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+
+        return json_anzahl
+
+######################################################
 @app.route("/Anzahl_Studenten_10", methods=["GET", "POST"])
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
