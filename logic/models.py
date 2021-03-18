@@ -63,6 +63,7 @@ def upload_to_db(path: str, sql_table:str):
 def update_table(sql_table:str, type: str, json):
     """Update a table from a Frontend JSON Object entirely
     """
+    print("This is a string")
     print(json)
     print(type(json))                             #delete after succesful testing
     df = pd.read_json(json, orient="records")
