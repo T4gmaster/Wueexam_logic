@@ -100,9 +100,9 @@ def anmeldung_nachtrag():
     """
     if request.method == "POST":
         j = request.json
-        df = md.add_row(j, sql_table="enrollment_table")        #handover json to Models.py
+        md.add_row(json=j, sql_table="enrollment_table")        #handover json to Models.py
 
-        return df
+
 ######################################################
 ######################################################
 ######################################################
@@ -215,7 +215,7 @@ def anzahl_pruefungen():
 ######################################################
 @app.route("/anzahl_anmeldungen", methods=["GET", "POST"])
 def anzahl_anmeldungen():
-    """String for the amount of students enrolled"""
+    """String for the count of students enrolled"""
 
     if request.method == "GET":
 

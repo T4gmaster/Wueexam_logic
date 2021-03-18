@@ -76,7 +76,6 @@ def add_row(sql_table: str, json):
 
     dbf.write_df(sql_table, frame=df, type="append")    #append the row to the Table
 
-    return df
 ##########################################
 # Part down from the DB
 ##########################################
