@@ -226,7 +226,7 @@ def anzahl_anmeldungen():
         return json_anzahl
 
 ######################################################
-@app.route("/anzahl_Studenten_10", methods=["GET", "POST"])
+@app.route("/anzahl_studenten_10", methods=["GET", "POST"])
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
 
