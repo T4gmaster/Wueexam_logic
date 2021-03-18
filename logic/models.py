@@ -54,7 +54,7 @@ def upload_to_db(path: str, sql_table:str):
         df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
 
-    dbf.write_df(sql_table, frame=df)
+    dbf.write_df(sql_table, frame=df, type="replace")
     return df
 
 

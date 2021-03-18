@@ -67,7 +67,7 @@ def upload_to_df():
         #warum orient="columns" wenn es das letzte mal "records" sein sollte?
         path = request.files['file']
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
-        print (df.describe())
+        #print (df.describe())
 
         result = df.to_json(orient='columns')       #this is a json result for frontend
 
@@ -176,6 +176,8 @@ def anmeldungen_distribution():
         return json_anm
 
 ######################################################
+#Single-Value-Return Functions
+######################################################
 @app.route("/anzahl_studenten", methods=["GET", "POST"])
 def anzahl_studenten():
     """String for the amount of students enrolled"""
@@ -224,6 +226,7 @@ def anzahl_studenten_10():
 
         return df
 
+######################################################
 ######################################################
 @app.route("/faecherliste", methods=["GET", "POST"])
 def faecherliste():
