@@ -66,11 +66,17 @@ def update_table(sql_table:str, json):
 
     df = pd.read_json(json, orient="records")
 
-    dbf.write_df(sql_table, frame=df)
+    dbf.write_df(sql_table, frame=df, type="replace")
 
+##########################################
+def add_row(sql_table: str, json):
+    """Add a row to an existing table in the DB
+    """
+    df = pd.read_json(json, orient="records")       #convert json from app.py to pandas DataFrame
 
+    dbf.write_df(sql_table, frame=df, type="append")    #append the row to the Table
 
-
+    return df
 ##########################################
 # Part down from the DB
 ##########################################

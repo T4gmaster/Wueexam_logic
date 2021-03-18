@@ -30,16 +30,19 @@ else:
 
 #######################################################
 
-def write_df(sql_table: str, frame):
+def write_df(sql_table: str, type: str, frame):
     """Uploads a chosen Dataframe to mysql Database
         path: Must be a string of the xls. to upload to the db
-        > sql_table: specifies table to be used
-        > dataframe: is the dataframe to be uploaded
+        > sql_table: specifies DB-table to be used
+        > frame: is the dataframe to be uploaded
+        > type: can be "append" or "replace"
     """
 
     print("Writing DF into SQL-Table '%s'" % sql_table)
-    with engine.begin() as connection:                                       #open Database connection
-        frame.to_sql(sql_table,con=connection, if_exists='replace', index=False) #pandas module to upload entire Dataframe
+
+    with engine.begin() as connection:                                   #open Database connection
+        frame.to_sql(sql_table,con=connection, if_exists=type, index=False) #pandas module to upload entire Dataframe and replace or append
+
     print("Done writing")
 
 
