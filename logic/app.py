@@ -84,7 +84,7 @@ def update_parameter():
     """
     if request.method == "POST":
         j = request.json
-        md.update_table(sql_table= "solver_parameters", json=j)
+        md.update_table(sql_table= "solver_parameters", json=j, type="replace")
 
 
     message = print("JSON uploaded to table sucessfully")
@@ -100,7 +100,7 @@ def anmeldung_nachtrag():
     """
     if request.method == "POST":
         j = request.json
-        md.add_row(json=j, sql_table="enrollment_table")        #handover json to Models.py
+        md.update_table(json=j, sql_table="enrollment_table", type="append")        #handover json to Models.py
 
 
 ######################################################

@@ -60,13 +60,13 @@ def upload_to_db(path: str, sql_table:str):
 
 ##########################################
 #Update an existing Table and its values
-def update_table(sql_table:str, json):
+def update_table(sql_table:str, type: str, json):
     """Update a table from a Frontend JSON Object entirely
     """
 
     df = pd.read_json(json, orient="records")
 
-    dbf.write_df(sql_table, frame=df, type="replace")
+    dbf.write_df(sql_table, frame=df, type=type)
 
 ##########################################
 def add_row(sql_table: str, json):
