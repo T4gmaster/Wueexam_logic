@@ -136,18 +136,6 @@ def studentenansicht():
         json_df = md.download_output("json", table="solved_enrollment_table")
 
     return json_df
-######################################################
-@app.route("/anmeldungen", methods = ["GET","POST"])
-def studentenansicht():
-    """Shows all entries from the solved Enrollment table and returns it as a json
-    input:
-    output: json object
-    author: Adrian
-    """
-    if request.method == "GET":
-        json_df = md.download_output("json", table="solved_enrollment_table")
-
-    return json_df
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
