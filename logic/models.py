@@ -65,7 +65,7 @@ def update_table(sql_table:str, type: str, json):
     """
 
     df = pd.read_json(json, orient="records")
-
+    print("json convertion worked in md.update_table")
     dbf.write_df(sql_table, frame=df, type=type)
 
 ##########################################

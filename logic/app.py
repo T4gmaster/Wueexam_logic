@@ -100,6 +100,7 @@ def anmeldung_nachtrag():
     """
     if request.method == "POST":
         j = request.json
+        print("this works")
         md.update_table(json=j, sql_table="enrollment_table", type="append")        #handover json to Models.py
 
 
