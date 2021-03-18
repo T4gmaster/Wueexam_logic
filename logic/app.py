@@ -92,7 +92,7 @@ def update_parameter():
     return message
 
 ######################################################
-@app.route("/Anmeldung_nachtrag", methods=["GET","POST"])
+@app.route("/anmeldung_nachtrag", methods=["GET","POST"])
 def anmeldung_nachtrag():
     """Upload addtional student enrollments into "enrollment_table" in the db.
     input: Firstname, Lastname, Matr.Nr. , Exam, Exam-ID
@@ -100,7 +100,7 @@ def anmeldung_nachtrag():
     """
     if request.method == "POST":
         j = request.json
-        df = md.add_row(j, sql_table="enrollment_table")        #handover json to Models.py
+        df = md.add_row(j, sql_table="enrollment_table"        #handover json to Models.py
 
         return df
 ######################################################
@@ -136,6 +136,18 @@ def studentenansicht():
         json_df = md.download_output("json", table="solved_enrollment_table")
 
     return json_df
+######################################################
+@app.route("/anmeldungen", methods = ["GET","POST"])
+def studentenansicht():
+    """Shows all entries from the solved Enrollment table and returns it as a json
+    input:
+    output: json object
+    author: Adrian
+    """
+    if request.method == "GET":
+        json_df = md.download_output("json", table="solved_enrollment_table")
+
+    return json_df
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
@@ -160,7 +172,7 @@ def download(method="excel"):
     return df
 
 ######################################################
-@app.route("/Anmeldungen_Distribution", methods=["GET", "POST"])
+@app.route("/anmeldungen_distribution", methods=["GET", "POST"])
 def anmeldungen_distribution():
     """Test für Ausgabe an Graphen"""
     if request.method == "GET":
@@ -176,7 +188,7 @@ def anmeldungen_distribution():
         return json_anm
 
 ######################################################
-@app.route("/Anzahl_Studenten", methods=["GET", "POST"])
+@app.route("/anzahl_studenten", methods=["GET", "POST"])
 def anzahl_studenten():
     """String for the amount of students enrolled"""
 
@@ -189,7 +201,7 @@ def anzahl_studenten():
         return json_anzahl
 
 ######################################################
-@app.route("/Anzahl_Pruefungen", methods=["GET", "POST"])
+@app.route("/anzahl_pruefungen", methods=["GET", "POST"])
 def anzahl_pruefungen():
     """String for the amount of students enrolled"""
 
@@ -200,9 +212,21 @@ def anzahl_pruefungen():
         json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
 
         return json_anzahl
+######################################################
+@app.route("/anzahl_anmeldungen", methods=["GET", "POST"])
+def anzahl_anmeldungen():
+    """String for the amount of students enrolled"""
+
+    if request.method == "GET":
+
+        df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
+        anzahl = len(df)                  #count length of columns in the df
+        json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+
+        return json_anzahl
 
 ######################################################
-@app.route("/Anzahl_Studenten_10", methods=["GET", "POST"])
+@app.route("/anzahl_Studenten_10", methods=["GET", "POST"])
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
 
@@ -213,7 +237,7 @@ def anzahl_studenten_10():
         return df
 
 ######################################################
-@app.route("/Faecherliste", methods=["GET", "POST"])
+@app.route("/faecherliste", methods=["GET", "POST"])
 def faecherliste():
     """Liste aller Prüfungen mit Teilnehmeranzahl"""
 
@@ -225,7 +249,7 @@ def faecherliste():
         return json_df_grouped
 
 ######################################################
-@app.route("/Kalender", methods=["GET", "POST"])
+@app.route("/kalender", methods=["GET", "POST"])
 def kalender():
     df = md.download_output("dataframe", table="solved_exam_ov")
 
