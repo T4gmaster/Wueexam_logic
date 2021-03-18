@@ -100,7 +100,7 @@ def anmeldung_nachtrag():
     """
     if request.method == "POST":
         j = request.json
-        df = md.add_row(j, sql_table="enrollment_table"        #handover json to Models.py
+        df = md.add_row(j, sql_table="enrollment_table")        #handover json to Models.py
 
         return df
 ######################################################
