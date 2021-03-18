@@ -75,7 +75,7 @@ def upload_to_df():
 
 
 ######################################################
-@app.route("/update_parameter",methods=["GET","POST"])
+@app.route("/update_parameter",methods=["GET","POST","OPTIONS"])
 def update_parameter():
     """Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters
     input: JSON mit {days, days_before, solver_msg, timelimit}
@@ -92,7 +92,7 @@ def update_parameter():
     return message
 
 ######################################################
-@app.route("/anmeldung_nachtrag", methods=["GET","POST"])
+@app.route("/anmeldung_nachtrag", methods=["GET","POST","OPTIONS"])
 def anmeldung_nachtrag():
     """Upload addtional student enrollments into "enrollment_table" in the db.
     input: Firstname, Lastname, Matr.Nr. , Exam, Exam-ID
