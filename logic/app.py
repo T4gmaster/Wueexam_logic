@@ -31,7 +31,7 @@ app = Flask(__name__,
 
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-CORS(app, resources={r"/*": {"origins":"*"}})
+cors = CORS(app, resources={r"/*": {"origins":"*"}})
 app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456' # config noch in externe Datei auslagern: https://hackersandslackers.com/configure-flask-applications/
 
 # alle routings werden an die index.html Datei umgeleitet und dann vom vue-router weiterverarbeitet
@@ -72,7 +72,7 @@ def upload_to_df():
 
 
 ######################################################
-@app.route("/update_parameter",methods=["GET","POST","OPTIONS"])
+@app.route("/update_parameter",methods=["GET","POST"])
 def update_parameter():
     """Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters
     input: JSON mit {days, days_before, solver_msg, timelimit}
@@ -90,7 +90,7 @@ def update_parameter():
     return message
 
 ######################################################
-@app.route("/anmeldung_nachtrag", methods=["GET","POST","OPTIONS"])
+@app.route("/anmeldung_nachtrag", methods=["GET","POST"])
 def anmeldung_nachtrag():
     """Upload addtional student enrollments into "enrollment_table" in the db.
     input: Firstname, Lastname, Matr.Nr. , Exam, Exam-ID
