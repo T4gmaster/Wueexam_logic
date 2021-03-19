@@ -23,7 +23,7 @@ import Wueexam_logic.functions.DbFunctions as dbf
 import Wueexam_logic as pd
 from datetime import datetime as dt
 import pandas as pd
-
+import json
 import os
 
 #########################################
@@ -63,9 +63,9 @@ def upload_to_db(path: str, sql_table:str):
 def update_table(sql_table:str, type: str, json):
     """Update a table from a Frontend JSON Object entirely
     """
+ 
+    df = pd.read_json(json.dumps(json), orient="records")
 
-    df = pd.read_json(json, orient="records")
-    
     dbf.write_df(sql_table, frame=df, type=type)
 
 ##########################################
