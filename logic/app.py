@@ -62,9 +62,6 @@ def upload_to_df():
     """
     if request.method == 'POST':
 
-        #df = pd.read_csv(request.files['file'], encoding='cp1252') #encoding damit utf8 mit windows korrekt gelesen werden kann
-        #result = df.to_json(orient='columns')     moved to models.py
-        #warum orient="columns" wenn es das letzte mal "records" sein sollte?
         path = request.files['file']
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
         #print (df.describe())
@@ -83,7 +80,8 @@ def update_parameter():
     athor: Luc
     """
     if request.method == "POST":
-        j = request.json
+        #j = request.json
+        j = request.get_json(force=True)
         md.update_table(sql_table= "solver_parameters", json=j, type="replace")
 
 
