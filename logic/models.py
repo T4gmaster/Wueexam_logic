@@ -68,7 +68,7 @@ def update_table(sql_table:str, type: str, json_file):
 
     df = pd.read_json(j, orient="records", typ="series")
     df.columns = ['EXAM', 'EXAM_ID',"LAST_NAME","FIRST_NAME","MATRICULATION_NUMBER","COURSE"]
-
+    df = df.drop(columns=["0"])
     dbf.write_df(sql_table, frame=df, type=type)
 
 ##########################################
