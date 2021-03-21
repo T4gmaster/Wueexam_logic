@@ -72,13 +72,20 @@ def update_table(sql_table:str, type: str, json_file):
     columns = []
     values = []
     df = pd.DataFrame()
+    #put together the values
     for key,value in json_file.items():
         columns.append(key)
         values.append(value)
         df[key] = [value]
 
-    df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
-    
+    #do this to get the column order right
+    if sql_table == "enrollment_table":
+        df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
+    elif sql_table == "solver_parameters":
+        df = df[["days","days_before","solver_msg","solver_time_limit"]]
+    else:
+        print("nothing to change")
+
     dbf.write_df(sql_table, frame=df, type=type)
 
 ##########################################
@@ -127,16 +134,34 @@ def download_output(method:str, table:str):
 
 ##########################################
 #Group a table by certain values
+def group(groupby: str, index_reset: str, frame):
+    df = frame.groupby(groupby).size().reset_index(name=index_reset)
+
+    return df
+
+
+##########################################
+#Special function for student with >10 enrollments
 
 def anzahl_studenten_10_md(frame):
-    df_grouped = frame.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')   #grozup by the 3 columns and name the new one "Anmeldungen"
+    #df_grouped = frame.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')   #grozup by the 3 columns and name the new one "Anmeldungen"
+    df = group(frame, groupby=["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"], index_reset="Anmeldungen")
+
     df_grouped2 = df_grouped.rename(columns={"MATRICULATION_NUMBER":"Matrikelnummer","LAST_NAME":"Nachname","FIRST_NAME":"Vorname"}) #rename the 3 first columns
 
     students_over_10 = df_grouped2[df_grouped2["Anmeldungen"] > 8].sort_values(by="Anmeldungen", ascending = False)               #order and filter the second grouped data
+
     json_students_over_10 = students_over_10.to_json(orient="records")                  #convert to json
 
     return json_students_over_10
 
+##########################################
+#Count occurences in a Dataframe and return a single value
+def anzahl(frame, column:str):
+    value = frame[column].nunique()
+    json_df = json.dumps(str(value))
+
+    return json_df
 
 
 ###############################################

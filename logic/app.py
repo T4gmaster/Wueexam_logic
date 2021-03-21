@@ -82,6 +82,7 @@ def update_parameter():
     if request.method == "POST":
         #j = request.json
         j = request.get_json(force=True)
+
         md.update_table(sql_table= "solver_parameters", json=j, type="replace")
 
 
@@ -98,9 +99,11 @@ def anmeldung_nachtrag():
     """
     if request.method == "POST":
         j = request.get_json(force= True)
-        print(j)
+
         md.update_table(json_file=j, sql_table="enrollment_table", type="append")        #handover json to Models.py
 
+    message = "Append to \" enrollment_table \" update succesful"
+    return message
 
 ######################################################
 ######################################################
@@ -163,13 +166,16 @@ def download(method="excel"):
 def anmeldungen_distribution():
     """Test für Ausgabe an Graphen"""
     if request.method == "GET":
+
         df = md.download_output("dataframe", table="enrollment_table")
+        df = md.group(df, groupby="MATRICULATION_NUMBER", index_reset="Anmeldungen")
+        #df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
 
-        df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
-        df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
-        #md.group_by(column="MATRICULATION_NUMBER", index_name="Anmeldungen", df)
+        df = md.group(df, groupby="Anmeldungen", index_reset="Anzahl")
+        #df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
 
-        anzahl_je_anmeldungen = df_exam_grouped.to_dict(orient="list")
+
+        anzahl_je_anmeldungen = df.to_dict(orient="list")
         json_anm = json.dumps(anzahl_je_anmeldungen)
 
         return json_anm
@@ -184,8 +190,10 @@ def anzahl_studenten():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
-        json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+        #anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
+        #json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+
+        json_anzahl = md.anzahl(df, column="MATRICULATION_NUMBER")
 
         return json_anzahl
 
@@ -197,8 +205,10 @@ def anzahl_pruefungen():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        anzahl = df["EXAM_ID"].nunique()                      #count unique values of exams
-        json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+        #anzahl = df["EXAM_ID"].nunique()                      #count unique values of exams
+        #json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+
+        json_anzahl= md.anzahl(df, column="EXAM_ID")
 
         return json_anzahl
 ######################################################
