@@ -63,14 +63,22 @@ def upload_to_db(path: str, sql_table:str):
 def update_table(sql_table:str, type: str, json_file):
     """Update a table from a Frontend JSON Object entirely
     """
-    j = json.dumps(json_file)
+    #j = json.dumps(json_file)
+    #df = pd.read_json(j, orient="records", typ="series")
+    #print(df.columns)
+    #df = df.drop(columns=["0"])
+    #df.columns = ['EXAM', 'EXAM_ID',"LAST_NAME","FIRST_NAME","MATRICULATION_NUMBER","COURSE"]
 
+    columns = []
+    values = []
+    df = pd.DataFrame()
+    for key,value in json_file.items():
+        columns.append(key)
+        values.append(value)
+        df[key] = [value]
 
-    df = pd.read_json(j, orient="records", typ="series")
-    print(df.columns)
-    df = df.drop(columns=["0"])
-    df.columns = ['EXAM', 'EXAM_ID',"LAST_NAME","FIRST_NAME","MATRICULATION_NUMBER","COURSE"]
-
+    df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
+    
     dbf.write_df(sql_table, frame=df, type=type)
 
 ##########################################
