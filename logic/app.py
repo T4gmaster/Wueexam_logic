@@ -168,14 +168,14 @@ def anmeldungen_distribution():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")
-        df = md.group(df, groupby="MATRICULATION_NUMBER", index_reset="Anmeldungen")
+        df2 = md.group(df, group_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
         #df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
 
-        df = md.group(df, groupby="Anmeldungen", index_reset="Anzahl")
+        df3 = md.group(df2, group_by="Anmeldungen", index_reset="Anzahl")
         #df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
 
 
-        anzahl_je_anmeldungen = df.to_dict(orient="list")
+        anzahl_je_anmeldungen = df3.to_dict(orient="list")
         json_anm = json.dumps(anzahl_je_anmeldungen)
 
         return json_anm
@@ -243,7 +243,9 @@ def faecherliste():
 
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
-        df_grouped = df.groupby(["EXAM","EXAM_ID"]).size().reset_index(name='Teilnehmer')
+
+        #df_grouped = df.groupby(["EXAM","EXAM_ID"]).size().reset_index(name='Teilnehmer')
+        df_grouped = md.group(df, groupby=["EXAM","EXAM_ID"], index_reset="Teilnehmer" )
         json_df_grouped = df_grouped.to_json(orient="records")
 
         return json_df_grouped
