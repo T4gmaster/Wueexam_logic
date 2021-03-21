@@ -245,7 +245,7 @@ def faecherliste():
         df = md.download_output("dataframe", table="enrollment_table")
 
         #df_grouped = df.groupby(["EXAM","EXAM_ID"]).size().reset_index(name='Teilnehmer')
-        df_grouped = md.group(df, groupby=["EXAM","EXAM_ID"], index_reset="Teilnehmer" )
+        df_grouped = md.group(df, group_it_by=["EXAM","EXAM_ID"], index_reset="Teilnehmer" )
         json_df_grouped = df_grouped.to_json(orient="records")
 
         return json_df_grouped
