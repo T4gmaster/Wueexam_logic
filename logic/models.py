@@ -134,8 +134,8 @@ def download_output(method:str, table:str):
 
 ##########################################
 #Group a table by certain values
-def group(group_by: str, index_reset: str, frame):
-    df = frame.groupby(group_by).size().reset_index(name=index_reset)
+def group(group_it_by: str, index_reset: str, frame):
+    df = frame.groupby(group_it_by).size().reset_index(name=index_reset)
 
     return df
 
@@ -145,7 +145,7 @@ def group(group_by: str, index_reset: str, frame):
 
 def anzahl_studenten_10_md(frame):
     #df_grouped = frame.groupby(["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"]).size().reset_index(name='Anmeldungen')   #grozup by the 3 columns and name the new one "Anmeldungen"
-    df = group(frame, group_by=["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"], index_reset="Anmeldungen")
+    df = group(frame, group_it_by=["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"], index_reset="Anmeldungen")
     df = df.rename(columns={"MATRICULATION_NUMBER":"Matrikelnummer","LAST_NAME":"Nachname","FIRST_NAME":"Vorname"}) #rename the 3 first columns
 
     students_over_10 = df[df["Anmeldungen"] > 8].sort_values(by="Anmeldungen", ascending = False)               #order and filter the second grouped data
