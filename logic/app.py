@@ -83,12 +83,12 @@ def update_parameter():
         #j = request.json
         j = request.get_json(force=True)
 
-        md.update_table(sql_table= "solver_parameters", json=j, type="replace")
+        md.update_table(json_file=j, sql_table= "solver_parameters",type="replace")
 
 
-    message = print("JSON uploaded to table sucessfully")
+    #message = print("JSON uploaded to table sucessfully")
 
-    return message
+    return "solver update_parameter updated sucessfully"
 
 ######################################################
 @app.route("/anmeldung_nachtrag", methods=["GET","POST"])
@@ -102,8 +102,8 @@ def anmeldung_nachtrag():
 
         md.update_table(json_file=j, sql_table="enrollment_table", type="append")        #handover json to Models.py
 
-    message = "Append to \" enrollment_table \" update succesful"
-    return message
+    #message = "Append to \" enrollment_table \" update succesful"
+    return "Append to \" enrollment_table \" update succesful"
 
 ######################################################
 ######################################################
