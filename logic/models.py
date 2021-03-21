@@ -134,7 +134,7 @@ def download_output(method:str, table:str):
 
 ##########################################
 #Group a table by certain values
-def group(group_it_by: str, index_reset: str, frame):
+def group(frame,group_it_by: str, index_reset: str):
     df = frame.groupby(group_it_by).size().reset_index(name=index_reset)
 
     return df
