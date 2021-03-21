@@ -168,10 +168,10 @@ def anmeldungen_distribution():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")
-        df2 = md.group(df, group_it_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
+        df2 = md.group(frame=df, group_it_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
         #df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
 
-        df3 = md.group(df2, group_it_by="Anmeldungen", index_reset="Anzahl")
+        df3 = md.group(frame=df2, group_it_by="Anmeldungen", index_reset="Anzahl")
         #df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
 
 
