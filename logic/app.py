@@ -14,7 +14,6 @@ import pandas as pd
 
 #move to models
 import json
-from datetime import datetime, timedelta
 
 #from flask_sqlalchemy import SQLAlchemy # für DB später
 #from random import * # für Testrouting
