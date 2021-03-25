@@ -10,9 +10,6 @@ from flask import jsonify
 from flask import request
 from flask_cors import CORS
 import pandas as pd
-
-
-#move to models
 import json
 
 #from flask_sqlalchemy import SQLAlchemy # für DB später
@@ -83,11 +80,7 @@ def update_parameter():
         j = request.get_json(force=True)
 
         message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
-
-
-    #message = print("JSON uploaded to table sucessfully")
-
-    return message
+        return message
 
 ######################################################
 @app.route("/anmeldung_nachtrag", methods=["GET","POST"])
@@ -99,10 +92,8 @@ def anmeldung_nachtrag():
     if request.method == "POST":
         j = request.get_json(force= True)
 
-    message = md.update_table(json_file=j, sql_table="enrollment_table", type="append", table="wide")        #handover json to Models.py
-
-    #message = "Append to \" enrollment_table \" update succesful"
-    return message
+        message = md.update_table(json_file=j, sql_table="enrollment_table", type="append", table="wide")        #handover json to Models.py
+        return message
 
 ######################################################
 @app.route("/day_mapping", methods=["GET","POST"])
@@ -182,10 +173,8 @@ def anmeldungen_distribution():
 
         df = md.download_output("dataframe", table="enrollment_table")
         df2 = md.group(frame=df, group_it_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
-        #df_grouped = df.groupby("MATRICULATION_NUMBER").size().reset_index(name='Anmeldungen')
 
         df3 = md.group(frame=df2, group_it_by="Anmeldungen", index_reset="Anzahl")
-        #df_exam_grouped = df_grouped.groupby("Anmeldungen").size().reset_index(name='Anzahl')
 
 
         anzahl_je_anmeldungen = df3.to_dict(orient="list")
@@ -203,8 +192,6 @@ def anzahl_studenten():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        #anzahl = df["MATRICULATION_NUMBER"].nunique()                      #count unique values of students
-        #json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
 
         json_anzahl = md.anzahl(df, column="MATRICULATION_NUMBER")
 
@@ -218,8 +205,6 @@ def anzahl_pruefungen():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        #anzahl = df["EXAM_ID"].nunique()                      #count unique values of exams
-        #json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
 
         json_anzahl= md.anzahl(df, column="EXAM_ID")
 
@@ -257,7 +242,6 @@ def faecherliste():
     if request.method == "GET":
         df = md.download_output("dataframe", table="enrollment_table")
 
-        #df_grouped = df.groupby(["EXAM","EXAM_ID"]).size().reset_index(name='Teilnehmer')
         df_grouped = md.group(df, group_it_by=["EXAM","EXAM_ID"], index_reset="Teilnehmer" )
         json_df_grouped = df_grouped.to_json(orient="records")
 
@@ -272,20 +256,7 @@ def kalender():
     df = md.download_output("dataframe", table="solved_exam_ov")
 
     j = md.kalender_md(frame=df)
-    #df["start_date"] = df["day_date"] + timedelta(hours=1)
-    #df["end_date"] = df["day_date"] + timedelta(hours=3)      #exam takes 2 hours
 
-    #df["start_date"] = df["start_date"].astype(str)
-    #df["end_date"]  = df["end_date"].astype(str)
-    #df = df.sort_values(by="start_date").reset_index(drop=True)
-    #df["text"] = df["exam_name"]
-    #df["id"] = df.index
-
-
-    #json_exam_plan = df[["id","start_date","end_date","text"]].to_json(orient="records")
-    #json_exam_plan = df.to_json(orient="records")
-
-    #return json_exam_plan
     return j
 ######################################################
 ######################################################

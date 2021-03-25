@@ -77,7 +77,7 @@ def update_table(sql_table:str, type: str, table:str, json_file):
         elif sql_table == "solver_parameters":
             df = df[["days","days_before","solver_msg","solver_time_limit"]]
         else:
-            print("nNo column order specified")
+            print("No column order specified")
 
 
     elif table=="long":
@@ -95,7 +95,7 @@ def update_table(sql_table:str, type: str, table:str, json_file):
 
     dbf.write_df(sql_table, frame=df, type=type)
 
-    return "{type}ed {table} table to {sql_table} succesfully."
+    return "{}ed {} table to {} succesfully.".format(type,table,sql_table)
 ##########################################
 # Part down from the DB
 ##########################################
