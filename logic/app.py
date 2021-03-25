@@ -104,15 +104,12 @@ def day_mapping():
     """
 
     if request.method == "POST":
-        #a
-        #j = request.form.getlist('period')
-        #b
-        j = request.form.get('period')
-        #j = request.get_json(force=True)
-        return j
-        #message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
 
-        #return message
+        j = request.get_json(force=True)
+
+        message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
+
+        return message
 ######################################################
 ######################################################
 ######################################################

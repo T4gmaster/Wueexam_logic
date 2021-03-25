@@ -86,10 +86,13 @@ def update_table(sql_table:str, type: str, table:str, json_file):
             values.append(value)
 
         if sql_table == "day_mapping":
-            df["day_ordered"] = keys    #1 column many rows
-            df["date"] = values            #1 column many rows
-            df = df.sort_values(by="day_ordered", ascending = True)  #to make sure everything is in the right order
+            for key,value in json_file.items():
+                list = value
+            df["date"] = pd.to_datetime(list)
+            df["day_ordered"] = df.index+1
             df = df[["day_ordered","date"]]
+
+
     else:
         print("table width not specified")
 
