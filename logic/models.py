@@ -167,9 +167,10 @@ def anzahl(frame, column:str):
 ##########################################
 def kalender_md(frame):
     #new option
-    frame["day_date"] =  pd.to_datetime(frame['day_date'], format='%d%m%y H:M')
+    frame["day_date"] =  pd.to_datetime(frame['day_date'], format='%d%m%y')
     frame["start_date"] = frame["day_date"]
-
+    frame["start_date"] = frame["start_date"] + timedelta(hours=1)
+    frame["start_date"] = frame["start_date"] - timedelta(hours=1)
     frame["end_date"] = frame["start_date"] + timedelta(hours=2)
 
     #old option
