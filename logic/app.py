@@ -83,12 +83,12 @@ def update_parameter():
         #j = request.json
         j = request.get_json(force=True)
 
-        md.update_table(json_file=j, sql_table= "solver_parameters",type="replace")
+        message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
 
 
     #message = print("JSON uploaded to table sucessfully")
 
-    return "solver update_parameter updated sucessfully"
+    return message
 
 ######################################################
 @app.route("/anmeldung_nachtrag", methods=["GET","POST"])
@@ -100,11 +100,25 @@ def anmeldung_nachtrag():
     if request.method == "POST":
         j = request.get_json(force= True)
 
-        md.update_table(json_file=j, sql_table="enrollment_table", type="append")        #handover json to Models.py
+    message = md.update_table(json_file=j, sql_table="enrollment_table", type="append", table="wide")        #handover json to Models.py
 
     #message = "Append to \" enrollment_table \" update succesful"
-    return "Append to \" enrollment_table \" update succesful"
+    return message
 
+######################################################
+@app.route("/day_mapping", methods=["GET","POST"])
+def day_mapping():
+    """Upload the Nr-Data Pair for the exam-phase to the table wueexam.day_mapping.
+    input: JSON with {day_nr1:date, day_nr2:date, ...}
+    output: Upload to Database
+    """
+
+    if request.method == "POST":
+        j = request.get_json(force=True)
+
+        message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
+
+        return message
 ######################################################
 ######################################################
 ######################################################
@@ -253,22 +267,27 @@ def faecherliste():
 ######################################################
 @app.route("/kalender", methods=["GET", "POST"])
 def kalender():
+    """Display planned exams
+    output: json of rows with exam and its date per row
+    """
     df = md.download_output("dataframe", table="solved_exam_ov")
 
-    df["start_date"] = df["day_date"] + timedelta(hours=1)
-    df["end_date"] = df["day_date"] + timedelta(hours=3)      #exam takes 2 hours
+    j = md.kalender_md(frame=df)
+    #df["start_date"] = df["day_date"] + timedelta(hours=1)
+    #df["end_date"] = df["day_date"] + timedelta(hours=3)      #exam takes 2 hours
 
-    df["start_date"] = df["start_date"].astype(str)
-    df["end_date"]  = df["end_date"].astype(str)
-    df = df.sort_values(by="start_date").reset_index(drop=True)
-    df["text"] = df["exam_name"]
-    df["id"] = df.index
+    #df["start_date"] = df["start_date"].astype(str)
+    #df["end_date"]  = df["end_date"].astype(str)
+    #df = df.sort_values(by="start_date").reset_index(drop=True)
+    #df["text"] = df["exam_name"]
+    #df["id"] = df.index
 
 
-    json_exam_plan = df[["id","start_date","end_date","text"]].to_json(orient="records")
+    #json_exam_plan = df[["id","start_date","end_date","text"]].to_json(orient="records")
     #json_exam_plan = df.to_json(orient="records")
-    return json_exam_plan
 
+    #return json_exam_plan
+    return j
 ######################################################
 ######################################################
 ######################################################

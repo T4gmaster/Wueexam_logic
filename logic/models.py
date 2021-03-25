@@ -60,42 +60,42 @@ def upload_to_db(path: str, sql_table:str):
 
 ##########################################
 #Update an existing Table and its values
-def update_table(sql_table:str, type: str, json_file):
+def update_table(sql_table:str, type: str, table:str, json_file):
     """Update a table from a Frontend JSON Object entirely
     """
-    #j = json.dumps(json_file)
-    #df = pd.read_json(j, orient="records", typ="series")
-    #print(df.columns)
-    #df = df.drop(columns=["0"])
-    #df.columns = ['EXAM', 'EXAM_ID',"LAST_NAME","FIRST_NAME","MATRICULATION_NUMBER","COURSE"]
 
-    columns = []
+    keys = []
     values = []
     df = pd.DataFrame()
     #put together the values
-    for key,value in json_file.items():
-        columns.append(key)
-        values.append(value)
-        df[key] = [value]
+    if table =="wide":
+        for key,value in json_file.items():
+            df[key] = [value]
 
-    #do this to get the column order right
-    if sql_table == "enrollment_table":
-        df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
-    elif sql_table == "solver_parameters":
-        df = df[["days","days_before","solver_msg","solver_time_limit"]]
+        if sql_table == "enrollment_table":
+            df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
+        elif sql_table == "solver_parameters":
+            df = df[["days","days_before","solver_msg","solver_time_limit"]]
+        else:
+            print("nNo column order specified")
+
+
+    elif table=="long":
+        for key,value in json_file.items():
+            keys.append(key)
+            values.append(value)
+
+        if sql_table == "day_mapping":
+            df["day_ordered"] = keys    #1 column many rows
+            df["date"] = values            #1 column many rows
+            df = df.sort_values(by="day_ordered", ascending = True)  #to make sure everything is in the right order
+            df = df[["day_ordered","date"]]
     else:
-        print("nothing to change")
+        print("table width not specified")
 
     dbf.write_df(sql_table, frame=df, type=type)
 
-##########################################
-def add_row(sql_table: str, json):
-    """Add a row to an existing table in the DB
-    """
-    df = pd.read_json(json, orient="records")       #convert json from app.py to pandas DataFrame
-
-    dbf.write_df(sql_table, frame=df, type="append")    #append the row to the Table
-
+    return "{type}ed {table} table to {sql_table} succesfully."
 ##########################################
 # Part down from the DB
 ##########################################
@@ -164,6 +164,20 @@ def anzahl(frame, column:str):
 
     return json_df
 
+##########################################
+def kalender_md(frame):
+    frame["start_date"] = frame["day_date"] + timedelta(hours=0)
+    frame["end_date"] = frame["day_date"] + timedelta(hours=3)      #exam takes 2 hours
+
+    frame["start_date"] = frame["start_date"].astype(str)
+    frame["end_date"]  = frame["end_date"].astype(str)
+    frame = df.sort_values(by="start_date").reset_index(drop=True)
+    frame["text"] = frame["exam_name"]
+    frame["id"] = df.index
+
+    json_exam_plan = frame[["id","start_date","end_date","text"]].to_json(orient="records")
+
+    return json_exam_plan
 
 ###############################################
 def command_solver(cmd: str):
