@@ -169,7 +169,7 @@ def kalender_md(frame):
     frame["start_date"] = datetime.strptime(frame["day_date"],'%d-%m-%Y %H::%M')
     #frame["start_date"] = frame["day_date"] + timedelta(hours=1)
     #frame["start_date"] = frame["day_date"] - timedelta(hours=1)
-    frame["end_date"] = frame["day_date"] + timedelta(hours=2)      #exam takes 2 hours
+    frame["end_date"] = frame["start_date"] + timedelta(hours=2)      #exam takes 2 hours
 
     frame["start_date"] = frame["start_date"].astype(str)
     frame["end_date"]  = frame["end_date"].astype(str)
