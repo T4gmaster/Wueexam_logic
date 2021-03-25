@@ -128,7 +128,7 @@ def pruefungsansicht():
     if request.method == "GET":
         json_df = md.download_output("json", table="solved_exam_ov")
 
-    return json_df
+        return json_df
 
 ######################################################
 @app.route("/studentenansicht", methods = ["GET","POST"])
@@ -141,7 +141,7 @@ def studentenansicht():
     if request.method == "GET":
         json_df = md.download_output("json", table="solved_enrollment_table")
 
-    return json_df
+        return json_df
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
@@ -151,7 +151,7 @@ def anmeldeliste():
     if request.method == "GET":
         json_df = md.download_output("json", table= "enrollment_table")
 
-    return json_df
+        return json_df
 
 ######################################################
 @app.route("/download")
@@ -163,6 +163,7 @@ def download(method="excel"):
     tested: yes
     """
     df = md.download_output(method, table="solved_exam_ov")
+
     return df
 
 ######################################################
@@ -173,9 +174,7 @@ def anmeldungen_distribution():
 
         df = md.download_output("dataframe", table="enrollment_table")
         df2 = md.group(frame=df, group_it_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
-
         df3 = md.group(frame=df2, group_it_by="Anmeldungen", index_reset="Anzahl")
-
 
         anzahl_je_anmeldungen = df3.to_dict(orient="list")
         json_anm = json.dumps(anzahl_je_anmeldungen)
@@ -192,7 +191,6 @@ def anzahl_studenten():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-
         json_anzahl = md.anzahl(df, column="MATRICULATION_NUMBER")
 
         return json_anzahl
@@ -205,7 +203,6 @@ def anzahl_pruefungen():
     if request.method == "GET":
 
         df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-
         json_anzahl= md.anzahl(df, column="EXAM_ID")
 
         return json_anzahl
