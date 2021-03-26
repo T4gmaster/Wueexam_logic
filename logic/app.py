@@ -110,6 +110,27 @@ def day_mapping():
         message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
 
         return message
+
+
+######################################################
+@app.route("/heatmap_input", methods=["GET","POST"])
+def heatmap_input():
+    """Function for the calculation of the heatmap
+    input: EXAM_ID
+    output: Json of Values for the heatmap
+    """
+    if request.method == "POST":
+
+        id = request.files["exam_id"]
+
+        #df = md.#nicos heatmap funktion(exam_id = id)
+
+        #json_file = df.to_json(df, orient="records")
+
+        return id
+        #return json_file
+
+
 ######################################################
 ######################################################
 ######################################################
@@ -230,6 +251,9 @@ def anzahl_studenten_10():
         df = md.anzahl_studenten_10_md(df)
 
         return df
+
+
+
 
 ######################################################
 ######################################################

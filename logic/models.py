@@ -86,7 +86,7 @@ def update_table(sql_table:str, type: str, table:str, json_file):
             values.append(value)
 
         if sql_table == "day_mapping":
-            for key,value in json_file.items():
+            for key,value in json_file.items(): #break 
                 list = value
             df["date"] = pd.to_datetime(list)
             df["day_ordered"] = df.index+1
