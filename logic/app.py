@@ -130,7 +130,7 @@ def heatmap_input():
         print("id:",id)
         #json_file = df.to_json(df, orient="records")
 
-        return id
+        return jsonify(id)
         #return json_file
     print("This is a statement")
     return jsonify("No POST request was made",request.get_json(force=True))
