@@ -205,7 +205,7 @@ def heatmap_input_md():
 
     cost_df.append(row)
     cost_df = pd.DataFrame(cost_df)
-    cost_df.iloc[4,6] = 0
+    cost_df.loc[3,3] = 0
     #####dis is a quatsch for fake-daten########
 
     slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 -14:00', '14:00 - 16:00','16:00 - 18:00', '18:00 - 20:00']
