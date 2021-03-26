@@ -81,7 +81,7 @@ def update_parameter():
         j = request.get_json(force=True)
 
         message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
-        return message
+        return jsonify(message)
 
 ######################################################
 @app.route("/anmeldung_nachtrag", methods=["GET","POST"])
@@ -94,7 +94,7 @@ def anmeldung_nachtrag():
         j = request.get_json(force= True)
 
         message = md.update_table(json_file=j, sql_table="enrollment_table", type="append", table="wide")        #handover json to Models.py
-        return message
+        return jsonify(message)
 
 ######################################################
 @app.route("/day_mapping", methods=["GET","POST"])
@@ -110,7 +110,7 @@ def day_mapping():
 
         message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
 
-        return message
+        return jsonify(message)
 
 
 ######################################################
@@ -132,7 +132,8 @@ def heatmap_input():
 
         return id
         #return json_file
-    return jsonify("string")
+    print("This is a statement")
+    return jsonify("No POST request was made",request.get_json(force=True))
 
 ######################################################
 ######################################################
