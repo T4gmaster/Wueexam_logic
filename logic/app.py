@@ -28,7 +28,7 @@ app = Flask(__name__,
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 cors = CORS(app, resources={r"/*": {"origins":"*"}})
-app.config['CORS_HEADERS'] = 'Content-Type'
+#app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456' # config noch in externe Datei auslagern: https://hackersandslackers.com/configure-flask-applications/
 
 # alle routings werden an die index.html Datei umgeleitet und dann vom vue-router weiterverarbeitet
