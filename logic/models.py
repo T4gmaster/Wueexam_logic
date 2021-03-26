@@ -86,7 +86,7 @@ def update_table(sql_table:str, type: str, table:str, json_file):
             values.append(value)
 
         if sql_table == "day_mapping":
-            for key,value in json_file.items(): #break 
+            for key,value in json_file.items(): #break
                 list = value
             df["date"] = pd.to_datetime(list)
             df["day_ordered"] = df.index+1
@@ -191,6 +191,39 @@ def kalender_md(frame):
     json_exam_plan = frame[["id","start_date","end_date","text"]].to_json(orient="records")
 
     return json_exam_plan
+
+###############################################
+def heatmap_input_md():
+    """Takes the exam for which everything is calculated and return the data for the heatmap
+    """
+    import random
+    cost_df = []
+    for t in range(6):
+        row = {}
+        for d in range(14):
+            row[d] = random.random()*100
+
+    cost_df.append(row)
+    cost_df = pd.DataFrame(cost_df)
+    cost_df.iloc[4,6] = 0
+    #####dis is a quatsch for fake-daten########
+
+    slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 -14:00', '14:00 - 16:00','16:00 - 18:00', '18:00 - 20:00']
+    names = [{"name":"f","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]}]
+    dates = ["Montag 01.02.2021","Dienstag 02.02.2021","Mittwoch 03.02.2021","Donnerstag 04.02.2021","Freitag 05.02.2021","Samstag 06.02.2021","Sonntag 07.02.2021","Montag 08.02.2021","Dienstag 09.02.2021","Mittwoch 10.02.2021","Donnerstag 11.02.2021","Freitag 12.02.2021","Samstag 13.02.2021","Sonntag 14.02.2021",]
+    cost_df.columns = dates
+    for i in range(len(cost_df.index)):
+        names[i]["name"] = slots[i]
+        for j in range(len(cost_df.columns)):
+            names[i]["data"].append({"x":cost_df.columns[j],"y":cost_df.iloc[i][j]})
+
+    jsonString = json.dumps(names)
+
+    return jsonString
+
+
+
+
 
 ###############################################
 def command_solver(cmd: str):

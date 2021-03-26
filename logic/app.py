@@ -121,15 +121,41 @@ def heatmap_input():
     output: Json of Values for the heatmap
     """
     if request.method == "POST":
-        print("function is called")
-        js_exam_id = request.get_json(force=True)
-        print("js_exam_id", js_exam_id)
-        #js_exam_id = list(js_exam_id.values())
-        id = js_exam_id["exam_id"]
-        #df = md.#nicos heatmap funktion(exam_id = id)
-        print("js_exam_id[exam_id]:",id)
-        #json_file = df.to_json(df, orient="records")
 
+        js_exam_id = request.get_json(force=True)
+
+        id = js_exam_id["exam_id"]
+        #######Nico I need yo shit here ###############
+        #######Nico I need yo shit here ###############
+        #######Nico I need yo shit here ###############
+        #######Nico I need yo shit here ###############
+
+        #####dis is a quatsch for fake-daten#######
+        #import random
+        #cost_df = []
+        #for t in range(6):
+        #    row = {}
+        #    for d in range(14):
+        #        row[d] = random.random()*100
+
+        #cost_df.append(row)
+        #cost_df = pd.DataFrame(cost_df)
+        #cost_df.iloc[4,6] = 0
+        #####dis is a quatsch for fake-daten########
+
+        #slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 -14:00', '14:00 - 16:00','16:00 - 18:00', '18:00 - 20:00']
+        #names = [{"name":"f","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]}]
+        #dates = ["Montag 01.02.2021","Dienstag 02.02.2021","Mittwoch 03.02.2021","Donnerstag 04.02.2021","Freitag 05.02.2021","Samstag 06.02.2021","Sonntag 07.02.2021","Montag 08.02.2021","Dienstag 09.02.2021","Mittwoch 10.02.2021","Donnerstag 11.02.2021","Freitag 12.02.2021","Samstag 13.02.2021","Sonntag 14.02.2021",]
+        #cost_df.columns = dates
+        #for i in range(len(cost_df.index)):
+        #    names[i]["name"] = slots[i]
+        #    for j in range(len(cost_df.columns)):
+        #        names[i]["data"].append({"x":cost_df.columns[j],"y":cost_df.iloc[i][j]})
+#
+#        jsonString = json.dumps(names)
+        jsonString = md.heatmap_input_md()
+        print(jsonString)
+        return jsonString
 
 #######Nico I need yo shit here ###############
 
