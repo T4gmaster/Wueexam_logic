@@ -203,17 +203,18 @@ def heatmap_input_md():
         for d in range(14):
             row[d] = random.random()*100
 
-    cost_df.append(row)
+        cost_df.append(row)
+
     cost_df = pd.DataFrame(cost_df)
     print(cost_df)
     cost_df.loc[3,3] = 0
     #####dis is a quatsch for fake-daten########
 
-    slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 -14:00', '14:00 - 16:00','16:00 - 18:00', '18:00 - 20:00']
-    names = [{"name":"f","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]}]
+    slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00', '14:00 - 16:00','16:00 - 18:00', '18:00 - 20:00']
+    names = [{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]}]
     dates = ["Montag 01.02.2021","Dienstag 02.02.2021","Mittwoch 03.02.2021","Donnerstag 04.02.2021","Freitag 05.02.2021","Samstag 06.02.2021","Sonntag 07.02.2021","Montag 08.02.2021","Dienstag 09.02.2021","Mittwoch 10.02.2021","Donnerstag 11.02.2021","Freitag 12.02.2021","Samstag 13.02.2021","Sonntag 14.02.2021",]
     cost_df.columns = dates
-    pritn(cost_df)
+    print(cost_df)
     for i in range(len(cost_df.index)):
         names[i]["name"] = slots[i]
         for j in range(len(cost_df.columns)):
