@@ -127,7 +127,7 @@ def heatmap_input():
 
         #json_file = df.to_json(df, orient="records")
 
-        return id
+        return "ok"
         #return json_file
 
 
