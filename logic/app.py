@@ -121,14 +121,15 @@ def heatmap_input():
     output: Json of Values for the heatmap
     """
     if request.method == "POST":
-
+        print("function is called")
         js_exam_id = request.get_json(force=True)
+        print("js_exam_id")
         id = js_exam_id["exam_id"]
         #df = md.#nicos heatmap funktion(exam_id = id)
-
+        print("id:",id)
         #json_file = df.to_json(df, orient="records")
-
-        return "ok"
+        x = {"1":"2"}
+        return x
         #return json_file
 
 
