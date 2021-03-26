@@ -127,8 +127,14 @@ def heatmap_input():
         #js_exam_id = list(js_exam_id.values())
         id = js_exam_id["exam_id"]
         #df = md.#nicos heatmap funktion(exam_id = id)
-        print("id:",id)
+        print("js_exam_id[exam_id]:",id)
         #json_file = df.to_json(df, orient="records")
+
+
+#######Nico I need yo shit here ###############
+
+
+
 
         return jsonify(id)
         #return json_file
