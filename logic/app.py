@@ -161,7 +161,7 @@ def heatmap_correction():
         print("exam_id:",exam_id)
         df = md.download_output(method = "dataframe", table="solved_exam_ov")
 
-        message = md.heatmap_correction_md(value = exam_id, json_file= json_f, frame=df)
+        message = md.heatmap_correction_md(value = exam_id, json_file= json_f, d_frame=df)
         print("all worked")
         return "ok"
 ######################################################

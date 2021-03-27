@@ -240,7 +240,7 @@ def heatmap_input_md(id_str: str):
     return jsonString
 
 ###############################################
-def heatmap_correction_md(value: str, json_file:str, frame):
+def heatmap_correction_md(value: str, json_file:str, d_frame):
     """Takes the exam id and changes the date
     output: datafram with changed value
     """
@@ -255,13 +255,13 @@ def heatmap_correction_md(value: str, json_file:str, frame):
     #print("frame:",frame.head(2))
 
     #get the exams index for changes
-    exam_id_index = frame.index[frame['exam_id'] == value].tolist()[0]
+    exam_id_index = d_frame.index[frame['exam_id'] == value].tolist()[0]
 
     #change the values
-    frame.loc[exam_id_index,"day_date"] = tag
-    frame.loc[exam_id_index,"time_slot"] = str(slot)
-    print("frame changed:", frame.head(5))
-    message = dbf.write_df(frame, sql_table="solved_exam_ov",type="replace")
+    d_frame.loc[exam_id_index,"day_date"] = tag
+    d_frame.loc[exam_id_index,"time_slot"] = str(slot)
+    print("frame changed:", d_frame.head(5))
+    message = dbf.write_df(frame=d_frame, sql_table="solved_exam_ov",type="replace")
     print(message)
     return message
 
