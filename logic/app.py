@@ -58,12 +58,12 @@ def upload_to_df():
     todo: limit upload path (for security reasons) and limit uploadable files to .csv only. Also add error handling.
     """
     if request.method == 'POST':
-
+        print("this is fine")
         path = request.files['file']
-        json_data = request.get_json(force = True)
+        print("path",path)
+        json_data = request.get_json
         print("json data:::",json_data)
-        print(type(path))
-        print(path)
+
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
 
         result = df.to_json(orient='columns')       #this is a json result for frontend
