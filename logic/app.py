@@ -129,8 +129,9 @@ def heatmap_input():
         js_exam_id = request.get_json(force=True)
         print("app.py js_exam_id",js_exam_id)
         global exam_id
-        exam_id = 0000
-        exam_id = js_exam_id["exam_id"]
+        #exam_id = 0000
+        exam_id = js_exam_id["exam_id"]["exam_id"]
+        print(exam_id)
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
@@ -156,9 +157,9 @@ def heatmap_correction():
     if request.method == "POST":
         #print(exam_id)
         json_f = request.get_json(force=True)
-        print("json_f",json_f)
-        print("exam_id",exam_id)
-        df = md.download_output(method = dataframe, table="solved_exam_ov")
+        print("json_f:",json_f)
+        print("exam_id:",exam_id)
+        df = md.download_output(method = "dataframe", table="solved_exam_ov")
 
         message = md.heatmap_correction_md(value = exam_id, json_file= json_f, frame=df)
         print("all worked")
