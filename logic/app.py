@@ -117,7 +117,8 @@ def day_mapping():
 
 
 ######################################################
-
+global exam_id
+exam_id ="default value - please change me"
 @app.route("/heatmap_input", methods=["GET","POST"])
 def heatmap_input():
     """Function for the calculation of the heatmap
@@ -128,7 +129,7 @@ def heatmap_input():
 
         js_exam_id = request.get_json(force=True)
         global exam_id
-        
+
         exam_id = js_exam_id["exam_id"]["exam_id"]
         print("exam_id",exam_id)
         #######Nico I need yo shit here ###############
