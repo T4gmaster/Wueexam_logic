@@ -261,8 +261,8 @@ def heatmap_correction_md(value: str, json_file:str, frame):
     frame.loc[exam_id_index,"day_date"] = tag
     frame.loc[exam_id_index,"time_slot"] = str(slot)
     print("frame changed:", frame.head(5))
-
-    message = "ok"
+    message = dbf.write_df(sql_table="solved_exam_ov",type=replace, frame)
+    print(message)
     return message
 
 
