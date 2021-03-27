@@ -127,11 +127,10 @@ def heatmap_input():
     if request.method == "POST":
 
         js_exam_id = request.get_json(force=True)
-        print("app.py js_exam_id",js_exam_id)
         global exam_id
-        #exam_id = 0000
+        
         exam_id = js_exam_id["exam_id"]["exam_id"]
-        print(exam_id)
+        print("exam_id",exam_id)
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
