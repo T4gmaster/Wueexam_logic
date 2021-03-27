@@ -246,7 +246,7 @@ def heatmap_correction_md(value: str, json_file:str, frame):
     """
     print("md json_file:",json_file)
     print("value:( exam_id global::)",value)
-    print("frame:",frame.head(2)
+    print("frame:",frame.head(2))
 
     message = "ok"
     return message
