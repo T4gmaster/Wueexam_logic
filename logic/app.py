@@ -117,6 +117,9 @@ def day_mapping():
 
 
 ######################################################
+global exam_id
+exam_id = 00000
+
 @app.route("/heatmap_input", methods=["GET","POST"])
 def heatmap_input():
     """Function for the calculation of the heatmap
@@ -126,8 +129,8 @@ def heatmap_input():
     if request.method == "POST":
 
         js_exam_id = request.get_json(force=True)
-
-        id = js_exam_id["exam_id"]
+        global exam_id
+        exam_id = js_exam_id["exam_id"]
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
@@ -135,20 +138,30 @@ def heatmap_input():
 
 
         jsonString = md.heatmap_input_md()
-        print(jsonString)
+        #print(jsonString)
         return jsonString
 
-#######Nico I need yo shit here ###############
 
-
-
-
-        return jsonify(id)
+        #return jsonify(id)
         #return json_file
     print("This is a statement")
     return jsonify("No POST request was made",request.get_json(force=True))
-
 ######################################################
+
+@app.route("/heatmap_correction", methods=["GET","POST"])
+"""Change exam date after selection in the heatmap
+"""
+def heatmap_correction():
+    if request.method == "POST":
+        #print(exam_id)
+        json_f = request.get_json(force=True)
+        print("json_f",json_f)
+        print("exam_id",exam_id)
+        df = md.download_output(method = dataframe, table="solved_exam_ov")
+
+        message = md.heatmap_correction_md(value = exam_id, json_file= json_f, frame=df)
+        print("all worked")
+        return "ok"
 ######################################################
 ######################################################
 

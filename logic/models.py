@@ -211,6 +211,8 @@ def heatmap_input_md():
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
     import random
+
+    exam_id =
     cost_df = []
     for t in range(6):
         row = {}
@@ -236,6 +238,16 @@ def heatmap_input_md():
 
     return jsonString
 
+###############################################
+def heatmap_correction_md(value: str, json_file:str, frame):
+        """Takes the exam id and changes the date
+        output: datafram with changed value
+        """
+        print("md json_file",json_file)
+        print("value",value)
+        print("frame",frame)
+
+        return "ok"
 
 
 
