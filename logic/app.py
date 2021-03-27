@@ -61,7 +61,7 @@ def upload_to_df():
         print("this is fine")
         path = request.files['file']
         print("path",path)
-        json_data = request.get_json
+        json_data = request.get_json()
         print("json data:::",json_data)
 
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
