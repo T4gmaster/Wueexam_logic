@@ -64,7 +64,8 @@ def upload_to_db(path: str, sql_table:str):
         for i in range(len(df.columns)):
             df2 = df2.rename(columns={matches[i][1]:matches[i][0]})
         #df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
-
+        print("df cols: ", df.columns)
+        print("df2 cols:", df2.columns)
 
     dbf.write_df(sql_table, frame=df2, type="replace")
 
@@ -232,7 +233,6 @@ def heatmap_input_md():
             names[i]["data"].append({"x":cost_df.columns[j],"y":cost_df.iloc[i][j]})
 
     jsonString = json.dumps(names)
-    print(jsonString)
 
     return jsonString
 
