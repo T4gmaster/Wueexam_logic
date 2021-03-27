@@ -248,23 +248,19 @@ def heatmap_correction_md(value: str, json_file:str, frame):
     #get values out of the json
     slot = json_file["data"]["Slot"]
     tag = json_file["data"]["Tag"]
-    print("slot::",slot)
-    print("tag::",tag)
+    #split the day into a date
+    tag = datetime.strptime(tag.split()[1], '%d.%m.%Y')
 
-    print("value:( exam_id global::)",value)
-    print("frame:",frame.head(2))
+    #print("value:( exam_id global::)",value)
+    #print("frame:",frame.head(2))
 
     #get the exams index for changes
-    exam_id_list = frame.index[frame['exam_id'] == value].tolist()
-    print("exam_id_list::",exam_id_list)
-    exam_id_index = exam_id_list[0]
-    print("exam_id_index::",exam_id_index)
-
+    exam_id_index = frame.index[frame['exam_id'] == value].tolist()[0]
 
     #change the values
-    frame.loc[exam_id_index,"day_date"] = str(tag)
+    frame.loc[exam_id_index,"day_date"] = tag
     frame.loc[exam_id_index,"time_slot"] = str(slot)
-    print("frame changed:", frame.head(2))
+    print("frame changed:", frame.head(5))
 
     message = "ok"
     return message
