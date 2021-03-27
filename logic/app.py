@@ -61,7 +61,7 @@ def upload_to_df():
 
         path = request.files['file']
         print("path",path)
-        json_data = request.json
+        json_data = request.form
         print("json data:::",json_data)
 
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
@@ -117,8 +117,6 @@ def day_mapping():
 
 
 ######################################################
-global exam_id
-exam_id = 00000
 
 @app.route("/heatmap_input", methods=["GET","POST"])
 def heatmap_input():
@@ -129,7 +127,9 @@ def heatmap_input():
     if request.method == "POST":
 
         js_exam_id = request.get_json(force=True)
+        print("app.py js_exam_id",js_exam_id)
         global exam_id
+        exam_id = 0000
         exam_id = js_exam_id["exam_id"]
         #######Nico I need yo shit here ###############
         #######Nico I need yo shit here ###############
@@ -137,7 +137,7 @@ def heatmap_input():
         #######Nico I need yo shit here ###############
 
 
-        jsonString = md.heatmap_input_md()
+        jsonString = md.heatmap_input_md(id_str=exam_id)
         #print(jsonString)
         return jsonString
 
@@ -149,9 +149,10 @@ def heatmap_input():
 ######################################################
 
 @app.route("/heatmap_correction", methods=["GET","POST"])
-"""Change exam date after selection in the heatmap
-"""
+
 def heatmap_correction():
+    """Change exam date after selection in the heatmap
+    """
     if request.method == "POST":
         #print(exam_id)
         json_f = request.get_json(force=True)

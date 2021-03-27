@@ -207,9 +207,10 @@ def kalender_md(frame):
     return json_exam_plan
 
 ###############################################
-def heatmap_input_md():
+def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
+    print("id_str::",id_str)
     import random
 
     exam_id =
