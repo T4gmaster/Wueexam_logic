@@ -63,7 +63,6 @@ def upload_to_df():
         print(type(path))
         print(path)
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
-        #print (df.describe())
 
         result = df.to_json(orient='columns')       #this is a json result for frontend
 
