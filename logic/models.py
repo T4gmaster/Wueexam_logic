@@ -213,7 +213,7 @@ def heatmap_input_md(id_str: str):
     print("id_str::",id_str)
     import random
 
-    exam_id =
+    #exam_id =
     cost_df = []
     for t in range(6):
         row = {}
