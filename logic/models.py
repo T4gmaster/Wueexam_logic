@@ -26,6 +26,7 @@ import pandas as pd
 import json
 import os
 from datetime import datetime, timedelta
+from fuzzywuzzy import process, fuzz
 #########################################
 # import sqllite3
 
@@ -51,11 +52,24 @@ def upload_to_db(path: str, sql_table:str):
 
     if sql_table == "enrollment_table":
         df = ff.get_excel(path)
-        df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
+        matches = []
+        columns_standard = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
+
+            for i in range(len(columns_standard)):
+                result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
+
+                matches.append((columns_standard[i],result[0][0]))
 
 
-    dbf.write_df(sql_table, frame=df, type="replace")
-    return df
+        df2 = df.copy()
+        for i in range(len(df.columns)):
+            df2 = df2.rename(columns={matches[i][1]:matches[i][0]})
+        #df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
+
+
+    dbf.write_df(sql_table, frame=df2, type="replace")
+
+    return df2
 
 
 ##########################################

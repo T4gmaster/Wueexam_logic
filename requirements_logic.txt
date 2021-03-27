@@ -8,3 +8,4 @@ openpyxl
 datetime
 pymysql
 cryptography
+fuzzywuzzy
