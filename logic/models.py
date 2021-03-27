@@ -48,17 +48,16 @@ def upload_to_db(path: str, sql_table:str):
     > sql_table: Table to which the Dataframe should be uploaded to
     author: Luc  (16.01.21)
     """
-    #df = pd.read_csv(request.files['file'], encoding='cp1252') #encoding damit utf8 mit windows korrekt gelesen werden kann
 
     if sql_table == "enrollment_table":
         df = ff.get_excel(path)
         matches = []
         columns_standard = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
-            for i in range(len(columns_standard)):
-                result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
+        for i in range(len(columns_standard)):
+            result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
 
-                matches.append((columns_standard[i],result[0][0]))
+            matches.append((columns_standard[i],result[0][0]))
 
 
         df2 = df.copy()
