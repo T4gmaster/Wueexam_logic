@@ -215,7 +215,7 @@ def heatmap_input_md():
     for t in range(6):
         row = {}
         for d in range(14):
-            row[d] = random.random()*100
+            row[d] = int(random.random()*100)
 
         cost_df.append(row)
 

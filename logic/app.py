@@ -60,6 +60,8 @@ def upload_to_df():
     if request.method == 'POST':
 
         path = request.files['file']
+        print(type(path))
+        print(path)
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
         #print (df.describe())
 
