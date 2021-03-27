@@ -255,7 +255,7 @@ def heatmap_correction_md(value: str, json_file:str, d_frame):
     #print("frame:",frame.head(2))
 
     #get the exams index for changes
-    exam_id_index = d_frame.index[frame['exam_id'] == value].tolist()[0]
+    exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
 
     #change the values
     d_frame.loc[exam_id_index,"day_date"] = tag
