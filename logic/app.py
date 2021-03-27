@@ -60,6 +60,8 @@ def upload_to_df():
     if request.method == 'POST':
 
         path = request.files['file']
+        json_data = request.get_json(force = True)
+        print("json data:::",json_data)
         print(type(path))
         print(path)
         df = md.upload_to_db(path= path, sql_table="enrollment_table")
