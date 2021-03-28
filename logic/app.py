@@ -282,14 +282,19 @@ def anzahl_studenten_10():
         j = request.get_json(force=True)
         print("request j:",j)
         print("type of j:",type(j))
+        print("j["Anmeldung"]",j["Anmeldung"])
+        j_int = int(j["Anmeldung"])
+        print("type..",type(int(j["Anmeldung"]))
+        print("type j_int",j_int)
         #j = int(request.get_json(force=True)["Anmeldung"])
         df = md.download_output("dataframe", table="enrollment_table")
         print("downloaded df",df)
         #df = md.anzahl_studenten_10_md(df,param=j)
         print("df students over x:",df)
+
         return "ok"
         #return df
-
+    return "ok"
 
 
 
