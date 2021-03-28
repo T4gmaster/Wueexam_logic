@@ -284,10 +284,10 @@ def anzahl_studenten_10():
         j_int = j["Anmeldung"]
         df = md.download_output("dataframe", table="enrollment_table")
 
-        df = md.anzahl_studenten_10_md(df,param=j_int)
-        print(df)
+        json_file = md.anzahl_studenten_10_md(df,param=j_int)
+        print(json_file)
 
-        return df
+        return json_file
 
     return "ok"
 
