@@ -278,7 +278,7 @@ def anzahl_anmeldungen():
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
 
-    if request.method == "GET":
+    if request.method == "POST":
         j = request.get_json(force=True)
         print("request:",j)
         print("type of j:",type(j))
