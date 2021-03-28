@@ -246,8 +246,8 @@ def heatmap_correction_md(value: str, json_file:str, d_frame):
     """
     print("md json_file:",json_file)
     #get values out of the json
-    slot = json_file["data"]["Slot"]
-    tag = json_file["data"]["Tag"]
+    slot = json_file["Slot"]
+    tag = json_file["Tag"]
     #split the day into a date
     tag = datetime.strptime(tag.split()[1], '%d.%m.%Y')
 
