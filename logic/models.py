@@ -165,10 +165,10 @@ def anzahl_studenten_10_md(df_frame, param:str):
     df = group(frame=df_frame, group_it_by=["MATRICULATION_NUMBER","LAST_NAME","FIRST_NAME"], index_reset="Anmeldungen")
     df = df.rename(columns={"MATRICULATION_NUMBER":"Matrikelnummer","LAST_NAME":"Nachname","FIRST_NAME":"Vorname"}) #rename the 3 first columns
 
-    students_over_10 = df[df["Anmeldungen"] > param].sort_values(by="Anmeldungen", ascending = False)               #order and filter the second grouped data
-    json_students_over_10 = students_over_10.to_json(orient="records")                  #convert to json
+    students_over_x = df[df["Anmeldungen"] > param].sort_values(by="Anmeldungen", ascending = False)               #order and filter the second grouped data
+    json_students_over_x = students_over_x.to_json(orient="records")                  #convert to json
 
-    return json_students_over_10
+    return json_students_over_x
 
 ##########################################
 #Count occurences in a Dataframe and return a single value
