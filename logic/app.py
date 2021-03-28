@@ -285,7 +285,7 @@ def anzahl_studenten_10():
         df = md.download_output("dataframe", table="enrollment_table")
 
         df = md.anzahl_studenten_10_md(df,param=j_int)
-
+        print(df)
 
         return df
 
