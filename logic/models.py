@@ -244,28 +244,31 @@ def heatmap_correction_md(value: str, json_file:str, d_frame):
     """Takes the exam id and changes the date
     output: datafram with changed value
     """
-    print("md json_file:",json_file)
-    #get values out of the json
-    slot = json_file["Slot"]
-    tag = json_file["Tag"]
-    #split the day into a date
-    tag = datetime.strptime(tag.split()[1], '%d.%m.%Y')
+    try:
+        print("md json_file:",json_file)
+        #get values out of the json
+        slot = json_file["Slot"]
+        tag = json_file["Tag"]
+        #split the day into a date
+        tag = datetime.strptime(tag.split()[1], '%d.%m.%Y')
 
-    #print("value:( exam_id global::)",value)
-    #print("frame:",frame.head(2))
+        #print("value:( exam_id global::)",value)
+        #print("frame:",frame.head(2))
 
-    #get the exams index for changes
-    exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
+        #get the exams index for changes
+        exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
 
-    #change the values
-    d_frame.loc[exam_id_index,"day_date"] = tag
-    d_frame.loc[exam_id_index,"time_slot"] = str(slot)
-    print("frame changed:", d_frame.head(5))
-    message = dbf.write_df(frame=d_frame, sql_table="solved_exam_ov",type="replace")
-    print(message)
-    return message
+        #change the values
+        d_frame.loc[exam_id_index,"day_date"] = tag
+        d_frame.loc[exam_id_index,"time_slot"] = str(slot)
+        print("frame changed:", d_frame.head(5))
+        message = dbf.write_df(frame=d_frame, sql_table="solved_exam_ov",type="replace")
+        print(message)
+        return message
 
-
+    except:
+        print("Oops there was an error in the Models file")
+        return "not ok"
 
 
 ###############################################
