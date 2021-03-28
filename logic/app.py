@@ -285,7 +285,7 @@ def anzahl_studenten_10():
         #j = int(request.get_json(force=True)["Anmeldung"])
         df = md.download_output("dataframe", table="enrollment_table")
         print("downloaded df",df)
-        df = md.anzahl_studenten_10_md(df,param=j)
+        #df = md.anzahl_studenten_10_md(df,param=j)
         print("df students over x:",df)
         return "ok"
         #return df
