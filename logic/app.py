@@ -63,7 +63,8 @@ def upload_to_df():
 
             path = request.files['file']
             print("path",path)
-            json_data = request.form
+            json_data = request.form("mapping")
+            print("json data:::",json_data)
             print("json data:::",json_data)
 
             df = md.upload_to_db(path= path, sql_table="enrollment_table")
@@ -71,10 +72,14 @@ def upload_to_df():
             result = df.to_json(orient='columns')       #this is a json result for frontend
 
             return result
-
     except:
         print("There was a problem, please try again")
         return "An error occurred"
+
+
+j = ([('mapping', '{"EXAM":"test","EXAM_ID":"test","LAST_NAME":"test","FIRST_NAME":"test","MATRICUALTAION_NUMBER":"test","COURSE":"test"}')])
+j_s = j[0][1]
+print(j[0][1][2:5])
 
 ######################################################
 @app.route("/update_parameter",methods=["GET","POST"])
