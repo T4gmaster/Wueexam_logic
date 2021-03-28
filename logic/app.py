@@ -64,7 +64,8 @@ def upload_to_df():
             path = request.files['file']
             print("path",path)
             json_data = request.form
-            print("json data:::",json_data[0][1])
+            print("json_data",json_data)
+            print("json data[0]:::",json_data[0])
             #print("json data:::",json_data)
 
             j_s = json.loads(json_data[0][1])
@@ -98,13 +99,18 @@ def update_parameter():
     output: Werte an die Tabelle wueexam.solver_parameters
     athor: Luc
     """
-    if request.method == "POST":
-        #j = request.json
-        j = request.get_json(force=True)
+    try:
 
-        message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
-        return jsonify(message)
+        if request.method == "POST":
+            #j = request.json
+            j = request.get_json(force=True)
 
+            message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
+            return jsonify(message)
+
+    except:
+        print("a Problem occured.")
+        return "not ok"
 ######################################################
 @app.route("/anmeldung_nachtrag", methods=["GET","POST"])
 def anmeldung_nachtrag():
@@ -112,12 +118,18 @@ def anmeldung_nachtrag():
     input: Firstname, Lastname, Matr.Nr. , Exam, Exam-ID
     output: Firstname, Lastname, Matr.Nr. , Exam, Exam-ID to DB
     """
-    if request.method == "POST":
-        j = request.get_json(force= True)
+    try:
 
-        message = md.update_table(json_file=j, sql_table="enrollment_table", type="append", table="wide")        #handover json to Models.py
-        return jsonify(message)
+        if request.method == "POST":
+            j = request.get_json(force= True)
+            message = md.update_table(json_file=j, sql_table="enrollment_table", type="append", table="wide")        #handover json to Models.py
 
+            return jsonify(message)
+
+    except:
+        print("there was a problem")
+
+        return "not ok"
 ######################################################
 @app.route("/day_mapping", methods=["GET","POST"])
 def day_mapping():
