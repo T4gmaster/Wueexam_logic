@@ -280,14 +280,15 @@ def anzahl_studenten_10():
 
     if request.method == "POST":
         j = request.get_json(force=True)
-        print("request:",j)
+        print("request j:",j)
         print("type of j:",type(j))
         #j = int(request.get_json(force=True)["Anmeldung"])
         df = md.download_output("dataframe", table="enrollment_table")
         print("downloaded df",df)
         df = md.anzahl_studenten_10_md(df,param=j)
         print("df students over x:",df)
-        return df
+        return "ok"
+        #return df
 
 
 
