@@ -65,6 +65,8 @@ def upload_to_df():
             print("path",path)
             json_data = request.form
             print("json_data",json_data)
+            x = json.loads(json_data)
+            print("json loads data:",x)
             print("json data[0]:::",json_data[0])
             #print("json data:::",json_data)
 
@@ -85,11 +87,6 @@ def upload_to_df():
     except:
         print("There was a problem, please try again")
         return "An error occurred"
-
-
-j = ([('mapping', '{"EXAM":"test","EXAM_ID":"test","LAST_NAME":"test","FIRST_NAME":"test","MATRICUALTAION_NUMBER":"test","COURSE":"test"}')])
-j_s = j[0][1]
-print(j[0][1][2:5])
 
 ######################################################
 @app.route("/update_parameter",methods=["GET","POST"])
@@ -150,6 +147,7 @@ def day_mapping():
 ######################################################
 global exam_id
 exam_id ="default value - please change me"
+
 @app.route("/heatmap_input", methods=["GET","POST"])
 def heatmap_input():
     """Function for the calculation of the heatmap
