@@ -11,6 +11,7 @@ from flask import request
 from flask_cors import CORS
 import pandas as pd
 import json
+import traceback                                #https://stackoverflow.com/questions/1483429/how-to-print-an-exception-in-python
 
 #from flask_sqlalchemy import SQLAlchemy # für DB später
 #from random import * # für Testrouting
@@ -62,9 +63,13 @@ def upload_to_df():
         if request.method == 'POST':
 
             path = request.files['file']
-            print("path",path)
+
             json_data = request.form
-            print("json_data",json_data)
+            print("line 68: json_data",json_data)
+            print("request.form.to_dict()",request.form.to_dict())
+            #test This# https://www.reddit.com/r/flask/comments/hundt0/better_way_to_convert_immutablemultidict_to_list/
+            print("line 70: request.form.listvalues())  ---> ",list(request.form.listvalues()))
+            print("line 71: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
             x = json.loads(json_data)
             print("json loads data:",x)
             print("json data[0]:::",json_data[0])
@@ -84,7 +89,8 @@ def upload_to_df():
             #df = md.upload_to_db(path= path, sql_table="enrollment_table")
             #result = df.to_json(orient='columns')       #this is a json result for frontend
             #return result
-    except:
+    except Exception:
+        traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
 
@@ -105,7 +111,8 @@ def update_parameter():
             message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
             return jsonify(message)
 
-    except:
+    except Exception:
+        traceback.print_exc()
         print("a Problem occured.")
         return "not ok"
 ######################################################
@@ -123,7 +130,8 @@ def anmeldung_nachtrag():
 
             return jsonify(message)
 
-    except:
+    except Exception:
+        traceback.print_exc()
         print("there was a problem")
 
         return "not ok"
