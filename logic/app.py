@@ -78,8 +78,9 @@ def upload_to_df():
                 #somewhere here we need json.loads
                 try:
                     x = request.form.to_dict().keys()
-                    print("keys of request.form.to_dict() -->", x)
-                    x1 = request.form.to_dict()["mapping"]
+                    print("keys of request.form.to_dict().keys() -->", x)
+                    x1 = request.form.to_dict()
+                    print("x1['mapping'] -->",x1["mapping"])
                 except Exception:
                     traceback.print_exc()
                     print("There was a problem, please try again")
@@ -93,7 +94,7 @@ def upload_to_df():
             try:
                 print("Now for the listvalues option")
                 print("line 71: request.form.listvalues())  ---> ",list(request.form.listvalues()))
-                print("line 72: request.form.listvalues())  ---> ",list(request.form.listvalues())[1])
+                print("line 72: request.form.listvalues())  ---> ",list(request.form.listvalues())[0])
                 print("line 73: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
             except Exception:
                 traceback.print_exc()
