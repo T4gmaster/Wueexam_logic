@@ -64,6 +64,7 @@ def upload_to_df():
 
             path = request.files['file']
             try:
+                #this does not work
                 y = request.get_json()
                 print(y)
             except Exception:
@@ -98,7 +99,10 @@ def upload_to_df():
             try:
                 print("Now for the listvalues option")
                 print("line 71: request.form.listvalues())  ---> ",list(request.form.listvalues()))
-                print("line 72: request.form.listvalues())  ---> ",list(request.form.listvalues())[0])
+                print("line 72: list(request.form.listvalues())[0]  ---> ",list(request.form.listvalues())[0])
+                print("line 72: list(request.form.listvalues())[0][0]  ---> ",list(request.form.listvalues())[0][0])
+                x3 = json.loads(list(request.form.listvalues())[0][0])
+                print("x3 --->",x3)
                 print("line 73: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
             except Exception:
                 traceback.print_exc()
