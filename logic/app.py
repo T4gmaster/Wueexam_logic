@@ -63,6 +63,9 @@ def upload_to_df():
         if request.method == 'POST':
 
             path = request.files['file']
+            try:
+                y = request.get_json()
+                print(y)
 
             json_data = request.form
 
@@ -72,9 +75,11 @@ def upload_to_df():
                 print("request.form.to_dict() -->",request.form.to_dict())
                 print("json.dumps(request.form.to_dict()) -->",json.dumps(request.form.to_dict()))
                 print("______________________________________________________________________________")
+                #somewhere here we need json.loads
                 try:
                     x = request.form.to_dict().keys()
                     print("keys of request.form.to_dict() -->", x)
+                    x1 = request.form.to_dict()["mapping"]
                 except Exception:
                     traceback.print_exc()
                     print("There was a problem, please try again")
@@ -94,9 +99,7 @@ def upload_to_df():
                 traceback.print_exc()
                 print("There was a problem, please try again")
                 return "An error occurred"
-            x = json.loads(json_data)
-            print("json loads data:",x)
-            print("json data[0]:::",json_data[0])
+
             #print("json data:::",json_data)
 
             j_s = json.loads(json_data[0][1])
