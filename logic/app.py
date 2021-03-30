@@ -66,6 +66,10 @@ def upload_to_df():
             try:
                 y = request.get_json()
                 print(y)
+            except Exception:
+                traceback.print_exc()
+                print("There was a problem, please try again")
+                return "An error occurred"
 
             json_data = request.form
 
