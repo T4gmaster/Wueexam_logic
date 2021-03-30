@@ -59,17 +59,41 @@ def upload_to_df():
     todo: limit upload path (for security reasons) and limit uploadable files to .csv only. Also add error handling.
     """
     try:
-
+        print("______________________________________________________________________________")
         if request.method == 'POST':
 
             path = request.files['file']
 
             json_data = request.form
-            print("line 68: json_data",json_data)
-            print("request.form.to_dict()",request.form.to_dict())
+
+            try:
+                print("Handling request.form as a dictionary")
+                print("line 68: json_data",json_data)
+                print("request.form.to_dict() -->",request.form.to_dict())
+                print("json.dumps(request.form.to_dict()) -->",json.dumps(request.form.to_dict()))
+                print("______________________________________________________________________________")
+                try:
+                    x = request.form.to_dict().keys()
+                    print("keys of request.form.to_dict() -->", x)
+                except Exception:
+                    traceback.print_exc()
+                    print("There was a problem, please try again")
+                    return "An error occurred"
             #test This# https://www.reddit.com/r/flask/comments/hundt0/better_way_to_convert_immutablemultidict_to_list/
-            print("line 70: request.form.listvalues())  ---> ",list(request.form.listvalues()))
-            print("line 71: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
+            except Exception:
+                traceback.print_exc()
+                print("There was a problem, please try again")
+                return "An error occurred"
+            print("______________________________________________________________________________")
+            try:
+                print("Now for the listvalues option")
+                print("line 71: request.form.listvalues())  ---> ",list(request.form.listvalues()))
+                print("line 72: request.form.listvalues())  ---> ",list(request.form.listvalues())[1])
+                print("line 73: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
+            except Exception:
+                traceback.print_exc()
+                print("There was a problem, please try again")
+                return "An error occurred"
             x = json.loads(json_data)
             print("json loads data:",x)
             print("json data[0]:::",json_data[0])
