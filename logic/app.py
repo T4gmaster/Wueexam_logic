@@ -66,7 +66,7 @@ def upload_to_df():
             try:
                 #this does not work
                 y = request.get_json()
-                print(y)
+                print("y -->",y)
             except Exception:
                 traceback.print_exc()
                 print("There was a problem, please try again")
@@ -111,20 +111,20 @@ def upload_to_df():
 
             #print("json data:::",json_data)
 
-            j_s = json.loads(json_data[0][1])
-            print("j_s",j_s)
-            print("EXAM:",j_s["EXAM"])
-            print("EXAM_ID:",j_s["EXAM_ID"])
-            print("LASTNAME:",j_s["LAST_NAME"])
-            print("FIRST_NAME:",j_s["FIRST_NAME"])
+            #j_s = json.loads(json_data[0][1])
+            #print("j_s",j_s)
+            #print("EXAM:",j_s["EXAM"])
+            #print("EXAM_ID:",j_s["EXAM_ID"])
+            #print("LASTNAME:",j_s["LAST_NAME"])
+            #rint("FIRST_NAME:",j_s["FIRST_NAME"])
 
 
             return "ok"
 
 
-            #df = md.upload_to_db(path= path, sql_table="enrollment_table")
-            #result = df.to_json(orient='columns')       #this is a json result for frontend
-            #return result
+            df = md.upload_to_db(path= path, sql_table="enrollment_table")
+            result = df.to_json(orient='columns')       #this is a json result for frontend
+            return result
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
