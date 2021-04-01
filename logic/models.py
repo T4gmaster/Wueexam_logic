@@ -52,10 +52,11 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
 
     if sql_table == "enrollment_table":
         df = ff.get_excel(path)
+        print("df.columns  --> ",df.columns)
         matches = []
         try:
 
-            columns_standard = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],mapping['FIRST_NAME'], mapping['COURSE']] #mapping['MATRICULATION_NUMBER']
+            columns_standard = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER'] ]
             print("models:: columns_standard --> ",columns_standard)
         except Exception:
             traceback.print_exc()
@@ -65,7 +66,7 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
         for i in range(len(columns_standard)):
             result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
 
-            matches.append((columns_standard[i],result[0][0]))
+            matches.append((columns_standard[i],result))
             print("columns_standard[i],result[0][0]  --> ",columns_standard[i],result[0][0])
             print(matches)
 

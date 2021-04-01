@@ -352,6 +352,15 @@ def kalender():
     j = md.kalender_md(frame=df)
 
     return j
+
+@app.route("/fake_sentence", methods =["GET","POST"])
+def fake_sentence():
+    """Irgendwelche Fake-Sätze für Adrian
+    """
+
+    import random
+
+    
 ######################################################
 ######################################################
 ######################################################
