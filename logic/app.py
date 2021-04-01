@@ -63,14 +63,6 @@ def upload_to_df():
         if request.method == 'POST':
 
             path = request.files['file']
-            try:
-                #this does not work
-                y = request.get_json()
-                print("y -->",y)
-            except Exception:
-                traceback.print_exc()
-                print("There was a problem, please try again")
-                return "An error occurred"
 
             json_data = request.form
 
@@ -78,18 +70,13 @@ def upload_to_df():
                 print("Handling request.form as a dictionary")
                 print("line 68: json_data",json_data)
                 print("request.form.to_dict() -->",request.form.to_dict())
-                print("json.dumps(request.form.to_dict()) -->",json.dumps(request.form.to_dict()))
+                x = request.form.to_dict()
+                print("x['mapping']['EXAM'] --> ", x['mapping']['EXAM'])
+                print("x['mapping']['FIRST_NAME'] --> ", x['mapping']['FIRST_NAME'])
+
                 print("______________________________________________________________________________")
                 #somewhere here we need json.loads
-                try:
-                    x = request.form.to_dict().keys()
-                    print("keys of request.form.to_dict().keys() -->", x)
-                    x1 = request.form.to_dict()
-                    print("x1['mapping'] -->",x1["mapping"])
-                except Exception:
-                    traceback.print_exc()
-                    print("There was a problem, please try again")
-                    return "An error occurred"
+
             #test This# https://www.reddit.com/r/flask/comments/hundt0/better_way_to_convert_immutablemultidict_to_list/
             except Exception:
                 traceback.print_exc()
@@ -103,6 +90,8 @@ def upload_to_df():
                 print("line 72: list(request.form.listvalues())[0][0]  ---> ",list(request.form.listvalues())[0][0])
                 x3 = json.loads(list(request.form.listvalues())[0][0])
                 print("x3 --->",x3)
+                print("x3['EXAM']  --> ",x3['EXAM'])
+                print(("x3['FIRST_NAME']",x3['FIRST_NAME']))
                 print("line 73: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
             except Exception:
                 traceback.print_exc()
