@@ -45,7 +45,8 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
     Converts that excel to a Dataframe.
     Then upload the dataframe to the WueExam.sql_table-Argument
 
-    >path: String of a local path of
+    >path: String of a local path
+    >mapping: Dict of column names for mapping purposes
     > sql_table: Table to which the Dataframe should be uploaded to
     author: Luc  (16.01.21)
     """
@@ -55,34 +56,31 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
         print("df.columns  --> ",df.columns)
         matches = []
         try:
-
+            #list of the column names from user input
             columns_mapping = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER'] ]
             matches = []
 
             for i in range(len(df.columns)):
+                #use string similarity to find pairs in case of typos
                 result = process.extract(df.columns[i],columns_mapping, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
-
+                #append the matches to a list
                 for j in range(len(result)):
                     matches.append((result[j][0],df.columns[i],result[j][1]))
+                #rename the columns by the best matched names
                 df = df.rename(columns={df.columns[i]:result[0][0]})
 
+            #rename again to fit the Business Logic / Data models
             df = df.rename(columns={mapping["EXAM"]:"EXAM",mapping['EXAM_ID']:'EXAM_ID', mapping['LAST_NAME']:'LAST_NAME',mapping['FIRST_NAME']:'FIRST_NAME', mapping['COURSE']:'COURSE', mapping['MATRICULATION_NUMBER']:'MATRICULATION_NUMBER'})
-            print("df  after fuzzy & renaming -->",df)
-            print("df new cols --->",df.columns)
+
         except Exception:
             traceback.print_exc()
             print("There was a problem, please try again")
             return "An error occurred"
 
-        print("_____________________________________________")
+        #get the columns in the right order
         df = df[['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
-
-        df2 = df.copy()
-        print("type(df2)  -->", type(df2))
-        print("df2 ---> ", df2)
-
-    #dbf.write_df(sql_table, frame=df2, type="replace")
-    dbf.write_df(sql_table, frame=df, type="replace")
+        #write the DataFrame to the db
+        dbf.write_df(sql_table, frame=df, type="replace")
 
     return df
 
@@ -264,11 +262,8 @@ def heatmap_correction_md(value: str, json_file:str, d_frame):
         #get values out of the json
         slot = json_file["Slot"]
         tag = json_file["Tag"]
-        #split the day into a date
-        tag = datetime.strptime(tag.split()[1], '%d.%m.%Y')
-
-        #print("value:( exam_id global::)",value)
-        #print("frame:",frame.head(2))
+        #split the day into a date with the correct time
+        tag = datetime.strptime(tag.split()[1]+" "+slot.split()[0],'%d.%m.%Y %H:%M')
 
         #get the exams index for changes
         exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
