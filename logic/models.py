@@ -54,7 +54,7 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
         matches = []
         try:
 
-            columns_standard = [mapping["mapping"]['EXAM'], mapping["mapping"]['EXAM_ID'], mapping["mapping"]['LAST_NAME'],mapping["mapping"]['FIRST_NAME'], mapping["mapping"]['MATRICULATION_NUMBER'], mapping["mapping"]['COURSE']]
+            columns_standard = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],mapping['FIRST_NAME'], mapping['MATRICULATION_NUMBER'], mapping['COURSE']]
             print("models:: columns_standard --> ",columns_standard)
         except Exception:
             traceback.print_exc()

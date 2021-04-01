@@ -74,6 +74,7 @@ def upload_to_df():
                 print("x['mapping']--> ", x['mapping'])
                 y = json.loads(x["mapping"])
                 print("json.loads(x['mapping']) --> ", y)
+                print("y['EXAM'] --> " y["EXAM"])
 
                 print("______________________________________________________________________________")
                 #somewhere here we need json.loads
@@ -99,7 +100,7 @@ def upload_to_df():
                 return "An error occurred"
 
 
-            df = md.upload_to_db(path= path, sql_table="enrollment_table")
+            df = md.upload_to_db(path= path, sql_table="enrollment_table", mapping=x3)
             result = df.to_json(orient='columns')       #this is a json result for frontend
             return result
     except Exception:
