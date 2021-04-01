@@ -74,7 +74,7 @@ def upload_to_df():
                 print("x['mapping']--> ", x['mapping'])
                 y = json.loads(x["mapping"])
                 print("json.loads(x['mapping']) --> ", y)
-                print("y['EXAM'] --> " y["EXAM"])
+                print("y['EXAM'] --> ", y["EXAM"])
 
                 print("______________________________________________________________________________")
                 #somewhere here we need json.loads
