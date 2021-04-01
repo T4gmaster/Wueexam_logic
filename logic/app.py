@@ -72,9 +72,6 @@ def upload_to_df():
                 print("request.form.to_dict() -->",request.form.to_dict())
                 x = json.loads(request.form.to_dict()["mapping"])
                 print("x['EXAM']--> ", x['EXAM'])
-                y = json.loads(x["mapping"])
-                print("json.loads(x['mapping']) --> ", y)
-                print("y['EXAM'] --> ", y["EXAM"])
 
                 print("______________________________________________________________________________")
                 #somewhere here we need json.loads
@@ -84,23 +81,10 @@ def upload_to_df():
                 traceback.print_exc()
                 print("There was a problem, please try again")
                 return "An error occurred"
-            print("______________________________________________________________________________")
-            try:
-                print("Now for the listvalues option")
-                print("line 71: request.form.listvalues())  ---> ",list(request.form.listvalues()))
-                print("line 72: list(request.form.listvalues())[0]  ---> ",list(request.form.listvalues())[0])
-                print("line 72: list(request.form.listvalues())[0][0]  ---> ",list(request.form.listvalues())[0][0])
-                x3 = json.loads(list(request.form.listvalues())[0][0])
-                print("json.loads(list(request.form.listvalues())[0][0])  --> ",x3)
-                print("json.loads(list(request.form.listvalues())[0][0])['EXAM']",x3["EXAM"])
-
-            except Exception:
-                traceback.print_exc()
-                print("There was a problem, please try again")
-                return "An error occurred"
 
 
-            df = md.upload_to_db(path= path, sql_table="enrollment_table", mapping=x3)
+
+            df = md.upload_to_db(path= path, sql_table="enrollment_table", mapping=x)
             result = df.to_json(orient='columns')       #this is a json result for frontend
             return result
     except Exception:
