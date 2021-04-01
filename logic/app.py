@@ -71,8 +71,9 @@ def upload_to_df():
                 print("line 68: json_data",json_data)
                 print("request.form.to_dict() -->",request.form.to_dict())
                 x = request.form.to_dict()
-                print("x['mapping']['EXAM'] --> ", x['mapping']['EXAM'])
-                print("x['mapping']['FIRST_NAME'] --> ", x['mapping']['FIRST_NAME'])
+                print("x['mapping']--> ", x['mapping'])
+                y = json.loads(x["mapping"])
+                print("json.loads(x['mapping']) --> ", y)
 
                 print("______________________________________________________________________________")
                 #somewhere here we need json.loads
@@ -89,26 +90,13 @@ def upload_to_df():
                 print("line 72: list(request.form.listvalues())[0]  ---> ",list(request.form.listvalues())[0])
                 print("line 72: list(request.form.listvalues())[0][0]  ---> ",list(request.form.listvalues())[0][0])
                 x3 = json.loads(list(request.form.listvalues())[0][0])
-                print("x3 --->",x3)
-                print("x3['EXAM']  --> ",x3['EXAM'])
-                print(("x3['FIRST_NAME']",x3['FIRST_NAME']))
-                print("line 73: type(request.form.listvalues()))  ---> ",type(list(request.form.listvalues())))
+                print("json.loads(list(request.form.listvalues())[0][0])  --> ",x3)
+                print("json.loads(list(request.form.listvalues())[0][0])['EXAM']",x3["EXAM"])
+
             except Exception:
                 traceback.print_exc()
                 print("There was a problem, please try again")
                 return "An error occurred"
-
-            #print("json data:::",json_data)
-
-            #j_s = json.loads(json_data[0][1])
-            #print("j_s",j_s)
-            #print("EXAM:",j_s["EXAM"])
-            #print("EXAM_ID:",j_s["EXAM_ID"])
-            #print("LASTNAME:",j_s["LAST_NAME"])
-            #rint("FIRST_NAME:",j_s["FIRST_NAME"])
-
-
-            return "ok"
 
 
             df = md.upload_to_db(path= path, sql_table="enrollment_table")

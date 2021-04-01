@@ -39,7 +39,7 @@ from fuzzywuzzy import process, fuzz
 
 ##########################################
 #Upload Excel to Database
-def upload_to_db(path: str, sql_table:str):
+def upload_to_db(path: str, mapping: str, sql_table:str):
     """Takes in a local path of an excel.
     Converts that excel to a Dataframe.
     Then upload the dataframe to the WueExam.sql_table-Argument
@@ -52,7 +52,14 @@ def upload_to_db(path: str, sql_table:str):
     if sql_table == "enrollment_table":
         df = ff.get_excel(path)
         matches = []
-        columns_standard = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
+        try:
+
+            columns_standard = [mapping["mapping"]['EXAM'], mapping["mapping"]['EXAM_ID'], mapping["mapping"]['LAST_NAME'],mapping["mapping"]['FIRST_NAME'], mapping["mapping"]['MATRICULATION_NUMBER'], mapping["mapping"]['COURSE']
+            print("models:: columns_standard --> ",columns_standard)
+        except Exception:
+            traceback.print_exc()
+            print("There was a problem, please try again")
+            return "An error occurred"
 
         for i in range(len(columns_standard)):
             result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
