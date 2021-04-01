@@ -11,7 +11,8 @@ from flask import request
 from flask_cors import CORS
 import pandas as pd
 import json
-import traceback                                #https://stackoverflow.com/questions/1483429/how-to-print-an-exception-in-python
+import traceback
+from faker import Faker                              #https://stackoverflow.com/questions/1483429/how-to-print-an-exception-in-python
 
 #from flask_sqlalchemy import SQLAlchemy # für DB später
 #from random import * # für Testrouting
@@ -338,8 +339,17 @@ def kalender():
 def fake_sentence():
     """Irgendwelche Fake-Sätze für Adrian
     """
+    if request.method == "GET":
+        try:
 
-    import random
+            fake = Faker()
+            sentence = fake.text().split(".")[0]+"."
+            return sentence
+
+        except Exception:
+            traceback.print_exc()
+            print("There was a problem, please try again")
+            return "An error occurred"
 
 
 ######################################################

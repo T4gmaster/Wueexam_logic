@@ -71,16 +71,17 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
 
             #rename again to fit the Business Logic / Data models
             df = df.rename(columns={mapping["EXAM"]:"EXAM",mapping['EXAM_ID']:'EXAM_ID', mapping['LAST_NAME']:'LAST_NAME',mapping['FIRST_NAME']:'FIRST_NAME', mapping['COURSE']:'COURSE', mapping['MATRICULATION_NUMBER']:'MATRICULATION_NUMBER'})
+            #get the columns in the right order
+            df = df[['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
+            #write the DataFrame to the db
+            dbf.write_df(sql_table, frame=df, type="replace")
 
         except Exception:
             traceback.print_exc()
             print("There was a problem, please try again")
             return "An error occurred"
 
-        #get the columns in the right order
-        df = df[['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
-        #write the DataFrame to the db
-        dbf.write_df(sql_table, frame=df, type="replace")
+
 
     return df
 
