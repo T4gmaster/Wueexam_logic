@@ -56,35 +56,35 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
         matches = []
         try:
 
-            columns_standard = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER'] ]
-            print("models:: columns_standard --> ",columns_standard)
+            columns_mapping = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER'] ]
+            matches = []
+
+            for i in range(len(df.columns)):
+                result = process.extract(df.columns[i],columns_mapping, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
+
+                for j in range(len(result)):
+                    matches.append((result[j][0],df.columns[i],result[j][1]))
+                df = df.rename(columns={df.columns[i]:result[0][0]})
+
+            df = df.rename(columns={mapping["EXAM"]:"EXAM",mapping['EXAM_ID']:'EXAM_ID', mapping['LAST_NAME']:'LAST_NAME',mapping['FIRST_NAME']:'FIRST_NAME', mapping['COURSE']:'COURSE', mapping['MATRICULATION_NUMBER']:'MATRICULATION_NUMBER'})
+            print("df  after fuzzy & renaming -->"df)
+            print("df new cols --->",df.columns)
         except Exception:
             traceback.print_exc()
             print("There was a problem, please try again")
             return "An error occurred"
 
-        for i in range(len(columns_standard)):
-            result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
-
-            matches.append((columns_standard[i],result))
-            print("columns_standard[i],result[0][0]  --> ",columns_standard[i],result[0][0])
-            print(matches)
-
-        #df2 = df2.rename(columns={matches[i][1]:matches[i][0]})
-        #df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
+        print("_____________________________________________")
+        df = df[['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
 
         df2 = df.copy()
         print("type(df2)  -->", type(df2))
         print("df2 ---> ", df2)
-        #for i in range(len(df.columns)):
-
-        #print("df cols: ", df.columns)
-        #print("df2 cols:", df2.columns)
 
     #dbf.write_df(sql_table, frame=df2, type="replace")
     dbf.write_df(sql_table, frame=df, type="replace")
 
-    return df2
+    return df
 
 
 ##########################################
