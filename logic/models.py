@@ -27,7 +27,7 @@ import json
 import os
 from datetime import datetime, timedelta
 from fuzzywuzzy import process, fuzz
-import traceback    
+import traceback
 #########################################
 # import sqllite3
 
@@ -66,16 +66,20 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
             result = process.extract(columns_standard[i],df.columns, scorer = fuzz.token_sort_ratio)  #df is the uploaded excel
 
             matches.append((columns_standard[i],result[0][0]))
+            print("columns_standard[i],result[0][0]  --> ",columns_standard[i],result[0][0])
+            print(matches)
 
+        #df2 = df2.rename(columns={matches[i][1]:matches[i][0]})
+        #df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
 
         df2 = df.copy()
-        for i in range(len(df.columns)):
-            df2 = df2.rename(columns={matches[i][1]:matches[i][0]})
-        #df.columns = ['EXAM', 'EXAM_ID', 'LAST_NAME', 'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']
-        print("df cols: ", df.columns)
-        print("df2 cols:", df2.columns)
+        #for i in range(len(df.columns)):
 
-    dbf.write_df(sql_table, frame=df2, type="replace")
+        #print("df cols: ", df.columns)
+        #print("df2 cols:", df2.columns)
+
+    #dbf.write_df(sql_table, frame=df2, type="replace")
+    dbf.write_df(sql_table, frame=df, type="replace")
 
     return df2
 
