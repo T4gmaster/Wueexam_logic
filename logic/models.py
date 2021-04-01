@@ -67,7 +67,7 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
                 df = df.rename(columns={df.columns[i]:result[0][0]})
 
             df = df.rename(columns={mapping["EXAM"]:"EXAM",mapping['EXAM_ID']:'EXAM_ID', mapping['LAST_NAME']:'LAST_NAME',mapping['FIRST_NAME']:'FIRST_NAME', mapping['COURSE']:'COURSE', mapping['MATRICULATION_NUMBER']:'MATRICULATION_NUMBER'})
-            print("df  after fuzzy & renaming -->"df)
+            print("df  after fuzzy & renaming -->",df)
             print("df new cols --->",df.columns)
         except Exception:
             traceback.print_exc()

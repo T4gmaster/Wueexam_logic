@@ -64,26 +64,7 @@ def upload_to_df():
 
             path = request.files['file']
 
-            json_data = request.form
-
-            try:
-                print("Handling request.form as a dictionary")
-                print("line 68: json_data",json_data)
-                print("request.form.to_dict() -->",request.form.to_dict())
-                x = json.loads(request.form.to_dict()["mapping"])
-                print("x['EXAM']--> ", x['EXAM'])
-
-                print("______________________________________________________________________________")
-                #somewhere here we need json.loads
-
-            #test This# https://www.reddit.com/r/flask/comments/hundt0/better_way_to_convert_immutablemultidict_to_list/
-            except Exception:
-                traceback.print_exc()
-                print("There was a problem, please try again")
-                return "An error occurred"
-
-
-
+            x = json.loads(request.form.to_dict()["mapping"])
             df = md.upload_to_db(path= path, sql_table="enrollment_table", mapping=x)
             result = df.to_json(orient='columns')       #this is a json result for frontend
             return result
@@ -360,7 +341,7 @@ def fake_sentence():
 
     import random
 
-    
+
 ######################################################
 ######################################################
 ######################################################
