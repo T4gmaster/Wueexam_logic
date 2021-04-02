@@ -354,13 +354,6 @@ def fake_sentence():
 
 #####################################################
 #log Testing
-import docker
-from docker import APIClient
-client = APIClient(base_url='unix://var/run/docker.sock')
-
-for line in client.container.logs(stream=True):
-    print("streaming live from somewhere")
-    print(line.decode("utf-8"))
 ######################################################
 ######################################################
 ######################################################

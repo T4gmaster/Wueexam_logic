@@ -11,4 +11,3 @@ cryptography
 fuzzywuzzy
 Levenshtein
 Faker
-docker
