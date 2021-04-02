@@ -352,6 +352,15 @@ def fake_sentence():
             return "An error occurred"
 
 
+#####################################################
+#log Testing
+import docker
+client = docker.from_env()
+#client = APIClient(base_url='unix://var/run/docker.sock')
+
+for line in client.container.logs(stream=True):
+    print("streaming live from somewhere")
+    print(line.decode("utf-8"))
 ######################################################
 ######################################################
 ######################################################
