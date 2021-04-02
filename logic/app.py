@@ -341,7 +341,7 @@ def fake_sentence():
     """
     if request.method == "GET":
         try:
-
+            from faker import Faker
             fake = Faker()
             sentence = fake.text().split(".")[0]+"."
             return sentence

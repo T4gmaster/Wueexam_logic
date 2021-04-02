@@ -214,7 +214,7 @@ def kalender_md(frame):
     frame["end_date"]  = frame["end_date"].astype(str)
     frame = frame.sort_values(by="start_date").reset_index(drop=True)
     frame["text"] = frame["exam_name"]
-    frame["id"] = frame.index
+    frame["id"] = frame.index+1
 
     json_exam_plan = frame[["id","start_date","end_date","text"]].to_json(orient="records")
 
