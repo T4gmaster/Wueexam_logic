@@ -110,10 +110,6 @@ def update_table(sql_table:str, type: str, table:str, json_file):
 
 
         elif table=="long":
-            for key,value in json_file.items():
-                keys.append(key)
-                values.append(value)
-
             if sql_table == "day_mapping":
                 day = []
                 date = []
