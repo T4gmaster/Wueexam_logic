@@ -113,9 +113,9 @@ def update_table(sql_table:str, type: str, table:str, json_file):
             if sql_table == "day_mapping":
                 day = []
                 date = []
-                for i in json_file["finalPeriod"]:
-                    day.append(i["day"]+1)          #+1 because it needs to start at 1
-                    date.append(i["date"])
+                for i in range(len(json_file)):
+                    day.append(json_file[i]["day"]+1)          #+1 because it needs to start at 1
+                    date.append(json_file[i]["date"])
 
                 data = {"day_ordered":day,"date":date}
                 df = pd.DataFrame(data)
