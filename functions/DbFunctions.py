@@ -19,13 +19,13 @@ if not local:
     database = os.environ["MYSQL_DATABASE"]
     host = os.environ["MYSQL_HOST"]
     conn_url = "mysql://"+user+":"+password+"@"+host+"/"+database
-    engine = create_engine(conn_url)
+    engine = create_engine(conn_url, pool_pre_ping=True)
 else:
     import pymysql
     pymysql.install_as_MySQLdb()
     config = ff.read_json_to_dict('../db_config.json')
     config_mysql_str = str(config["type"])+str(config["user"])+":"+str(config["password"])+"@"+str(config["host"])+":"+str(config["port"])+"/"+str(config["database"])
-    engine = create_engine(config_mysql_str)
+    engine = create_engine(config_mysql_str, pool_pre_ping=True)
 
 
 #######################################################
