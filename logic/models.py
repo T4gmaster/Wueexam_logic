@@ -91,43 +91,55 @@ def upload_to_db(path: str, mapping: str, sql_table:str):
 def update_table(sql_table:str, type: str, table:str, json_file):
     """Update a table from a Frontend JSON Object entirely
     """
+    try:
+        print("modules:: json_file::  --> ",json_file)
+        keys = []
+        values = []
+        df = pd.DataFrame()
+        #put together the values
+        if table =="wide":
+            for key,value in json_file.items():
+                df[key] = [value]
 
-    keys = []
-    values = []
-    df = pd.DataFrame()
-    #put together the values
-    if table =="wide":
-        for key,value in json_file.items():
-            df[key] = [value]
+            if sql_table == "enrollment_table":
+                df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
+            elif sql_table == "solver_parameters":
+                df = df[["days","days_before","solver_msg","solver_time_limit"]]
+            else:
+                print("No column order specified")
 
-        if sql_table == "enrollment_table":
-            df = df[["EXAM", "EXAM_ID", "LAST_NAME", "FIRST_NAME", "MATRICULATION_NUMBER", "COURSE"]]
-        elif sql_table == "solver_parameters":
-            df = df[["days","days_before","solver_msg","solver_time_limit"]]
+
+        elif table=="long":
+            for key,value in json_file.items():
+                keys.append(key)
+                values.append(value)
+
+            if sql_table == "day_mapping":
+                day = []
+                date = []
+                for i in json_file["finalPeriod"]:
+                    day.append(i["day"]+1)          #+1 because it needs to start at 1
+                    date.append(i["date"])
+
+                data = {"day_ordered":day,"date":date}
+                df = pd.DataFrame(data)
+                df = df[["day_ordered","date"]]
+
+
         else:
-            print("No column order specified")
+            print("table width not specified")
+
+        dbf.write_df(sql_table, frame=df, type=type)
+
+        return "{}ed {} table to {} succesfully.".format(type,table,sql_table)
 
 
-    elif table=="long":
-        for key,value in json_file.items():
-            keys.append(key)
-            values.append(value)
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
-        if sql_table == "day_mapping":
-            for key,value in json_file.items(): #break
-                list = value
-            df["date"] = pd.to_datetime(list)
-            df["day_ordered"] = df.index+1
-            df = df[["day_ordered","date"]]
-
-
-    else:
-        print("table width not specified")
-
-    dbf.write_df(sql_table, frame=df, type=type)
-
-    return "{}ed {} table to {} succesfully.".format(type,table,sql_table)
-##########################################
+    ##########################################
 # Part down from the DB
 ##########################################
 

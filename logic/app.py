@@ -122,15 +122,21 @@ def day_mapping():
     input: JSON with {day_nr1:date, day_nr2:date, ...}
     output: Upload to Database
     """
+    try:
 
-    if request.method == "POST":
+        if request.method == "POST":
 
-        j = request.get_json(force=True)
+            j = request.get_json(force=True)
 
-        message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
+            message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
 
-        return jsonify(message)
+            return jsonify(message)
 
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 global exam_id
