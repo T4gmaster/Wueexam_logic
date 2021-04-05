@@ -188,6 +188,15 @@ def heatmap_correction():
         print("all worked")
         return "ok"
 ######################################################
+
+@app.route("/fixed_exam", methods=["POST","GET"])
+def fixed_exam():
+    """Get exams with fixed dates an upload it to a table in the DB
+    """
+    json_file = request.get_json(force=True)
+    print("json_file --->",json_file)
+    message = md.update_table(json_file= json_file, sql_table="fixed_exams",table="long",type="append")
+
 ######################################################
 
 

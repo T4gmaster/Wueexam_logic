@@ -121,6 +121,18 @@ def update_table(sql_table:str, type: str, table:str, json_file):
                 df = pd.DataFrame(data)
                 df = df[["day_ordered","date"]]
 
+            elif sql_table== "fixed_exams":
+                df = pd.DataFrame(columns=["exam_id","exam","date","slot"])
+                for i in range(len(json_file)):
+                    list = []
+                    for key, value in json_file[i].items():
+                        list.append(value)
+                        print("fixed_exams list of values   ---> ",list)
+                    df.loc[i] = list
+                df['date'] = pd.to_datetime(df['date'], format="%d-%m-%Y")
+
+            else:
+                print("no table specified.")
 
         else:
             print("table width not specified")
@@ -135,7 +147,12 @@ def update_table(sql_table:str, type: str, table:str, json_file):
         print("There was a problem, please try again")
         return "An error occurred"
 
-    ##########################################
+
+
+
+
+
+##########################################
 # Part down from the DB
 ##########################################
 
