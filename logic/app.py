@@ -76,7 +76,7 @@ def upload_to_df():
 
 ######################################################
 @app.route("/update_parameter",methods=["GET","POST"])
-def update_parameter():
+def update_parameters():
     """Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters
     input: JSON mit {days, days_before, solver_msg, timelimit}
     output: Werte an die Tabelle wueexam.solver_parameters
