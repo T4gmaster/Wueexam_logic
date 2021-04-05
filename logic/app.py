@@ -359,8 +359,8 @@ def fake_sentence():
             from faker import Faker
             fake = Faker()
             sentence = fake.text().split(".")[0]+"."
-            import logger
-            info = logger.info("Adrian geb das ma ans FE")+fake.text()[10]
+            import logging
+            info = logging.info("Adrian geb das ma ans FE")+fake.text()[10]
             #https://www.loggly.com/ultimate-guide/python-logging-basics/
             #https://stackoverflow.com/questions/15727420/using-logging-in-multiple-modules
             #https://docs.python.org/3/howto/logging.html#advanced-logging-tutorial
