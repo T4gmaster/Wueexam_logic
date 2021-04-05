@@ -119,6 +119,7 @@ def update_table(sql_table:str, type: str, table:str, json_file):
 
                 data = {"day_ordered":day,"date":date}
                 df = pd.DataFrame(data)
+                df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d %H:%M")
                 df = df[["day_ordered","date"]]
 
             elif sql_table== "fixed_exams":
