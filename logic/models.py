@@ -120,6 +120,8 @@ def update_table(sql_table:str, type: str, table:str, json_file):
                 data = {"day_ordered":day,"date":date}
                 df = pd.DataFrame(data)
                 df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d %H:%M")
+                for i in df.index:
+                    df["date"].loc[i] = datetime.date(df["date"].loc[i])
                 df = df[["day_ordered","date"]]
 
             elif sql_table== "fixed_exams":
@@ -270,6 +272,7 @@ def heatmap_input_md(id_str: str):
     names = [{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]},{"name":"","data":[]}]
     dates = ["Montag 01.02.2021","Dienstag 02.02.2021","Mittwoch 03.02.2021","Donnerstag 04.02.2021","Freitag 05.02.2021","Samstag 06.02.2021","Sonntag 07.02.2021","Montag 08.02.2021","Dienstag 09.02.2021","Mittwoch 10.02.2021","Donnerstag 11.02.2021","Freitag 12.02.2021","Samstag 13.02.2021","Sonntag 14.02.2021",]
     cost_df.columns = dates
+    #this creates the needed datastructure for the heatmap
     for i in range(len(cost_df.index)):
         names[i]["name"] = slots[i]
         for j in range(len(cost_df.columns)):
@@ -283,6 +286,8 @@ def heatmap_input_md(id_str: str):
 def heatmap_correction_md(value: str, json_file:str, d_frame):
     """Takes the exam id and changes the date
     output: datafram with changed value
+    input:
+    >value: is the exam_id
     """
     try:
         print("md json_file:",json_file)
@@ -298,14 +303,55 @@ def heatmap_correction_md(value: str, json_file:str, d_frame):
         #change the values
         d_frame.loc[exam_id_index,"day_date"] = tag
         d_frame.loc[exam_id_index,"time_slot"] = str(slot)
+
+        ###we need to change the value in solved_enrollment_table
+        df3 = md.download_output(method = "dataframe", table="solved_enrollment_table")
+            #change all rows where the exam_id (value) corresponds
+        df3.loc[df3["exam_id"] == value, "day_date"] = datetime.date(tag)
+        #update solved_enrollment_table
+        dbf.write_df(frame=df3, sql_table="solved_exam_ov",type="replace")
+
         print("frame changed:", d_frame.head(5))
+        #update solved_exam_ov
         message = dbf.write_df(frame=d_frame, sql_table="solved_exam_ov",type="replace")
-        print(message)
+
+
+        #########trying to match the day_ids
+        try:
+            solved_exams = md.download_output(method="dataframe", table="solved_exam_ov")
+            day_mapping = md.download_output(method="dataframe", table="day_mapping")
+            print("solved_exams--->",solved_exams)
+            print("day_mapping --->",day_mapping)
+
+            list = []
+            for i in solved_exams.index:
+                list.append(datetime.date(solved_exams["day_date"].loc[i]))
+            solved_exams["the_date"] = list
+
+            list = []
+            for i in day_mapping.index:
+                list.append(datetime.date(day_mapping["date"].loc[i]))
+            day_mapping["the_date"] = list
+            #print(df)
+            df3 = solved_exams.merge(day_mapping,left_on="the_date", how="left",right_on="the_date")
+            df3["day_id"] = df3["day"].astype(int)
+            print("df3  --->",df3)
+            df3 = df3[["day_id","day_date","exam_id","exam_name"]]
+
+            #upload it
+            message = dbf.write_df(frame=df3, sql_table="solved_exam_ov",type="replace")
+        except Exception:
+            traceback.print_exc()
+            print("There was a problem, please try again")
+            return "An error occurred"
+
         return message
 
-    except:
-        print("Oops there was an error in the Models file")
-        return "not ok"
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
 
 
 ###############################################
