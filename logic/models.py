@@ -20,6 +20,7 @@ Die View wird durch Updates vom Controller gefüllt mit Daten, die aus einem ode
 #our selfmade files/functions
 import Wueexam_logic.functions.FileFunctions as ff
 import Wueexam_logic.functions.DbFunctions as dbf
+import models as md
 import Wueexam_logic as pd
 from datetime import datetime as dt
 import pandas as pd
@@ -140,9 +141,9 @@ def update_table(sql_table:str, type: str, table:str, json_file):
         else:
             print("table width not specified")
 
-        dbf.write_df(sql_table, frame=df, type=type)
-
-        return "{}ed {} table to {} succesfully.".format(type,table,sql_table)
+        message = dbf.write_df(sql_table, frame=df, type=type)
+        x = "{}ed {} table to {} succesfully.".format(type,table,sql_table)
+        return x
 
 
     except Exception:

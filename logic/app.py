@@ -60,7 +60,7 @@ def upload_to_df():
     todo: limit upload path (for security reasons) and limit uploadable files to .csv only. Also add error handling.
     """
     try:
-        print("______________________________________________________________________________")
+
         if request.method == 'POST':
 
             path = request.files['file']
@@ -85,9 +85,8 @@ def update_parameters():
     try:
 
         if request.method == "POST":
-            #j = request.json
-            j = request.get_json(force=True)
 
+            j = request.get_json(force=True)
             message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
             return jsonify(message)
 
@@ -110,6 +109,8 @@ def anmeldung_nachtrag():
 
             return jsonify(message)
 
+        message = "Wrong request type"
+        return message
     except Exception:
         traceback.print_exc()
         print("there was a problem")
@@ -131,6 +132,9 @@ def day_mapping():
             message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
 
             return jsonify(message)
+
+        message = "Wrong request type"
+        return message
 
     except Exception:
         traceback.print_exc()
@@ -177,26 +181,46 @@ def heatmap_input():
 def heatmap_correction():
     """Change exam date after selection in the heatmap
     """
-    if request.method == "POST":
-        #print(exam_id)
-        json_f = request.get_json(force=True)
-        print("json_f:",json_f)
-        print("exam_id:",exam_id)
-        df = md.download_output(method = "dataframe", table="solved_exam_ov")
+    try:
 
-        message = md.heatmap_correction_md(value = exam_id, json_file= json_f, d_frame=df)
-        print("all worked")
-        return "ok"
+        if request.method == "POST":
+            #print(exam_id)
+            json_f = request.get_json(force=True)
+            print("json_f:",json_f)
+            print("exam_id:",exam_id)
+            df = md.download_output(method = "dataframe", table="solved_exam_ov")
+
+            message = md.heatmap_correction_md(value = exam_id, json_file= json_f, d_frame=df)
+            print("all worked")
+            return "ok"
+
+        message = "Wrong request type"
+        return message
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 ######################################################
 
 @app.route("/fixed_exam", methods=["POST","GET"])
 def fixed_exam():
     """Get exams with fixed dates an upload it to a table in the DB
     """
-    json_file = request.get_json(force=True)
-    print("json_file --->",json_file)
-    message = md.update_table(json_file= json_file, sql_table="fixed_exams",table="long",type="append")
+    try:
 
+        json_file = request.get_json(force=True)
+        print("json_file --->",json_file)
+        message = md.update_table(json_file= json_file, sql_table="fixed_exams",table="long",type="append")
+
+        return message
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 ######################################################
 
 
@@ -211,11 +235,22 @@ def pruefungsansicht():
     output: json object
     author: Luc
     """
-    if request.method == "GET":
-        json_df = md.download_output("json", table="solved_exam_ov")
+    try:
 
-        return json_df
+        if request.method == "GET":
+            json_df = md.download_output("json", table="solved_exam_ov")
 
+            return json_df
+
+        message = "Wrong request type"
+        return message
+
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 ######################################################
 @app.route("/studentenansicht", methods = ["GET","POST"])
 def studentenansicht():
@@ -224,20 +259,42 @@ def studentenansicht():
     output: json object
     author: Adrian
     """
-    if request.method == "GET":
-        json_df = md.download_output("json", table="solved_enrollment_table")
+    try:
 
-        return json_df
+        if request.method == "GET":
+            json_df = md.download_output("json", table="solved_enrollment_table")
 
+            return json_df
+
+        message = "Wrong request type"
+        return message
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
 def anmeldeliste():
     """Gibt eine Json der Anmeldeliste wieder
     """
-    if request.method == "GET":
-        json_df = md.download_output("json", table= "enrollment_table")
+    try:
 
-        return json_df
+        if request.method == "GET":
+            json_df = md.download_output("json", table= "enrollment_table")
+
+            return json_df
+
+        message = "Wrong request type"
+        return message
+
+        
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 @app.route("/download")
@@ -248,81 +305,124 @@ def download(method="excel"):
     author: Luc (16.01.21)
     tested: yes
     """
-    df = md.download_output(method, table="solved_exam_ov")
+    try:
 
-    return df
+        df = md.download_output(method, table="solved_exam_ov")
+
+        return df
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 @app.route("/anmeldungen_distribution", methods=["GET", "POST"])
 def anmeldungen_distribution():
-    """Test für Ausgabe an Graphen"""
-    if request.method == "GET":
+    """Test für Ausgabe an hübsche Graphen"""
+    try:
 
-        df = md.download_output("dataframe", table="enrollment_table")
-        df2 = md.group(frame=df, group_it_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
-        df3 = md.group(frame=df2, group_it_by="Anmeldungen", index_reset="Anzahl")
+        if request.method == "GET":
 
-        anzahl_je_anmeldungen = df3.to_dict(orient="list")
-        json_anm = json.dumps(anzahl_je_anmeldungen)
+            df = md.download_output("dataframe", table="enrollment_table")
+            df2 = md.group(frame=df, group_it_by="MATRICULATION_NUMBER", index_reset="Anmeldungen")
+            df3 = md.group(frame=df2, group_it_by="Anmeldungen", index_reset="Anzahl")
 
-        return json_anm
+            anzahl_je_anmeldungen = df3.to_dict(orient="list")
+            json_anm = json.dumps(anzahl_je_anmeldungen)
 
+            return json_anm
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 ######################################################
 #Single-Value-Return Functions
 ######################################################
 @app.route("/anzahl_studenten", methods=["GET", "POST"])
 def anzahl_studenten():
     """String for the amount of students enrolled"""
+    try:
 
-    if request.method == "GET":
+        if request.method == "GET":
 
-        df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        json_anzahl = md.anzahl(df, column="MATRICULATION_NUMBER")
+            df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
+            json_anzahl = md.anzahl(df, column="MATRICULATION_NUMBER")
 
-        return json_anzahl
+            return json_anzahl
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 @app.route("/anzahl_pruefungen", methods=["GET", "POST"])
 def anzahl_pruefungen():
     """String for the amount of students enrolled"""
+    try:
 
-    if request.method == "GET":
+        if request.method == "GET":
 
-        df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        json_anzahl= md.anzahl(df, column="EXAM_ID")
+            df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
+            json_anzahl= md.anzahl(df, column="EXAM_ID")
 
-        return json_anzahl
+            return json_anzahl
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
+
 ######################################################
 @app.route("/anzahl_anmeldungen", methods=["GET", "POST"])
 def anzahl_anmeldungen():
     """String for the count of students enrolled"""
+    try:
 
-    if request.method == "GET":
+        if request.method == "GET":
 
-        df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
-        anzahl = len(df)                  #count length of columns in the df
-        json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
+            df = md.download_output("dataframe", table="enrollment_table")              #download the DataFrame
+            anzahl = len(df)                  #count length of columns in the df
+            json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
 
-        return json_anzahl
+            return json_anzahl
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 @app.route("/anzahl_studenten_10", methods=["GET", "POST"])
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
 
-    if request.method == "POST":
-        j = request.get_json(force=True)
-        print("request json::",request.get_json(force=True)["Anmeldung"])
-        j_int = j["Anmeldung"]
-        df = md.download_output("dataframe", table="enrollment_table")
+    try:
 
-        json_file = md.anzahl_studenten_10_md(df,param=j_int)
+        if request.method == "POST":
+            j = request.get_json(force=True)
+            print("request json::",request.get_json(force=True)["Anmeldung"])
+            j_int = j["Anmeldung"]
+            df = md.download_output("dataframe", table="enrollment_table")
 
-        return json_file
+            json_file = md.anzahl_studenten_10_md(df,param=j_int)
 
-    return "ok"
+            return json_file
 
+        return "ok"
 
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 ######################################################
@@ -330,13 +430,21 @@ def anzahl_studenten_10():
 def faecherliste():
     """Liste aller Prüfungen mit Teilnehmeranzahl"""
 
-    if request.method == "GET":
-        df = md.download_output("dataframe", table="enrollment_table")
+    try:
 
-        df_grouped = md.group(df, group_it_by=["EXAM","EXAM_ID"], index_reset="Teilnehmer" )
-        json_df_grouped = df_grouped.to_json(orient="records")
+        if request.method == "GET":
+            df = md.download_output("dataframe", table="enrollment_table")
 
-        return json_df_grouped
+            df_grouped = md.group(df, group_it_by=["EXAM","EXAM_ID"], index_reset="Teilnehmer" )
+            json_df_grouped = df_grouped.to_json(orient="records")
+
+            return json_df_grouped
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
 
 ######################################################
 @app.route("/kalender", methods=["GET", "POST"])
@@ -344,12 +452,21 @@ def kalender():
     """Display planned exams
     output: json of rows with exam and its date per row
     """
-    df = md.download_output("dataframe", table="solved_exam_ov")
+    try:
 
-    j = md.kalender_md(frame=df)
+        df = md.download_output("dataframe", table="solved_exam_ov")
 
-    return j
+        j = md.kalender_md(frame=df)
 
+        return j
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return "not ok"
+
+######################################################
 @app.route("/fake_sentence", methods =["GET","POST"])
 def fake_sentence():
     """Irgendwelche Fake-Sätze für Adrian
