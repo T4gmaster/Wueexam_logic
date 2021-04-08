@@ -496,7 +496,7 @@ def fake_sentence():
 def fixed_exams_download():
     """Download the table "fixed_exams.
     >input: None
-    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}] 
+    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
     """
     if request.method == "GET":
         try:
@@ -512,6 +512,29 @@ def fixed_exams_download():
             return "An error occurred"
 
     return {"Method needs to be GET, not POST"}, 200
+
+######################################################
+@app.route("/download_day_mapping", methods =["GET","POST"])
+def fixed_exams_download():
+    """Download the table "day_mapping.
+    >input: None
+    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
+    """
+    if request.method == "GET":
+        try:
+            df = md.download_output(method="dataframe",table="day_mapping")
+
+            js = df.to_json(orient="records")
+
+            return js
+
+        except Exception:
+            traceback.print_exc()
+            print("There was a problem, please try again")
+            return "An error occurred"
+
+    return {"Method needs to be GET, not POST"}, 200
+
 #####################################################
 #log Testing
 ######################################################
