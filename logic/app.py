@@ -69,6 +69,8 @@ def upload_to_df():
             df = md.upload_to_db(path= path, sql_table="enrollment_table", mapping=x)
             result = df.to_json(orient='columns')       #this is a json result for frontend
             return result
+        return {"Method needs to be GET, not POST"}, 200
+
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
@@ -90,6 +92,8 @@ def update_parameters():
             message = md.update_table(json_file=j, sql_table= "solver_parameters",type="replace", table="wide")
             return jsonify(message)
 
+        return {"Method needs to be GET, not POST"}, 200
+
     except Exception:
         traceback.print_exc()
         print("a Problem occured.")
@@ -109,8 +113,8 @@ def anmeldung_nachtrag():
 
             return jsonify(message)
 
-        message = "Wrong request type"
-        return message
+        return {"Method needs to be GET, not POST"}, 200
+
     except Exception:
         traceback.print_exc()
         print("there was a problem")
@@ -128,13 +132,10 @@ def day_mapping():
         if request.method == "POST":
 
             j = request.get_json(force=True)
-
             message = md.update_table(json_file= j, sql_table="day_mapping",type="replace", table="long")
-
             return jsonify(message)
 
-        message = "Wrong request type"
-        return message
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -169,11 +170,9 @@ def heatmap_input():
         #print(jsonString)
         return jsonString
 
+    return {"Method needs to be GET, not POST"}, 200
 
-        #return jsonify(id)
-        #return json_file
-    print("This is a statement")
-    return jsonify("No POST request was made",request.get_json(force=True))
+    #return jsonify("No POST request was made",request.get_json(force=True))
 ######################################################
 
 @app.route("/heatmap_correction", methods=["GET","POST"])
@@ -194,8 +193,7 @@ def heatmap_correction():
             print("all worked")
             return "ok"
 
-        message = "Wrong request type"
-        return message
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -242,8 +240,7 @@ def pruefungsansicht():
 
             return json_df
 
-        message = "Wrong request type"
-        return message
+        return {"Method needs to be GET, not POST"}, 200
 
 
     except Exception:
@@ -266,8 +263,7 @@ def studentenansicht():
 
             return json_df
 
-        message = "Wrong request type"
-        return message
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -285,9 +281,7 @@ def anmeldeliste():
             json_df = md.download_output("json", table= "enrollment_table")
 
             return json_df
-
-        message = "Wrong request type"
-        return message
+        return {"Method needs to be GET, not POST"}, 200
 
 
     except Exception:
@@ -333,6 +327,7 @@ def anmeldungen_distribution():
             json_anm = json.dumps(anzahl_je_anmeldungen)
 
             return json_anm
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -353,6 +348,7 @@ def anzahl_studenten():
             json_anzahl = md.anzahl(df, column="MATRICULATION_NUMBER")
 
             return json_anzahl
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -372,6 +368,7 @@ def anzahl_pruefungen():
             json_anzahl= md.anzahl(df, column="EXAM_ID")
 
             return json_anzahl
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -392,6 +389,7 @@ def anzahl_anmeldungen():
             json_anzahl = json.dumps(str(anzahl))            #convert to string, to list and finally to json
 
             return json_anzahl
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -416,7 +414,7 @@ def anzahl_studenten_10():
 
             return json_file
 
-        return "ok"
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -439,6 +437,7 @@ def faecherliste():
             json_df_grouped = df_grouped.to_json(orient="records")
 
             return json_df_grouped
+        return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
         traceback.print_exc()
@@ -473,8 +472,9 @@ def kalender():
 def fake_sentence():
     """Irgendwelche Fake-Sätze für Adrian
     """
-    if request.method == "GET":
-        try:
+    try:
+        if request.method == "GET":
+
             from faker import Faker
             fake = Faker()
             sentence = fake.text().split(".")[0]+"."
@@ -484,56 +484,60 @@ def fake_sentence():
             #https://stackoverflow.com/questions/15727420/using-logging-in-multiple-modules
             #https://docs.python.org/3/howto/logging.html#advanced-logging-tutorial
             return info
+        return {"Method needs to be GET, not POST"}, 200
 
-        except Exception:
-            traceback.print_exc()
-            print("There was a problem, please try again")
-            return "An error occurred"
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
-    return {"Method needs to be GET, not POST"}, 200
+
 ######################################################
 @app.route("/fixed_exams_download", methods =["GET","POST"])
-def fixed_exams_download():
-    """Download the table "fixed_exams.
+def fixed_exams_down():
+    """Download the table fixed_exams.
     >input: None
     >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
     """
-    if request.method == "GET":
-        try:
+    try:
+        if request.method == "GET":
             df = md.download_output(method="dataframe",table="fixed_exams")
 
             js = df.to_json(orient="records")
 
             return js
+        return {"Method needs to be GET, not POST"}, 200
 
-        except Exception:
-            traceback.print_exc()
-            print("There was a problem, please try again")
-            return "An error occurred"
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
-    return {"Method needs to be GET, not POST"}, 200
+
 
 ######################################################
 @app.route("/download_day_mapping", methods =["GET","POST"])
 def fixed_exams_download():
-    """Download the table "day_mapping.
+    """Download the table day_mapping.
     >input: None
     >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
     """
-    if request.method == "GET":
-        try:
+    try:
+        if request.method == "GET":
+
             df = md.download_output(method="dataframe",table="day_mapping")
 
             js = df.to_json(orient="records")
 
             return js
+        return {"Method needs to be GET, not POST"}, 200
 
-        except Exception:
-            traceback.print_exc()
-            print("There was a problem, please try again")
-            return "An error occurred"
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
-    return {"Method needs to be GET, not POST"}, 200
+
 
 #####################################################
 #log Testing
