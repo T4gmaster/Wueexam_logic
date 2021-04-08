@@ -212,7 +212,7 @@ def fixed_exam():
 
         json_file = request.get_json(force=True)
         print("json_file --->",json_file)
-        message = md.update_table(json_file= json_file, sql_table="fixed_exams",table="long",type="append")
+        message = md.update_table(json_file= json_file, sql_table="fixed_exams",table="long",type="replace")
 
         return message
 
@@ -289,7 +289,7 @@ def anmeldeliste():
         message = "Wrong request type"
         return message
 
-        
+
     except Exception:
         traceback.print_exc()
         print("there was a problem")
@@ -453,12 +453,14 @@ def kalender():
     output: json of rows with exam and its date per row
     """
     try:
+        if request.method == "GET":
+            df = md.download_output("dataframe", table="solved_exam_ov")
 
-        df = md.download_output("dataframe", table="solved_exam_ov")
+            j = md.kalender_md(frame=df)
 
-        j = md.kalender_md(frame=df)
+            return j
+        return {"Method needs to be GET, not POST"}, 200
 
-        return j
 
     except Exception:
         traceback.print_exc()
@@ -488,7 +490,28 @@ def fake_sentence():
             print("There was a problem, please try again")
             return "An error occurred"
 
+    return {"Method needs to be GET, not POST"}, 200
+######################################################
+@app.route("/fixed_exams_download", methods =["GET","POST"])
+def fixed_exams_download():
+    """Download the table "fixed_exams.
+    >input: None
+    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}] 
+    """
+    if request.method == "GET":
+        try:
+            df = md.download_output(method="dataframe",table="fixed_exams")
 
+            js = df.to_json(orient="records")
+
+            return js
+
+        except Exception:
+            traceback.print_exc()
+            print("There was a problem, please try again")
+            return "An error occurred"
+
+    return {"Method needs to be GET, not POST"}, 200
 #####################################################
 #log Testing
 ######################################################
