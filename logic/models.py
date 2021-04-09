@@ -361,7 +361,7 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
 ###############################################
 def abbildung_pruefungsverteilung():
 
-    df = md.download_output(method: "dataframe", table: "enrollment_table")
+    df = md.download_output(method= "dataframe", table= "enrollment_table")
     df = df[["EXAM"]]
 
     df = pd.DataFrame( df["EXAM"].value_counts())
@@ -377,7 +377,7 @@ def abbildung_pruefungsverteilung():
     dict_js = {"name":"Anzahl","data":data,"categories":index}
 
     return dict_js
-    
+
 ###############################################
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""
