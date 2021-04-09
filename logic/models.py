@@ -359,7 +359,7 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
         return "An error occurred"
 
 ###############################################
-def abbildung_pruefungsverteilung_md():
+def abb_pruefungsverteilung_md():
 
     df = md.download_output(method= "dataframe", table= "enrollment_table")
     df = df[["EXAM"]]
