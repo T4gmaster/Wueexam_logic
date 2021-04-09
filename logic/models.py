@@ -366,15 +366,14 @@ def abb_pruefungsverteilung_md():
 
     df = pd.DataFrame( df["EXAM"].value_counts())
     df.columns = ["Anzahl"]
-    data = df['Anzahl'].value_counts(bins=5, sort=False)
-    cut_bins = [0,100,200,300,400,500]
-    cut_labels = [50,100, 200, 300, 400]
+    data = df['Anzahl'].value_counts(bins=6, sort=False)
+    cut_bins = [0,100,200,300,400,500,600]
     data= pd.cut(df["Anzahl"], bins=cut_bins).value_counts().sort_values()
     data = data.sort_index()
     index = data.index.tolist()
     data = data.tolist()
     #put data in json format
-    dict = {"name":"Anzahl","data":data,"categories":["0-100","100-200","200-300","300-400","mehr als 400"]}
+    dict = {"name":"Anzahl","data":data,"categories":["0-100","100-200","200-300","300-400","400-500","mehr als 500"]}
 
 
     return dict
