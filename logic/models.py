@@ -373,7 +373,7 @@ def abb_pruefungsverteilung_md():
     index = data.index.tolist()
     data = data.tolist()
     #put data in json format
-    dict = {"name":"Anzahl","data":data,"categories":["0-100","100-200","200-300","300-400","400-500","mehr als 500"]}
+    dict = {"Anzahl":data,"Teilnehmerzahl":["0-100","100-200","200-300","300-400","400-500","mehr als 500"]}
 
 
     return dict
