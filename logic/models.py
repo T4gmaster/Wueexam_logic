@@ -359,7 +359,7 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
         return "An error occurred"
 
 ###############################################
-def abbildung_pruefungsverteilung():
+def abbildung_pruefungsverteilung_md():
 
     df = md.download_output(method= "dataframe", table= "enrollment_table")
     df = df[["EXAM"]]
@@ -371,10 +371,10 @@ def abbildung_pruefungsverteilung():
     data= pd.cut(df["Anzahl"], bins=cut_bins, labels=cut_labels).value_counts().sort_values()
     #create two lists
     data = data.sort_index()
-    index = data.index.tolist()
+    indexes = data.index.tolist()
     data = data.tolist()
     #put data in json format
-    dict_js = {"name":"Anzahl","data":data,"categories":index}
+    dict_js = {"name":"Anzahl","data":data,"categories":indexes}
 
     return dict_js
 
