@@ -362,20 +362,20 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
 def abb_pruefungsverteilung_md():
 
     df = md.download_output(method= "dataframe", table= "enrollment_table")
-    df = df[["EXAM"]]
+    df = dataf[["EXAM"]]
 
     df = pd.DataFrame( df["EXAM"].value_counts())
     df.columns = ["Anzahl"]
-    maxi = int(df["Anzahl"].max())
-    cut_bins = [int(0), int(50),int(100), int(300), int(600),maxi]
+    data = df['Anzahl'].value_counts(bins=5, sort=False)
+    cut_bins = [0,100,200,300,400,500]
     cut_labels = [50,100, 200, 300, 400]
-    data= pd.cut(df["Anzahl"], bins=cut_bins, labels=cut_labels).value_counts().sort_values()
-    #create two lists
+    data= pd.cut(df["Anzahl"], bins=cut_bins).value_counts().sort_values()
     data = data.sort_index()
-    indexes = data.index.tolist()
+    index = data.index.tolist()
     data = data.tolist()
     #put data in json format
-    dict_js = {"name":"Anzahl","data":data,"categories":indexes}
+    dict = {"name":"Anzahl","data":data,"categories":["0-100","100-200","200-300","300-400","größer 400"]}
+
 
     return dict_js
 
