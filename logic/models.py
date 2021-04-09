@@ -366,7 +366,7 @@ def abb_pruefungsverteilung_md():
 
     df = pd.DataFrame( df["EXAM"].value_counts())
     df.columns = ["Anzahl"]
-    cut_bins = [0, 50,100, 300, 600,df["Anzahl"].max()]
+    cut_bins = [int(0), int(50),int(100), int(300), int(600),int(df["Anzahl"].max())]
     cut_labels = [50,100, 200, 300, 400]
     data= pd.cut(df["Anzahl"], bins=cut_bins, labels=cut_labels).value_counts().sort_values()
     #create two lists
