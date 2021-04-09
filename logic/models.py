@@ -377,7 +377,7 @@ def abb_pruefungsverteilung_md():
     dict = {"name":"Anzahl","data":data,"categories":["0-100","100-200","200-300","300-400","größer 400"]}
 
 
-    return dict_js
+    return dict
 
 ###############################################
 def command_solver(cmd: str):
