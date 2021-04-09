@@ -218,8 +218,7 @@ def anzahl(frame, column: str):
     """Counts the unique values in a DataFrame column and
     returns it as a single valuein json form
     """
-    value = frame[column].nunique()
-    json_df = json.dumps(str(value))
+    json_df = json.dumps(str(frame[column].nunique()))
 
     return json_df
 
@@ -227,7 +226,7 @@ def anzahl(frame, column: str):
 
 
 def kalender_md(frame):
-    # new option
+
     frame["day_date"] = pd.to_datetime(frame['day_date'])
     frame["start_date"] = frame["day_date"]
     frame["start_date"] = frame["start_date"] + timedelta(hours=1)
@@ -251,7 +250,7 @@ def kalender_md(frame):
 def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
-    print("id_str::", id_str)
+    #####dis is a quatsch for fake-daten########
     import random
 
     cost_df = []
@@ -294,7 +293,6 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
     >value: is the exam_id
     """
     try:
-        print("md json_file:", json_file)
         # get values out of the json
         slot = json_file["Slot"]
         tag = json_file["Tag"]
@@ -317,7 +315,6 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
         # update solved_enrollment_table
         dbf.write_df(frame=df3, sql_table="solved_exam_ov", type="replace")
 
-        print("frame changed:", d_frame.head(5))
         # update solved_exam_ov
         message = dbf.write_df(
             frame=d_frame, sql_table="solved_exam_ov", type="replace")
@@ -340,11 +337,10 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
             for i in day_mapping.index:
                 list.append(datetime.date(day_mapping["date"].loc[i]))
             day_mapping["the_date"] = list
-            # print(df)
+
             df3 = solved_exams.merge(
                 day_mapping, left_on="the_date", how="left", right_on="the_date")
             df3["day_id"] = df3["day"].astype(int)
-            print("df3  --->", df3)
             df3 = df3[["day_id", "day_date", "exam_id", "exam_name"]]
 
             # upload it
@@ -362,7 +358,26 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
         print("There was a problem, please try again")
         return "An error occurred"
 
+###############################################
+def abbildung_pruefungsverteilung():
 
+    df = md.download_output(method: "dataframe", table: "enrollment_table")
+    df = df[["EXAM"]]
+
+    df = pd.DataFrame( df["EXAM"].value_counts())
+    df.columns = ["Anzahl"]
+    cut_bins = [0, 50,100, 300, 600,df["Anzahl"].max()]
+    cut_labels = [50,100, 200, 300, 400]
+    data= pd.cut(df["Anzahl"], bins=cut_bins, labels=cut_labels).value_counts().sort_values()
+    #create two lists
+    data = data.sort_index()
+    index = data.index.tolist()
+    data = data.tolist()
+    #put data in json format
+    dict_js = {"name":"Anzahl","data":data,"categories":index}
+
+    return dict_js
+    
 ###############################################
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""
