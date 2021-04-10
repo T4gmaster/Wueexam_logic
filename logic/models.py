@@ -411,6 +411,20 @@ def abb_scatterplot_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+###############################################
+
+def abb_piechart_md():
+    try:
+        df = md.download_output(method="dataframe",table="enrollment_table")
+        list = df.iloc[:,-1].value_counts().tolist()
+        dict = {"data":list}
+        return dict
+
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ###############################################
 def command_solver(cmd: str):
