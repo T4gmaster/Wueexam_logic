@@ -383,7 +383,7 @@ def abb_scatterplot_md():
     try:
 
         enrollments = md.download_output(method="dataframe", table="enrollment_table")
-        solved = md.download_output(method="dataframe", table="exam_solved_ov")
+        solved = md.download_output(method="dataframe", table="solved_exam_ov")
 
         #count enrollments
         enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
