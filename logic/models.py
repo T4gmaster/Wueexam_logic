@@ -404,7 +404,7 @@ def abb_scatterplot_md():
             anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"] == row[1]]["Anmeldungen"].min()
             list.append([int(anmeldung),int(date_range.days)])
 
-        dict = {"name":"Anmeldungen vs. Exam_Zeitraum", "data":[list]}
+        dict = {"name":"Anmeldungen vs. Exam_Zeitraum", "data":list}
         return dict
 
     except Exception:
