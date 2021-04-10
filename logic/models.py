@@ -46,43 +46,48 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
     > sql_table: Table to which the Dataframe should be uploaded to
     author: Luc  (16.01.21)
     """
-
-    if sql_table == "enrollment_table":
-        df = ff.get_excel(path)
-        print("df.columns  --> ", df.columns)
-        matches = []
-        try:
-            # list of the column names from user input
-            columns_mapping = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],
-                               mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER']]
+    try:
+        if sql_table == "enrollment_table":
+            df = ff.get_excel(path)
+            print("df.columns  --> ", df.columns)
             matches = []
+            try:
+                # list of the column names from user input
+                columns_mapping = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],
+                                   mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER']]
+                matches = []
 
-            for i in range(len(df.columns)):
-                # use string similarity to find pairs in case of typos
-                # df is the uploaded excel
-                result = process.extract(
-                    df.columns[i], columns_mapping, scorer=fuzz.token_sort_ratio)
-                # append the matches to a list
-                for j in range(len(result)):
-                    matches.append((result[j][0], df.columns[i], result[j][1]))
-                # rename the columns by the best matched names
-                df = df.rename(columns={df.columns[i]: result[0][0]})
+                for i in range(len(df.columns)):
+                    # use string similarity to find pairs in case of typos
+                    # df is the uploaded excel
+                    result = process.extract(
+                        df.columns[i], columns_mapping, scorer=fuzz.token_sort_ratio)
+                    # append the matches to a list
+                    for j in range(len(result)):
+                        matches.append((result[j][0], df.columns[i], result[j][1]))
+                    # rename the columns by the best matched names
+                    df = df.rename(columns={df.columns[i]: result[0][0]})
 
-            # rename again to fit the Business Logic / Data models
-            df = df.rename(columns={mapping["EXAM"]: "EXAM", mapping['EXAM_ID']: 'EXAM_ID', mapping['LAST_NAME']: 'LAST_NAME',
-                           mapping['FIRST_NAME']: 'FIRST_NAME', mapping['COURSE']: 'COURSE', mapping['MATRICULATION_NUMBER']: 'MATRICULATION_NUMBER'})
-            # get the columns in the right order
-            df = df[['EXAM', 'EXAM_ID', 'LAST_NAME',
-                     'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
-            # write the DataFrame to the db
-            dbf.write_df(sql_table, frame=df, type="replace")
+                # rename again to fit the Business Logic / Data models
+                df = df.rename(columns={mapping["EXAM"]: "EXAM", mapping['EXAM_ID']: 'EXAM_ID', mapping['LAST_NAME']: 'LAST_NAME',
+                               mapping['FIRST_NAME']: 'FIRST_NAME', mapping['COURSE']: 'COURSE', mapping['MATRICULATION_NUMBER']: 'MATRICULATION_NUMBER'})
+                # get the columns in the right order
+                df = df[['EXAM', 'EXAM_ID', 'LAST_NAME',
+                         'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
+                # write the DataFrame to the db
+                dbf.write_df(sql_table, frame=df, type="replace")
 
-        except Exception:
-            traceback.print_exc()
-            print("There was a problem, please try again")
-            return "An error occurred"
-    return df
+            except Exception:
+                traceback.print_exc()
+                print("There was a problem, please try again")
+                return "An error occurred"
+        return df
 
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ##########################################
 # Update an existing Table and its values
@@ -162,53 +167,69 @@ def download_output(method: str, table: str):
     Must be called once for each job it should do.
     Author: Luc (16.01.21)
     """
-    if table == "exam_plan":
-        df = dbf.read_table_exam_plan()
-        df["DATE"] = df["DATE"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
-    else:
-        df = dbf.read_df(table)
-    ########################
-    if method == "json":
-        j_df = df.to_json(orient="records")
-        return j_df
+    try:
+        if table == "exam_plan":
+            df = dbf.read_table_exam_plan()
+            df["DATE"] = df["DATE"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        else:
+            df = dbf.read_df(table)
+        ########################
+        if method == "json":
+            j_df = df.to_json(orient="records")
+            return j_df
 
-    elif method == "excel":
-        ff.df_to_xls(df)
-        confirmation = "The File was generated and can be found in the root folder"
-        return confirmation
+        elif method == "excel":
+            ff.df_to_xls(df)
+            confirmation = "The File was generated and can be found in the root folder"
+            return confirmation
 
-    elif method == "dataframe":
-        df = dbf.read_df(table)
-        return df
+        elif method == "dataframe":
+            df = dbf.read_df(table)
+            return df
 
-    else:
-        x = print("Some argument was wrong.")
-        return jsonify(x)
+        else:
+            x = print("Some argument was wrong.")
+            return jsonify(x)
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ##########################################
 # Group a table by certain values
 
 
 def group(frame, group_it_by: str, index_reset: str):
-    df = frame.groupby(group_it_by).size().reset_index(name=index_reset)
+    try:
+        df = frame.groupby(group_it_by).size().reset_index(name=index_reset)
+        return df
 
-    return df
-
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ##########################################
 # Special function for student with >10 enrollments
 def anzahl_studenten_10_md(df_frame, param: str):
     """Returns a list of students which have more enrollments than [param]
     """
-    df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
-                   "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
+    try:
+        df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
+                       "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
 
-    students_over_x = df[df["Anmeldungen"] > param].sort_values(
-        by="Anmeldungen", ascending=False)  # order and filter the second grouped data
-    json_students_over_x = students_over_x.to_json(
-        orient="records")  # convert to json
+        students_over_x = df[df["Anmeldungen"] > param].sort_values(
+            by="Anmeldungen", ascending=False)  # order and filter the second grouped data
+        json_students_over_x = students_over_x.to_json(
+            orient="records")  # convert to json
 
-    return json_students_over_x
+        return json_students_over_x
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ##########################################
 # Count occurences in a Dataframe and return a single value
@@ -218,31 +239,43 @@ def anzahl(frame, column: str):
     """Counts the unique values in a DataFrame column and
     returns it as a single valuein json form
     """
-    json_df = json.dumps(str(frame[column].nunique()))
+    try:
+        json_df = json.dumps(str(frame[column].nunique()))
 
-    return json_df
+        return json_df
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ##########################################
 
 
 def kalender_md(frame):
+    try:
+        frame["day_date"] = pd.to_datetime(frame['day_date'])
+        frame["start_date"] = frame["day_date"]
+        frame["start_date"] = frame["start_date"] + timedelta(hours=1)
+        frame["start_date"] = frame["start_date"] - timedelta(hours=1)
+        frame["end_date"] = frame["start_date"] + timedelta(hours=2)
 
-    frame["day_date"] = pd.to_datetime(frame['day_date'])
-    frame["start_date"] = frame["day_date"]
-    frame["start_date"] = frame["start_date"] + timedelta(hours=1)
-    frame["start_date"] = frame["start_date"] - timedelta(hours=1)
-    frame["end_date"] = frame["start_date"] + timedelta(hours=2)
+        frame["start_date"] = frame["start_date"].astype(str)
+        frame["end_date"] = frame["end_date"].astype(str)
+        frame = frame.sort_values(by="start_date").reset_index(drop=True)
+        frame["text"] = frame["exam_name"]
+        frame["id"] = frame.index + 1
 
-    frame["start_date"] = frame["start_date"].astype(str)
-    frame["end_date"] = frame["end_date"].astype(str)
-    frame = frame.sort_values(by="start_date").reset_index(drop=True)
-    frame["text"] = frame["exam_name"]
-    frame["id"] = frame.index + 1
+        json_exam_plan = frame[["id", "start_date",
+                                "end_date", "text"]].to_json(orient="records")
 
-    json_exam_plan = frame[["id", "start_date",
-                            "end_date", "text"]].to_json(orient="records")
+        return json_exam_plan
 
-    return json_exam_plan
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ###############################################
 
@@ -251,37 +284,44 @@ def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
     #####dis is a quatsch for fake-daten########
-    import random
+    try:
 
-    cost_df = []
-    for t in range(6):
-        row = {}
-        for d in range(14):
-            row[d] = random.random() * 100
+        import random
 
-        cost_df.append(row)
+        cost_df = []
+        for t in range(6):
+            row = {}
+            for d in range(14):
+                row[d] = random.random() * 100
 
-    cost_df = pd.DataFrame(cost_df)
-    cost_df.loc[3, 3] = 0
-    #####dis is a quatsch for fake-daten########
+            cost_df.append(row)
 
-    slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
-             '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
-    names = [{"name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}, {
-        "name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}]
-    dates = ["Montag 01.02.2021", "Dienstag 02.02.2021", "Mittwoch 03.02.2021", "Donnerstag 04.02.2021", "Freitag 05.02.2021", "Samstag 06.02.2021", "Sonntag 07.02.2021",
-             "Montag 08.02.2021", "Dienstag 09.02.2021", "Mittwoch 10.02.2021", "Donnerstag 11.02.2021", "Freitag 12.02.2021", "Samstag 13.02.2021", "Sonntag 14.02.2021", ]
-    cost_df.columns = dates
-    # this creates the needed datastructure for the heatmap
-    for i in range(len(cost_df.index)):
-        names[i]["name"] = slots[i]
-        for j in range(len(cost_df.columns)):
-            names[i]["data"].append(
-                {"x": cost_df.columns[j], "y": cost_df.iloc[i][j]})
+        cost_df = pd.DataFrame(cost_df)
+        cost_df.loc[3, 3] = 0
+        #####dis is a quatsch for fake-daten########
 
-    jsonString = json.dumps(names)
+        slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
+                 '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
+        names = [{"name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}, {
+            "name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}]
+        dates = ["Montag 01.02.2021", "Dienstag 02.02.2021", "Mittwoch 03.02.2021", "Donnerstag 04.02.2021", "Freitag 05.02.2021", "Samstag 06.02.2021", "Sonntag 07.02.2021",
+                 "Montag 08.02.2021", "Dienstag 09.02.2021", "Mittwoch 10.02.2021", "Donnerstag 11.02.2021", "Freitag 12.02.2021", "Samstag 13.02.2021", "Sonntag 14.02.2021", ]
+        cost_df.columns = dates
+        # this creates the needed datastructure for the heatmap
+        for i in range(len(cost_df.index)):
+            names[i]["name"] = slots[i]
+            for j in range(len(cost_df.columns)):
+                names[i]["data"].append(
+                    {"x": cost_df.columns[j], "y": cost_df.iloc[i][j]})
 
-    return jsonString
+        jsonString = json.dumps(names)
+
+        return jsonString
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 ###############################################
 
@@ -360,24 +400,28 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
 
 ###############################################
 def abb_pruefungsverteilung_md():
+    try:
 
-    df = md.download_output(method= "dataframe", table= "enrollment_table")
-    df = df[["EXAM"]]
+        df = md.download_output(method= "dataframe", table= "enrollment_table")
+        df = df[["EXAM"]]
 
-    df = pd.DataFrame( df["EXAM"].value_counts())
-    df.columns = ["Anzahl"]
-    data = df['Anzahl'].value_counts(bins=6, sort=False)
-    cut_bins = [0,100,200,300,400,500,600]
-    data= pd.cut(df["Anzahl"], bins=cut_bins).value_counts().sort_values()
-    data = data.sort_index()
-    index = data.index.tolist()
-    data = data.tolist()
-    #put data in json format
-    dict = {"Anzahl":data,"Teilnehmerzahl":["0-100","100-200","200-300","300-400","400-500","mehr als 500"]}
+        df = pd.DataFrame( df["EXAM"].value_counts())
+        df.columns = ["Anzahl"]
+        data = df['Anzahl'].value_counts(bins=6, sort=False)
+        cut_bins = [0,100,200,300,400,500,600]
+        data= pd.cut(df["Anzahl"], bins=cut_bins).value_counts().sort_values()
+        data = data.sort_index()
+        index = data.index.tolist()
+        data = data.tolist()
+        #put data in json format
+        dict = {"Anzahl":data,"Teilnehmerzahl":["0-100","100-200","200-300","300-400","400-500","mehr als 500"]}
 
+        return dict
 
-    return dict
-
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 ###############################################
 def abb_scatterplot_md():
     try:
@@ -432,7 +476,7 @@ def abb_piechart_md():
 def pruefungen_p_tag_md():
     try:
         df = md.download_output(method="dataframe",table="solved_exam_ov")
-        wert = float(df_solved["day_date"].value_counts().mean())
+        wert = float(df["day_date"].value_counts().mean())
         return wert
 
 
