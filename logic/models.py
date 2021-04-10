@@ -416,8 +416,10 @@ def abb_scatterplot_md():
 def abb_piechart_md():
     try:
         df = md.download_output(method="dataframe",table="enrollment_table")
-        list = df.iloc[:,-1].value_counts().tolist()
-        dict = {"data":list}
+        #put data & labels into list, then dict
+        labels = [i for i in df.iloc[:,-1].value_counts().index]
+        data = [i/sum(df.iloc[:,-1].value_counts()) for i in df.iloc[:,-1].value_counts()]
+        dict = {"labels":labels, "data":data}
         return dict
 
 
@@ -425,7 +427,19 @@ def abb_piechart_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+###############################################
 
+def pruefungen_p_tag_md():
+    try:
+        df = md.download_output(method="dataframe",table="solved_exam_ov")
+        wert = float(df_solved["day_date"].value_counts().mean())
+        return wert
+
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 ###############################################
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""

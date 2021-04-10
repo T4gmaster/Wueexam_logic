@@ -597,6 +597,24 @@ def abb_piechart():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+
+######################################################
+@app.route("/pruefungen_pro_tag", methods=["GET", "POST"])
+def pruefungen_p_tag():
+    """Get the data for a graph to show the distribution of enrollments over exams
+    """
+    try:
+        if request.method == "GET":
+
+            js = md.pruefungen_p_tag_md()
+
+            return jsonify(js)
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 #####################################################
 # log Testing
 ######################################################
