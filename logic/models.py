@@ -379,6 +379,40 @@ def abb_pruefungsverteilung_md():
     return dict
 
 ###############################################
+def abb_scatterplot_md():
+    try:
+
+        enrollments = md.download_output(method="dataframe", table="enrollment_table")
+        solved = md.download_output(method="dataframe", table="exam_solved_ov")
+
+        #count enrollments
+        enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
+        enroll_nr.name ="Anmeldungen"
+        enrolled = pd.DataFrame(df_enrolled)
+        enrolled["MATRICULATION_NUMBER"] = enrolled.index       #here is the df with enrollments per student
+        print("enrolled---> ",enrolled)
+        #merge enrollments & solved
+        df = pd.merge(left=enrollments, right=solved, how='outer', left_on='EXAM_ID', right_on='exam_id')
+        #convert to datetime fr calculations
+        df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
+        print("df   ---> ",df)
+        #now looping and putting it in the right format
+        list = []
+        for row in df["MATRICULATION_NUMBER"].items():
+        #print(row[1])
+            date_range = df[df["MATRICULATION_NUMBER"]==row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"]==row[1]]["day_date"].min()
+            anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"] == row[1]]["Anmeldungen"].min()
+            list.append([anmeldung,date_range.days])
+            print("list ---->",list)
+        dict = {"name":"Anmeldungen vs. Exam_Zeitraum", "data":[list]}
+        return dict
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+###############################################
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""
     if cmd == 'start' or cmd == 'stop':
