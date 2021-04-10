@@ -64,7 +64,8 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
                         df.columns[i], columns_mapping, scorer=fuzz.token_sort_ratio)
                     # append the matches to a list
                     for j in range(len(result)):
-                        matches.append((result[j][0], df.columns[i], result[j][1]))
+                        matches.append(
+                            (result[j][0], df.columns[i], result[j][1]))
                     # rename the columns by the best matched names
                     df = df.rename(columns={df.columns[i]: result[0][0]})
 
@@ -83,7 +84,6 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
                 return "An error occurred"
         return df
 
-
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
@@ -91,6 +91,8 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
 
 ##########################################
 # Update an existing Table and its values
+
+
 def update_table(sql_table: str, type: str, table: str, json_file):
     """Update a table from a Frontend JSON Object entirely
     """
@@ -212,6 +214,8 @@ def group(frame, group_it_by: str, index_reset: str):
 
 ##########################################
 # Special function for student with >10 enrollments
+
+
 def anzahl_studenten_10_md(df_frame, param: str):
     """Returns a list of students which have more enrollments than [param]
     """
@@ -270,7 +274,6 @@ def kalender_md(frame):
                                 "end_date", "text"]].to_json(orient="records")
 
         return json_exam_plan
-
 
     except Exception:
         traceback.print_exc()
@@ -399,22 +402,25 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
         return "An error occurred"
 
 ###############################################
+
+
 def abb_pruefungsverteilung_md():
     try:
 
-        df = md.download_output(method= "dataframe", table= "enrollment_table")
+        df = md.download_output(method="dataframe", table="enrollment_table")
         df = df[["EXAM"]]
 
-        df = pd.DataFrame( df["EXAM"].value_counts())
+        df = pd.DataFrame(df["EXAM"].value_counts())
         df.columns = ["Anzahl"]
         data = df['Anzahl'].value_counts(bins=6, sort=False)
-        cut_bins = [0,100,200,300,400,500,600]
-        data= pd.cut(df["Anzahl"], bins=cut_bins).value_counts().sort_values()
+        cut_bins = [0, 100, 200, 300, 400, 500, 600]
+        data = pd.cut(df["Anzahl"], bins=cut_bins).value_counts().sort_values()
         data = data.sort_index()
         index = data.index.tolist()
         data = data.tolist()
-        #put data in json format
-        dict = {"Anzahl":data,"Teilnehmerzahl":["0-100","100-200","200-300","300-400","400-500","mehr als 500"]}
+        # put data in json format
+        dict = {"Anzahl": data, "Teilnehmerzahl": [
+            "0-100", "100-200", "200-300", "300-400", "400-500", "mehr als 500"]}
 
         return dict
 
@@ -423,32 +429,39 @@ def abb_pruefungsverteilung_md():
         print("There was a problem, please try again")
         return "An error occurred"
 ###############################################
+
+
 def abb_scatterplot_md():
     try:
 
-        enrollments = md.download_output(method="dataframe", table="enrollment_table")
+        enrollments = md.download_output(
+            method="dataframe", table="enrollment_table")
         solved = md.download_output(method="dataframe", table="solved_exam_ov")
 
-        #count enrollments
+        # count enrollments
         enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
-        enroll_nr.name ="Anmeldungen"
+        enroll_nr.name = "Anmeldungen"
         enrolled = pd.DataFrame(enroll_nr)
-        enrolled["MATRICULATION_NUMBER"] = enrolled.index       #here is the df with enrollments per student
-        print("enrolled---> ",enrolled)
-        #merge enrollments & solved
-        df = pd.merge(left=enrollments, right=solved, how='outer', left_on='EXAM_ID', right_on='exam_id')
-        #convert to datetime fr calculations
+        # here is the df with enrollments per student
+        enrolled["MATRICULATION_NUMBER"] = enrolled.index
+        print("enrolled---> ", enrolled)
+        # merge enrollments & solved
+        df = pd.merge(left=enrollments, right=solved, how='outer',
+                      left_on='EXAM_ID', right_on='exam_id')
+        # convert to datetime fr calculations
         df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
-        print("df   ---> ",df)
-        #now looping and putting it in the right format
+        print("df   ---> ", df)
+        # now looping and putting it in the right format
         list = []
         for row in df["MATRICULATION_NUMBER"].items():
-        #print(row[1])
-            date_range = df[df["MATRICULATION_NUMBER"]==row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"]==row[1]]["day_date"].min()
-            anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"] == row[1]]["Anmeldungen"].min()
-            list.append([int(anmeldung),int(date_range.days)])
+            # print(row[1])
+            date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max(
+            ) - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
+            anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"]
+                                 == row[1]]["Anmeldungen"].min()
+            list.append([int(anmeldung), int(date_range.days)])
 
-        dict = {"name":"Anmeldungen vs. Exam_Zeitraum", "data":list}
+        dict = {"name": "Anmeldungen vs. Exam_Zeitraum", "data": list}
         return dict
 
     except Exception:
@@ -456,35 +469,38 @@ def abb_scatterplot_md():
         print("There was a problem, please try again")
         return "An error occurred"
 ###############################################
+
 
 def abb_piechart_md():
     try:
-        df = md.download_output(method="dataframe",table="enrollment_table")
-        #put data & labels into list, then dict
-        labels = [i for i in df.iloc[:,-1].value_counts().index]
-        data = [i/sum(df.iloc[:,-1].value_counts()) for i in df.iloc[:,-1].value_counts()]
-        dict = {"labels":labels, "data":data}
+        df = md.download_output(method="dataframe", table="enrollment_table")
+        # put data & labels into list, then dict
+        labels = [i for i in df.iloc[:, -1].value_counts().index]
+        data = [i / sum(df.iloc[:, -1].value_counts())
+                for i in df.iloc[:, -1].value_counts()]
+        dict = {"labels": labels, "data": data}
         return dict
-
 
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
 ###############################################
+
 
 def pruefungen_p_tag_md():
     try:
-        df = md.download_output(method="dataframe",table="solved_exam_ov")
+        df = md.download_output(method="dataframe", table="solved_exam_ov")
         wert = float(df["day_date"].value_counts().mean())
         return wert
-
 
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
 ###############################################
+
+
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""
     if cmd == 'start' or cmd == 'stop':

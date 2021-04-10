@@ -73,7 +73,7 @@ def upload_to_df():
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
-        return "An error occurred"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -99,7 +99,7 @@ def update_parameters():
     except Exception:
         traceback.print_exc()
         print("a Problem occured.")
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -126,7 +126,7 @@ def anmeldung_nachtrag():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 ######################################################
 
 
@@ -151,7 +151,7 @@ def day_mapping():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 
 ######################################################
@@ -169,9 +169,8 @@ def heatmap_input():
     if request.method == "POST":
 
         js_exam_id = request.get_json(force=True)
-        global exam_id
-
-        exam_id = js_exam_id["exam_id"]["exam_id"]
+        global exam_id  # call the global variable
+        exam_id = js_exam_id["exam_id"]["exam_id"]  # unpack the json
         jsonString = md.heatmap_input_md(id_str=exam_id)
 
         return jsonString
@@ -190,14 +189,12 @@ def heatmap_correction():
         if request.method == "POST":
             # print(exam_id)
             json_f = request.get_json(force=True)
-            print("json_f:", json_f)
-            print("exam_id:", exam_id)
             df = md.download_output(method="dataframe", table="solved_exam_ov")
 
             message = md.heatmap_correction_md(
                 value=exam_id, json_file=json_f, d_frame=df)
             print("all worked")
-            return "ok"
+            return {"ok"}
 
         return {"Method needs to be GET, not POST"}, 200
 
@@ -205,7 +202,7 @@ def heatmap_correction():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -227,7 +224,7 @@ def fixed_exam():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 ######################################################
 
 
@@ -252,7 +249,7 @@ def pruefungsansicht():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -278,7 +275,7 @@ def studentenansicht():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -299,7 +296,7 @@ def anmeldeliste():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -329,7 +326,7 @@ def anmeldungen_distribution():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 ######################################################
 # Single-Value-Return Functions
 ######################################################
@@ -352,7 +349,7 @@ def anzahl_studenten():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -374,7 +371,7 @@ def anzahl_pruefungen():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -398,7 +395,7 @@ def anzahl_anmeldungen():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -423,7 +420,7 @@ def anzahl_studenten_10():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 ######################################################
@@ -448,7 +445,7 @@ def faecherliste():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -470,7 +467,7 @@ def kalender():
         traceback.print_exc()
         print("there was a problem")
 
-        return "not ok"
+        return {"An error occurred"}, 200
 
 ######################################################
 
@@ -496,7 +493,7 @@ def fake_sentence():
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
-        return "An error occurred"
+        return {"An error occurred"}, 200
 
 
 ######################################################
@@ -517,7 +514,7 @@ def fixed_exams_down():
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
-        return "An error occurred"
+        return {"An error occurred"}, 200
 
 
 ######################################################
@@ -540,9 +537,11 @@ def fixed_exams_download():
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
-        return "An error occurred"
+        return {"An error occurred"}, 200
 
 ######################################################
+
+
 @app.route("/abbildung_pruefungsverteilung", methods=["GET", "POST"])
 def abb_pruefungsverteilung():
     """Get the data for a graph to show the distribution of enrollments over exams
@@ -558,7 +557,7 @@ def abb_pruefungsverteilung():
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
-        return "An error occurred"
+        return {"An error occurred"}, 200
 
 
 ######################################################
@@ -599,6 +598,8 @@ def abb_piechart():
         return "An error occurred"
 
 ######################################################
+
+
 @app.route("/pruefungen_pro_tag", methods=["GET", "POST"])
 def pruefungen_p_tag():
     """Get the data for a graph to show the distribution of enrollments over exams
@@ -620,6 +621,7 @@ def pruefungen_p_tag():
 ######################################################
 ######################################################
 ######################################################
+
 
 # App starten mit $ python app.py
 if __name__ == '__main__':

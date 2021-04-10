@@ -1,9 +1,9 @@
-#import docker compose environment variable
+# import docker compose environment variable
 import os
-#requirements
+# requirements
 from sqlalchemy import create_engine
 import pandas as pd
-#need numpy == 1.19.3 , so install it
+# need numpy == 1.19.3 , so install it
 from Wueexam_logic.functions import FileFunctions as ff
 import pandas as pd
 
@@ -18,13 +18,15 @@ if not local:
     password = os.environ["MYSQL_PASSWORD"]
     database = os.environ["MYSQL_DATABASE"]
     host = os.environ["MYSQL_HOST"]
-    conn_url = "mysql://"+user+":"+password+"@"+host+"/"+database
+    conn_url = "mysql://" + user + ":" + password + "@" + host + "/" + database
     engine = create_engine(conn_url, pool_pre_ping=True)
 else:
     import pymysql
     pymysql.install_as_MySQLdb()
     config = ff.read_json_to_dict('../db_config.json')
-    config_mysql_str = str(config["type"])+str(config["user"])+":"+str(config["password"])+"@"+str(config["host"])+":"+str(config["port"])+"/"+str(config["database"])
+    config_mysql_str = str(config["type"]) + str(config["user"]) + ":" + str(config["password"]) + \
+        "@" + str(config["host"]) + ":" + \
+        str(config["port"]) + "/" + str(config["database"])
     engine = create_engine(config_mysql_str, pool_pre_ping=True)
 
 
@@ -37,41 +39,72 @@ def write_df(sql_table: str, type: str, frame):
         > frame: is the dataframe to be uploaded
         > type: can be "append" or "replace"
     """
+    try:
 
-    print("Writing DF into SQL-Table '%s'" % sql_table)
+        print("Writing DF into SQL-Table '%s'" % sql_table)
 
-    with engine.begin() as connection:                                   #open Database connection
-        frame.to_sql(sql_table,con=connection, if_exists=type, index=False) #pandas module to upload entire Dataframe and replace or append
+        with engine.begin() as connection:  # open Database connection
+            # pandas module to upload entire Dataframe and replace or append
+            frame.to_sql(sql_table, con=connection,
+                         if_exists=type, index=False)
 
-    print("Done writing")
+        print("Done writing")
 
-
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 #######################################################
-#EXPORT
+# EXPORT
 ######################################################
+
+
 def read_df(tablename: str):
     """reads from the DB a table defined by str argument into pd.DF and returns it"""
+    try:
+        with engine.connect() as connection:
 
-    with engine.connect() as connection:
+            result = connection.execute("Select * from {}".format(tablename))
+            column_names = connection.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS\
+             WHERE TABLE_NAME = '{}' ORDER BY ORDINAL_POSITION".format(tablename))
 
-        result = connection.execute("Select * from {}".format(tablename))
-        column_names = connection.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS\
-         WHERE TABLE_NAME = '{}' ORDER BY ORDINAL_POSITION".format(tablename))
+            # gather list of table_columns
+            table_columns = []
+            for row in column_names:
+                table_columns.append(row[0])
 
-        #gather list of table_columns
-        table_columns = []
-        for row in column_names:
-            table_columns.append(row[0])
+            # create df
+            df = pd.DataFrame(result, columns=table_columns)
 
-        #create df
-        df = pd.DataFrame(result,columns=table_columns)
+            return df
 
-        return df
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+######################################################
+
 
 def read_table_exam_plan():
     "lazy function call of read_df for Output table - returns Output table as DF"
-    return read_df('exam_plan')
+    try:
+        return read_df('exam_plan')
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return {"An error occurred"}, 200
+
+######################################################
+
 
 def read_table_enrollment_table():
     "lazy function call of read_df for Output table - returns Output table as DF"
-    return read_df('enrollment_table')
+    try:
+        return read_df('enrollment_table')
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return {"An error occurred"}, 200
