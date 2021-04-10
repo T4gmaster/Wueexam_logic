@@ -403,7 +403,7 @@ def abb_scatterplot_md():
             date_range = df[df["MATRICULATION_NUMBER"]==row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"]==row[1]]["day_date"].min()
             anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"] == row[1]]["Anmeldungen"].min()
             list.append([anmeldung,date_range.days])
-            print("list ---->",list)
+
         dict = {"name":"Anmeldungen vs. Exam_Zeitraum", "data":[list]}
         return dict
 
