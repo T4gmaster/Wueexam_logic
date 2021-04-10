@@ -388,7 +388,7 @@ def abb_scatterplot_md():
         #count enrollments
         enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
         enroll_nr.name ="Anmeldungen"
-        enrolled = pd.DataFrame(df_enrolled)
+        enrolled = pd.DataFrame(enrolled_nr)
         enrolled["MATRICULATION_NUMBER"] = enrolled.index       #here is the df with enrollments per student
         print("enrolled---> ",enrolled)
         #merge enrollments & solved
