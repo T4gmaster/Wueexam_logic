@@ -456,13 +456,11 @@ def abb_scatterplot_md():
         list = []
         list = []
         list2 = []
-        for index,row in df3_copy.iterrows():
-            #print(row["MATRICULATION_NUMBER"])
+        for index,row in df.iterrows():
             if index not in list2:
-                sub_frame = df3_copy.query('MATRICULATION_NUMBER=={}'.format(row["MATRICULATION_NUMBER"]))
+                sub_frame = df.query('MATRICULATION_NUMBER=={}'.format(row["MATRICULATION_NUMBER"]))
                 date_range = a["day_date"].max() - a["day_date"].min()
-                #anmeldung = df[df["MATRICULATION_NUMBER"] == 10000]["Anmeldungen"].min()
-                list.append(date_range.days)
+                list.append(int(date_range.days))
                 list2.extend(sub_frame.index.values.tolist())
         #for row in df["MATRICULATION_NUMBER"].items():
         #    date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
