@@ -450,6 +450,8 @@ def abb_scatterplot_md():
                       left_on='EXAM_ID', right_on='exam_id')
         # convert to datetime fr calculations
         df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
+        # ValueError: time data '2021-02-05 18:00:00' does not match format '%d.%M.%Y' (match)
+        #df["day_date"] = pd.to_datetime(df["day_date"], format="%Y-%M-%d H:M:S")
         print("df   ---> ", df)
         # now looping and putting it in the right format
         global list
@@ -459,7 +461,7 @@ def abb_scatterplot_md():
         for index,row in df.iterrows():
             if index not in list2:
                 sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
-                date_range = a["day_date"].max() - a["day_date"].min()
+                date_range = sub_frame.max() - sub_frame.min()
                 list.append(int(date_range.days))
                 list2.extend(sub_frame.index.values.tolist())
         #for row in df["MATRICULATION_NUMBER"].items():
