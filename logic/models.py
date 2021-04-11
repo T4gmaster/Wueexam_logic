@@ -475,8 +475,8 @@ def abb_scatterplot_md():
             if key == 0:
                 None
             else:
-                labels.append(int(key))
-                values.append(int(value))
+                labels.append(key)
+                values.append(value)
 
 
         js = {"labels":labels,"values":values}
