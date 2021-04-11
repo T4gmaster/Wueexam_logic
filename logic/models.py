@@ -439,23 +439,24 @@ def abb_scatterplot_md():
         solved = md.download_output(method="dataframe", table="solved_exam_ov")
 
         # count enrollments
-        enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
-        enroll_nr.name = "Anmeldungen"
-        enrolled = pd.DataFrame(enroll_nr)
+        #enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
+        #enroll_nr.name = "Anmeldungen"
+        #enrolled = pd.DataFrame(enroll_nr)
         # here is the df with enrollments per student
-        enrolled["MATRICULATION_NUMBER"] = enrolled.index
-        print("enrolled---> ", enrolled)
+        #enrolled["MATRICULATION_NUMBER"] = enrolled.index
+        #print("enrolled---> ", enrolled)
         # merge enrollments & solved
         df = pd.merge(left=enrollments, right=solved, how='outer',
                       left_on='EXAM_ID', right_on='exam_id')
         # convert to datetime fr calculations
+        print("df --->",df)
         df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
         # ValueError: time data '2021-02-05 18:00:00' does not match format '%d.%M.%Y' (match)
         #df["day_date"] = pd.to_datetime(df["day_date"], format="%Y-%M-%d H:M:S")
+
         print("df   ---> ", df)
+        print("df.columns --->",df.columns)
         # now looping and putting it in the right format
-        global list
-        list = []
         list = []
         list2 = []
         for index,row in df.iterrows():
