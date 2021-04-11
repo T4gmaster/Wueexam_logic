@@ -463,7 +463,7 @@ def abb_scatterplot_md():
             if index not in list2:
                 sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
                 date_range = sub_frame.max() - sub_frame.min()
-                list.append(int(date_range.days))
+                list.append(date_range.days)
                 list2.extend(sub_frame.index.values.tolist())
         #for row in df["MATRICULATION_NUMBER"].items():
         #    date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
