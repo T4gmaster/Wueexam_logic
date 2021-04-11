@@ -460,7 +460,7 @@ def abb_scatterplot_md():
             #anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"]
                     #             == row[1]]["Anmeldungen"].min()
             #list.append([int(anmeldung), int(date_range.days)])
-            list.append(date_range)
+            list.append(date_range.days)
         dict_data = Counter(list)
         dict_data = collections.OrderedDict(sorted(dict_data.items()))
         labels = []
