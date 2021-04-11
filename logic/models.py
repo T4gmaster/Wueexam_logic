@@ -454,15 +454,26 @@ def abb_scatterplot_md():
         # now looping and putting it in the right format
         list = []
         for row in df["MATRICULATION_NUMBER"].items():
-            # print(row[1])
-            date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max(
-            ) - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
-            anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"]
-                                 == row[1]]["Anmeldungen"].min()
-            list.append([int(anmeldung), int(date_range.days)])
+            date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
+            #anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"]
+                    #             == row[1]]["Anmeldungen"].min()
+            #list.append([int(anmeldung), int(date_range.days)])
+            list.append(date_range)
+        dict_data = Counter(list)
+        labels = []
+        values = []
+        for key, value in dict.items():
+            if key == 0:
+                None
+            else:
+                labels.append(key)
+                values.append(value)
 
-        dict = {"name": "Anmeldungen vs. Exam_Zeitraum", "data": list}
-        return dict
+
+        js = {"labels":labels,"values":values}
+        return js
+        #dict = {"name": "Anmeldungen vs. Exam_Zeitraum", "data": list}
+        #return dict
 
     except Exception:
         traceback.print_exc()

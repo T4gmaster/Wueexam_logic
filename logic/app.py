@@ -561,7 +561,7 @@ def abb_pruefungsverteilung():
 
 
 ######################################################
-@app.route("/abbildung_scatterplot", methods=["GET", "POST"])
+@app.route("/abbildung_dauer", methods=["GET", "POST"])
 def abb_scatterplot():
     """Get the data for a graph to show the distribution of enrollments over exams
     """
