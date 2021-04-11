@@ -438,24 +438,15 @@ def abb_scatterplot_md():
             method="dataframe", table="enrollment_table")
         solved = md.download_output(method="dataframe", table="solved_exam_ov")
 
-        # count enrollments
-        #enroll_nr = enrollments["MATRICULATION_NUMBER"].value_counts()
-        #enroll_nr.name = "Anmeldungen"
-        #enrolled = pd.DataFrame(enroll_nr)
-        # here is the df with enrollments per student
-        #enrolled["MATRICULATION_NUMBER"] = enrolled.index
-        #print("enrolled---> ", enrolled)
         # merge enrollments & solved
         df = pd.merge(left=enrollments, right=solved, how='outer',
                       left_on='EXAM_ID', right_on='exam_id')
         # convert to datetime fr calculations
-        print("df --->",df)
+
         df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
         # ValueError: time data '2021-02-05 18:00:00' does not match format '%d.%M.%Y' (match)
         #df["day_date"] = pd.to_datetime(df["day_date"], format="%Y-%M-%d H:M:S")
 
-        print("df   ---> ", df)
-        print("df.columns --->",df.columns)
         # now looping and putting it in the right format
         list = []
         list2 = []
@@ -465,19 +456,13 @@ def abb_scatterplot_md():
                 date_range = sub_frame.max() - sub_frame.min()
                 list.append(date_range.days)
                 list2.extend(sub_frame.index.values.tolist())
-        #for row in df["MATRICULATION_NUMBER"].items():
-        #    date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
-            #anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"]
-                    #             == row[1]]["Anmeldungen"].min()
-            #list.append([int(anmeldung), int(date_range.days)])
-        #    list.append(date_range.days)
-        #list = df.apply(lambda row: iteration(row_nr=row,frame=df),axis=1)
+
         dict_data = Counter(list)
         dict_data = collections.OrderedDict(sorted(dict_data.items()))
         labels = []
         values = []
         for key, value in dict_data.items():
-            if np.isnan(key) == False:
+            if pd.isna(key) == False:
                 labels.append(key)
                 values.append(value)
 
