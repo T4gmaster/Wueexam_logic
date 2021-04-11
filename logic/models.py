@@ -222,7 +222,7 @@ def anzahl_studenten_10_md(df_frame, param: str):
     """Returns a list of students which have more enrollments than [param]
     """
     try:
-        df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
+        df = df_frame.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
                        "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
 
         students_over_x = df[df["Anmeldungen"] > param].sort_values(
@@ -477,7 +477,7 @@ def abb_scatterplot_md():
         labels = []
         values = []
         for key, value in dict_data.items():
-            if key == 0:
+            if np.isnan(key) == True:
                 None
             else:
                 labels.append(key)
