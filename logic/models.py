@@ -27,6 +27,7 @@ from datetime import datetime, timedelta
 from fuzzywuzzy import process, fuzz
 import traceback
 from collections import Counter
+import collections
 #########################################
 
 ##########################################
@@ -461,9 +462,10 @@ def abb_scatterplot_md():
             #list.append([int(anmeldung), int(date_range.days)])
             list.append(date_range)
         dict_data = Counter(list)
+        dict_data = collections.OrderedDict(sorted(dict_data.items()))
         labels = []
         values = []
-        for key, value in dict.items():
+        for key, value in dict_data.items():
             if key == 0:
                 None
             else:
