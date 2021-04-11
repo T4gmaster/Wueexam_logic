@@ -431,7 +431,10 @@ def abb_pruefungsverteilung_md():
         print("There was a problem, please try again")
         return "An error occurred"
 ###############################################
-
+def iteration(row_nr, frame):
+    sub_frame = frame[frame["MATRICULATION_NUMBER"]==row_nr["MATRICULATION_NUMBER"]]["day_date"]
+    date_range = sub_frame.max() - sub_frame.min()
+    list.append(date_range.days)
 
 def abb_scatterplot_md():
     try:
@@ -454,13 +457,15 @@ def abb_scatterplot_md():
         df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
         print("df   ---> ", df)
         # now looping and putting it in the right format
+
         list = []
-        for row in df["MATRICULATION_NUMBER"].items():
-            date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
+        #for row in df["MATRICULATION_NUMBER"].items():
+        #    date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
             #anmeldung = enrolled[enrolled["MATRICULATION_NUMBER"]
                     #             == row[1]]["Anmeldungen"].min()
             #list.append([int(anmeldung), int(date_range.days)])
-            list.append(date_range.days)
+        #    list.append(date_range.days)
+        list = df.apply(lambda row: iteration(row_nr=row,frame=df),axis=1)
         dict_data = Counter(list)
         dict_data = collections.OrderedDict(sorted(dict_data.items()))
         labels = []
