@@ -432,6 +432,7 @@ def abb_pruefungsverteilung_md():
         return "An error occurred"
 ###############################################
 def iteration(row_nr, frame):
+    global list
     sub_frame = frame[frame["MATRICULATION_NUMBER"]==row_nr["MATRICULATION_NUMBER"]]["day_date"]
     date_range = sub_frame.max() - sub_frame.min()
     list.append(date_range.days)
@@ -457,7 +458,7 @@ def abb_scatterplot_md():
         df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
         print("df   ---> ", df)
         # now looping and putting it in the right format
-
+        global list
         list = []
         #for row in df["MATRICULATION_NUMBER"].items():
         #    date_range = df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].max() - df[df["MATRICULATION_NUMBER"] == row[1]]["day_date"].min()
@@ -495,8 +496,7 @@ def abb_piechart_md():
         df = md.download_output(method="dataframe", table="enrollment_table")
         # put data & labels into list, then dict
         labels = [i for i in df.iloc[:, -1].value_counts().index]
-        data = [i / sum(df.iloc[:, -1].value_counts())
-                for i in df.iloc[:, -1].value_counts()]
+        data = [i for i in df.iloc[:, -1].value_counts()]
         dict = {"labels": labels, "data": data}
         return dict
 
