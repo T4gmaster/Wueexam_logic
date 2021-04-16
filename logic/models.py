@@ -119,12 +119,13 @@ def update_table(sql_table: str, type: str, table: str, json_file):
             if sql_table == "day_mapping":
                 day = []
                 date = []
+                selected = []
                 for i in range(len(json_file)):
-                    # +1 because it needs to start at 1
-                    day.append(json_file[i]["day"] + 1)
+                    day.append(json_file[i]["day"] + 1)                     # +1 because it needs to start at 1
                     date.append(json_file[i]["date"])
+                    selected.append(json_file[i]["selected"])
 
-                data = {"day_ordered": day, "date": date}
+                data = {"day_ordered": day, "date": date, "selected": selected}
                 df = pd.DataFrame(data)
                 df['date'] = pd.to_datetime(
                     df['date'], format="%Y-%m-%d %H:%M")
