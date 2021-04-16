@@ -437,7 +437,7 @@ def abb_scatterplot_md():
         enrollments = md.download_output(
             method="dataframe", table="enrollment_table")
         solved = md.download_output(method="dataframe", table="solved_exam_ov")
-
+        solved["exam_id"] = solved["exam_id"].astype(int)
         # merge enrollments & solved
         df = pd.merge(left=enrollments, right=solved, how='outer',
                       left_on='EXAM_ID', right_on='exam_id')

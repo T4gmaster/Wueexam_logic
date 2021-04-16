@@ -15,8 +15,7 @@ import traceback
 # https://stackoverflow.com/questions/1483429/how-to-print-an-exception-in-python
 from faker import Faker
 
-######################################################
-######################################################
+
 # Output Dateien werden im Frontend gesucht
 app = Flask(__name__,
             # Verweis auf build server Pfad von FE
@@ -24,6 +23,7 @@ app = Flask(__name__,
             template_folder="../frontend/dist")
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # config noch in externe Datei auslagern: https://hackersandslackers.com/configure-flask-applications/
 app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
@@ -35,7 +35,6 @@ app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
-
 
 ######################################################
 ######################################################
@@ -278,8 +277,6 @@ def studentenansicht():
         return {"An error occurred"}, 200
 
 ######################################################
-
-
 @app.route("/anmeldeliste", methods=["GET", "POST"])
 def anmeldeliste():
     """Gibt eine Json der Anmeldeliste wieder
