@@ -11,3 +11,6 @@ cryptography
 fuzzywuzzy
 Levenshtein
 Faker
+flask-restx
+Flask-Bcrypt
+Flask-JWT-Extended

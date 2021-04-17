@@ -15,7 +15,14 @@ import traceback
 # https://stackoverflow.com/questions/1483429/how-to-print-an-exception-in-python
 from faker import Faker
 
+##############TEST##################
+from flask_restx import Resource, Api
+from flask_bcrypt import BCrypt
+from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity)#, get_jwt)
 
+store = [{"fruit":"banana"}{"fruit":"banana"}]
+user = {"name":"test","password":"test1"}
+##############TEST##################
 # Output Dateien werden im Frontend gesucht
 app = Flask(__name__,
             # Verweis auf build server Pfad von FE
@@ -29,7 +36,34 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 
 # alle routings werden an die index.html Datei umgeleitet und dann vom vue-router weiterverarbeitet
+##############TEST################################TEST##################
+try:
+    jwt = JWTManager(app)
+    api = Api(app, version=1.0, title="Login API")
 
+    @api.route("/getitems")
+    class GetItems(Resource):
+        @jwt_required
+        def get(self):
+            return {"Store":store}, 200
+
+
+    @api.route("/login")
+    class Login(Resource):
+        def post(self):
+            username = request.get_json()["name"]
+            password = request.get_json()["password"]
+
+            if username == user["name"] and password == user["password"]:
+                access_token = create_access_token(identity=username)
+                return {"token": access_token}, 200
+            return {"message":"username or password wrong"}
+
+except Exception:
+    traceback.print_exc()
+    print("There was a problem, please try again")
+    return {"An error occurred"}, 200
+##############TEST##################
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
