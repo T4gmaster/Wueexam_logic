@@ -37,32 +37,28 @@ app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 
 # alle routings werden an die index.html Datei umgeleitet und dann vom vue-router weiterverarbeitet
 ##############TEST################################TEST##################
-try:
-    jwt = JWTManager(app)
-    api = Api(app, version=1.0, title="Login API")
 
-    @api.route("/getitems")
-    class GetItems(Resource):
-        @jwt_required
-        def get(self):
-            return {"Store":store}, 200
+jwt = JWTManager(app)
+api = Api(app, version=1.0, title="Login API")
+
+@api.route("/getitems")
+class GetItems(Resource):
+    @jwt_required
+    def get(self):
+        return {"Store":store}, 200
 
 
-    @api.route("/login")
-    class Login(Resource):
-        def post(self):
-            username = request.get_json()["name"]
-            password = request.get_json()["password"]
+@api.route("/login")
+class Login(Resource):
+    def post(self):
+        username = request.get_json()["name"]
+        password = request.get_json()["password"]
 
-            if username == user["name"] and password == user["password"]:
-                access_token = create_access_token(identity=username)
-                return {"token": access_token}, 200
-            return {"message":"username or password wrong"}
+        if username == user["name"] and password == user["password"]:
+            access_token = create_access_token(identity=username)
+            return {"token": access_token}, 200
+        return {"message":"username or password wrong"}
 
-except Exception:
-    traceback.print_exc()
-    print("There was a problem, please try again")
-    return {"An error occurred"}, 200
 ##############TEST##################
 
 @app.route('/', defaults={'path': ''})
