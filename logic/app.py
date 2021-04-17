@@ -18,7 +18,7 @@ from faker import Faker
 ##############TEST##################
 from flask_restx import Resource, Api
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity)#, get_jwt)
+from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity, get_jwt_claims)
 
 store = [{"item":"banana","price":1000},{"item":"banana","price":7000}]
 user = {"name":"test","password":"test1"}
@@ -41,7 +41,7 @@ app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 jwt = JWTManager(app)
 api = Api(app, version=1.0, title="Login API")
 
-@api.route("/getitems", methods = ["GET"])
+@api.route("/getitems")
 class GetItems(Resource):
     @jwt_required
     def get(self):

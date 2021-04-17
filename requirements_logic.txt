@@ -12,4 +12,4 @@ Levenshtein
 Faker
 flask-restx
 Flask-Bcrypt
-Flask-JWT-Extended
+JWT-Extended==3.25.0
