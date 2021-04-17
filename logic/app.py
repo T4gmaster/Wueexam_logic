@@ -20,7 +20,7 @@ from flask_restx import Resource, Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity)#, get_jwt)
 
-store = [{"fruit":"banana","price":1000},{"fruit":"banana","price":7000}]
+store = [{"item":"banana","price":1000},{"item":"banana","price":7000}]
 user = {"name":"test","password":"test1"}
 ##############TEST##################
 # Output Dateien werden im Frontend gesucht
@@ -44,6 +44,13 @@ api = Api(app, version=1.0, title="Login API")
 @api.route("/getitems", methods = ["GET"])
 class GetItems(Resource):
     @jwt_required
+    def get(self):
+        print("Nothing")
+        return {"store": store}, 200
+
+@api.route("/getitems2")
+class GetItems(Resource):
+    #@jwt_required
     def get(self):
         print("Nothing")
         return {"store": store}, 200
