@@ -134,13 +134,31 @@ def update_table(sql_table: str, type: str, table: str, json_file):
                 df = df[["day_ordered", "date"]]
 
             elif sql_table == "fixed_exams":
-                df = pd.DataFrame(columns=["exam_id", "exam", "date", "slot"])
-                for i in range(len(json_file)):
-                    list = []
-                    for key, value in json_file[i].items():
-                        list.append(value)
-                    df.loc[i] = list
-                df['date'] = pd.to_datetime(df['date'], format="%d-%m-%Y")
+                df = pd.DataFrame(columns=["exam_id", "exam", "date", "slot","ISO_date"])
+                for count,i in enumerate(json_file):
+                    list=[]
+                    for key, value in i.items():
+                        if key == "date":
+                            #split up ISO_format to get date
+                            date , time = value.split("T")
+                            #get time from dict
+                            time = str(datetime.strptime(i["time"],'%H:%M'))[11:]
+                            #put date & time together in ISO_format again
+                            value = str(date) + 'T' + time + '.000Z'
+                            list.append(value)
+                        else:
+                            list.append(value)
+                    list.append(list[2])
+                    df.loc[count] = list
+                    df["date"].loc[count] = list[2][:10]
+                df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
+                ###this is the old process: to be deleted after succesfully implemented above
+                #for i in range(len(json_file)):
+                #    list = []
+                #    for key, value in json_file[i].items():
+                #        list.append(value)
+                #    df.loc[i] = list
+                #df['date'] = pd.to_datetime(df['date'], format="%d-%m-%Y")
 
             else:
                 print("no table specified.")

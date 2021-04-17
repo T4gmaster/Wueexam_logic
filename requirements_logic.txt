@@ -7,7 +7,6 @@ mysqlclient
 openpyxl
 datetime
 pymysql
-cryptography
 fuzzywuzzy
 Levenshtein
 Faker
