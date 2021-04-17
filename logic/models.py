@@ -528,10 +528,10 @@ def pruefungen_p_tag_md():
 def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
-        df = df.groupby(["day_date","student_matnr"]).size().reset_index(name='count')
+        df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
         wert = len(df[df["count"]>1])
         return wert
-        
+
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
