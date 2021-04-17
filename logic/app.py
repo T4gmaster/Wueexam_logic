@@ -41,14 +41,19 @@ app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 jwt = JWTManager(app)
 api = Api(app, version=1.0, title="Login API")
 
-@api.route("/getitems")
+@api.route("/getitems", methods=["GET"])
 class GetItems(Resource):
     @jwt_required
     def get(self):
         return {"Store":store}, 200
 
+@api.route("/testroute", methods=["GET"])
+class GetItems(Resource):
+    #@jwt_required
+    def get(self):
+        return {"Store":store}, 200
 
-@api.route("/login")
+@api.route("/login", methods=["GET"])
 class Login(Resource):
     def post(self):
         username = request.get_json()["name"]
