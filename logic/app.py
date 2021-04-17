@@ -20,7 +20,7 @@ from flask_restx import Resource, Api
 from flask_bcrypt import BCrypt
 from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity)#, get_jwt)
 
-store = [{"fruit":"banana"}{"fruit":"banana"}]
+store = [{"fruit":"banana"},{"fruit":"banana"}]
 user = {"name":"test","password":"test1"}
 ##############TEST##################
 # Output Dateien werden im Frontend gesucht
