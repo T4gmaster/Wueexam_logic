@@ -108,3 +108,18 @@ def read_table_enrollment_table():
         traceback.print_exc()
         print("There was a problem, please try again")
         return {"An error occurred"}, 200
+
+
+from datetime import datetime
+
+def dt_to_iso(date: datetime.date, time: datetime.time):
+    """"Converts datetime.date & datetime.time into iso
+     format used in the frontend"""
+    dt = str(date) + 'T' + str(time)
+    iso = dt[:19] + '.000Z'
+    return iso
+
+def iso_to_datetime(iso: str):
+    """Converts Iso  """
+    my_datetime = pd.to_datetime(iso)
+    return my_datetime
