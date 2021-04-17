@@ -140,7 +140,7 @@ def update_table(sql_table: str, type: str, table: str, json_file):
                     for key, value in i.items():
                         if key == "date":
                             #split up ISO_format to get date
-                            date , time = value.split("T")
+                            date = i["date"].split("T")[0]
                             #get time from dict
                             time = str(datetime.strptime(i["time"],'%H:%M'))[11:]
                             #put date & time together in ISO_format again
@@ -525,8 +525,17 @@ def pruefungen_p_tag_md():
         print("There was a problem, please try again")
         return "An error occurred"
 ###############################################
-
-
+def sum_ueberschneidung_md():
+    try:
+        df = md.download_output(method="dataframe", table="solved_enrollment_table")
+        df = df.groupby(["day_date","student_matnr"]).size().reset_index(name='count')
+        wert = len(df[df["count"]>1])
+        return wert
+        
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 def command_solver(cmd: str):
     """Sending command to solver through writing in solver DB"""
     if cmd == 'start' or cmd == 'stop':

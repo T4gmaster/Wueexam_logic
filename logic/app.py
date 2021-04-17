@@ -47,11 +47,6 @@ class GetItems(Resource):
     def get(self):
         return {"Store":store}, 200
 
-@api.route("/testroute", methods=["GET"])
-class GetItems(Resource):
-    #@jwt_required
-    def get(self):
-        return {"Store":store}, 200
 
 @api.route("/login", methods=["GET"])
 class Login(Resource):
@@ -640,6 +635,23 @@ def pruefungen_p_tag():
         if request.method == "GET":
 
             js = md.pruefungen_p_tag_md()
+
+            return jsonify(js)
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+@app.route("/summe_ueberschneidungen", methods=["GET", "POST"])
+def sum_ueberschneidung():
+    """Get the data for a graph to show the distribution of enrollments over exams
+    """
+    try:
+        if request.method == "GET":
+
+            js = md.sum_ueberschneidung_md()
 
             return jsonify(js)
         return {"Method needs to be GET, not POST"}, 200
