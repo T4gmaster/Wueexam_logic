@@ -41,14 +41,14 @@ app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 jwt = JWTManager(app)
 api = Api(app, version=1.0, title="Login API")
 
-@api.route("/getitems", methods=["GET"])
+@api.route("/getitems")
 class GetItems(Resource):
     @jwt_required
     def get(self):
         return {"Store":store}, 200
 
 
-@api.route("/login", methods=["GET"])
+@api.route("/login")
 class Login(Resource):
     def post(self):
         username = request.get_json()["name"]
@@ -644,6 +644,7 @@ def pruefungen_p_tag():
         print("There was a problem, please try again")
         return "An error occurred"
 
+######################################################
 @app.route("/summe_ueberschneidungen", methods=["GET", "POST"])
 def sum_ueberschneidung():
     """Get the data for a graph to show the distribution of enrollments over exams
