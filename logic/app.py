@@ -17,7 +17,7 @@ from faker import Faker
 
 ##############TEST##################
 from flask_restx import Resource, Api
-from flask_bcrypt import BCrypt
+from flask_bcrypt import Bcrypt
 from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity)#, get_jwt)
 
 store = [{"fruit":"banana"},{"fruit":"banana"}]
