@@ -45,7 +45,8 @@ api = Api(app, version=1.0, title="Login API")
 class GetItems(Resource):
     @jwt_required
     def get(self):
-        return jsonify("Blob"){"Store"}, 200
+        print("Nothing")
+        return {"store":store},200
 
 
 @api.route("/login")
