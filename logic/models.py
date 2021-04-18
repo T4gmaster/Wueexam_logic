@@ -298,18 +298,17 @@ def kalender_md(frame):
 def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
-    #####dis is a quatsch for fake-daten########
+
     try:
         slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
                  '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
-        names = [{"name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}, {
-            "name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}]
+        names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
         #get a list of all dates to consider
         df = md.download_output(method="dataframe", table="day_mapping")
         day_list = df[df["selected"] == "true"]["date"].tolist()
 
 
-
+        #####dis is a quatsch for fake-daten########
         import random
         cost_df = []
         for t in range(len(slots)):
@@ -329,8 +328,7 @@ def heatmap_input_md(id_str: str):
         for i in range(len(cost_df.index)):
             names[i]["name"] = slots[i]
             for j in range(len(cost_df.columns)):
-                names[i]["data"].append(
-                    {"x": cost_df.columns[j], "y": cost_df.iloc[i][j]})
+                names[i]["data"].append({"x": cost_df.columns[j], "y": cost_df.iloc[i][j]})
 
         jsonString = json.dumps(names)
 
