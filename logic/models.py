@@ -118,20 +118,17 @@ def update_table(sql_table: str, type: str, table: str, json_file):
         elif table == "long":
             if sql_table == "day_mapping":
                 day = []
+                iso_date = []
                 date = []
                 selected = []
                 for i in range(len(json_file)):
                     day.append(json_file[i]["day"] + 1)                     # +1 because it needs to start at 1
-                    date.append(json_file[i]["date"])
+                    iso_date.append(json_file[i]["date"])
+                    date.append(json_file[i]["date"].split("T")[0])         #get the date extra for FE purposes
                     selected.append(json_file[i]["selected"])
 
-                data = {"day_ordered": day, "date": date, "selected": selected}
+                data = {"day_ordered": day, "date": date, "ISO_date":iso_date, "selected": selected}
                 df = pd.DataFrame(data)
-                df['date'] = pd.to_datetime(
-                    df['date'], format="%Y-%m-%d %H:%M")
-                for i in df.index:
-                    df["date"].loc[i] = datetime.date(df["date"].loc[i])
-                df = df[["day_ordered", "date"]]
 
             elif sql_table == "fixed_exams":
                 df = pd.DataFrame(columns=["exam_id", "exam", "date", "slot","ISO_date"])
@@ -329,9 +326,11 @@ def heatmap_input_md(id_str: str):
                  '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
         names = [{"name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}, {
             "name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}]
-        dates = ["Montag 01.02.2021", "Dienstag 02.02.2021", "Mittwoch 03.02.2021", "Donnerstag 04.02.2021", "Freitag 05.02.2021", "Samstag 06.02.2021", "Sonntag 07.02.2021",
-                 "Montag 08.02.2021", "Dienstag 09.02.2021", "Mittwoch 10.02.2021", "Donnerstag 11.02.2021", "Freitag 12.02.2021", "Samstag 13.02.2021", "Sonntag 14.02.2021", ]
-        cost_df.columns = dates
+        df = md.download_output(method="dataframe", table="day_mapping")
+        day_list = df["date"].tolist()
+        #dates = ["Montag 01.02.2021", "Dienstag 02.02.2021", "Mittwoch 03.02.2021", "Donnerstag 04.02.2021", "Freitag 05.02.2021", "Samstag 06.02.2021", "Sonntag 07.02.2021",
+                # "Montag 08.02.2021", "Dienstag 09.02.2021", "Mittwoch 10.02.2021", "Donnerstag 11.02.2021", "Freitag 12.02.2021", "Samstag 13.02.2021", "Sonntag 14.02.2021", ]
+        cost_df.columns = day_list #dates
         # this creates the needed datastructure for the heatmap
         for i in range(len(cost_df.index)):
             names[i]["name"] = slots[i]
@@ -556,21 +555,3 @@ def command_solver(cmd: str):
         print("Sending ", cmd, " command to solver")
     else:
         print("Command ", cmd, " could not be processed.")
-
-
-def start_solver():
-    """lazycall for start of command_solver"""
-    command_solver("start")
-
-
-def stop_solver():
-    """lazycall for stop of command_solver"""
-    command_solver("stop")
-
-
-def get_solver_status():
-    """return status of solver"""
-    df_solver = dbf.read_df("solver_commands")
-    cmd = df_solver['cmd'].iloc[0]
-    print("Current Solver Status: ", cmd)
-    return cmd
