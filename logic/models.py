@@ -302,7 +302,7 @@ def heatmap_input_md(id_str: str):
     try:
         slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
                  '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
-        names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
+
         #get a list of all dates to consider
         df = md.download_output(method="dataframe", table="day_mapping")
         day_list = df[df["selected"] == "true"]["date"].tolist()
@@ -323,7 +323,7 @@ def heatmap_input_md(id_str: str):
         cost_df.loc[3, 3] = 0
         #####dis is a quatsch for fake-daten########
 
-
+        names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
         # this creates the needed datastructure for the heatmap
         for i in range(len(cost_df.index)):
             names[i]["name"] = slots[i]
@@ -539,12 +539,3 @@ def sum_ueberschneidung_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
-def command_solver(cmd: str):
-    """Sending command to solver through writing in solver DB"""
-    if cmd == 'start' or cmd == 'stop':
-        df = pd.DataFrame([[cmd, "this is a comment"]])
-        df.columns = ["cmd", "comment"]
-        dbf.write_df("solver_commands", df)
-        print("Sending ", cmd, " command to solver")
-    else:
-        print("Command ", cmd, " could not be processed.")
