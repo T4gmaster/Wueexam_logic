@@ -360,6 +360,7 @@ def anmeldungen_distribution():
 
 
 @app.route("/anzahl_studenten", methods=["GET", "POST"])
+@jwt_required
 def anzahl_studenten():
     """String for the amount of students enrolled"""
     try:
@@ -382,6 +383,7 @@ def anzahl_studenten():
 
 
 @app.route("/anzahl_pruefungen", methods=["GET", "POST"])
+@jwt_required
 def anzahl_pruefungen():
     """String for the amount of students enrolled"""
     try:
@@ -629,6 +631,7 @@ def abb_piechart():
 
 
 @app.route("/pruefungen_pro_tag", methods=["GET", "POST"])
+@jwt_required
 def pruefungen_p_tag():
     """Get the data for a graph to show the distribution of enrollments over exams
     """
@@ -647,6 +650,7 @@ def pruefungen_p_tag():
 
 ######################################################
 @app.route("/summe_ueberschneidungen", methods=["GET", "POST"])
+@jwt_required
 def sum_ueberschneidung():
     """Get the data for a graph to show the distribution of enrollments over exams
     """
