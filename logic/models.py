@@ -131,7 +131,7 @@ def update_table(sql_table: str, type: str, table: str, json_file):
                 df = pd.DataFrame(data)
 
             elif sql_table == "fixed_exams":
-                df = pd.DataFrame(columns=["exam_id", "exam", "date", "slot","ISO_date"])
+                df = pd.DataFrame(columns=["exam_id", "exam", "date", "slot","time","ISO_date"])
                 for count,i in enumerate(json_file):
                     list=[]
                     for key, value in i.items():
@@ -146,17 +146,9 @@ def update_table(sql_table: str, type: str, table: str, json_file):
                             list.append(value)
                         else:
                             list.append(value)
-                    list.append(list[2])
+                    list.append(list[2])                #get the isodate column
+                    list[2] = list[2].split("T")[0]     #create the "date" in the table
                     df.loc[count] = list
-                    df["date"].loc[count] = list[2][:10]
-                df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
-                ###this is the old process: to be deleted after succesfully implemented above
-                #for i in range(len(json_file)):
-                #    list = []
-                #    for key, value in json_file[i].items():
-                #        list.append(value)
-                #    df.loc[i] = list
-                #df['date'] = pd.to_datetime(df['date'], format="%d-%m-%Y")
 
             else:
                 print("no table specified.")
@@ -166,6 +158,7 @@ def update_table(sql_table: str, type: str, table: str, json_file):
 
         message = dbf.write_df(sql_table, frame=df, type=type)
         x = "{}ed {} table to {} succesfully.".format(type, table, sql_table)
+        print(x)
         return x
 
     except Exception:
@@ -307,13 +300,21 @@ def heatmap_input_md(id_str: str):
     """
     #####dis is a quatsch for fake-daten########
     try:
+        slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
+                 '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
+        names = [{"name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}, {
+            "name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}]
+        #get a list of all dates to consider
+        df = md.download_output(method="dataframe", table="day_mapping")
+        day_list = df[df["selected"] == "true"]["date"].tolist()
+        cost_df.columns = day_list #dates shown in heatmap
+
 
         import random
-
         cost_df = []
-        for t in range(6):
+        for t in range(len(slots)):
             row = {}
-            for d in range(14):
+            for d in range(len(day_list)):
                 row[d] = random.random() * 100
 
             cost_df.append(row)
@@ -322,15 +323,7 @@ def heatmap_input_md(id_str: str):
         cost_df.loc[3, 3] = 0
         #####dis is a quatsch for fake-daten########
 
-        slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
-                 '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
-        names = [{"name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}, {
-            "name": "", "data": []}, {"name": "", "data": []}, {"name": "", "data": []}]
-        df = md.download_output(method="dataframe", table="day_mapping")
-        day_list = df["date"].tolist()
-        #dates = ["Montag 01.02.2021", "Dienstag 02.02.2021", "Mittwoch 03.02.2021", "Donnerstag 04.02.2021", "Freitag 05.02.2021", "Samstag 06.02.2021", "Sonntag 07.02.2021",
-                # "Montag 08.02.2021", "Dienstag 09.02.2021", "Mittwoch 10.02.2021", "Donnerstag 11.02.2021", "Freitag 12.02.2021", "Samstag 13.02.2021", "Sonntag 14.02.2021", ]
-        cost_df.columns = day_list #dates
+
         # this creates the needed datastructure for the heatmap
         for i in range(len(cost_df.index)):
             names[i]["name"] = slots[i]
