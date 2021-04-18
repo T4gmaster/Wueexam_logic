@@ -48,13 +48,6 @@ class GetItems(Resource):
         print("Nothing")
         return {"store": store}, 200
 
-@api.route("/getitems2")
-class GetItems(Resource):
-    #@jwt_required
-    def get(self):
-        print("Nothing")
-        return {"store": store}, 200
-
 
 @api.route("/login")
 class Login(Resource):
@@ -412,6 +405,7 @@ def anzahl_pruefungen():
 
 
 @app.route("/anzahl_anmeldungen", methods=["GET", "POST"])
+@jwt_required
 def anzahl_anmeldungen():
     """String for the count of students enrolled"""
     try:
