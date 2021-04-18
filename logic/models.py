@@ -350,35 +350,34 @@ def heatmap_correction_md(value: str, json_file: str):
     """
     try:
         # get values out of the json
-        slot = json_file["Slot"]
-        print("slot---->",slot)
-        tag = json_file["Tag"]
-        print("tag --->",tag)
+        time = json_file["Slot"]
+        print("time---->",time)
+        day = json_file["Tag"]
+        print("day --->",day)
         # split the day into a date with the correct time
         #get time from dict
-        #time = str(datetime.strptime(i["time"],'%H:%M'))[11:]
         #put date & time together in ISO_format again
-        #value = str(date) + 'T' + time + '.000Z'
+        #value = str(date) + 'T' + time + ':00.000Z'
         #list.append(value)
 
 
-        tag = datetime.strptime(
-            tag.split()[1] + " " + slot.split()[0], '%d.%m.%Y %H:%M')
+        day = datetime.strptime(
+            day.split()[1] + " " + time.split()[0], '%d.%m.%Y %H:%M')
 
         # get the exams index for changes
         d_frame = md.download_output(method="dataframe", table="solved_exam_ov")
         exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
 
         # change the values
-        d_frame.loc[exam_id_index, "day_date"] = tag
-        d_frame.loc[exam_id_index, "time_slot"] = str(slot)
-        #d_frame.loc[exam_id_index, "ISO_date"] = str(tag) + "T" + slot +":00.000Z"
+        d_frame.loc[exam_id_index, "day_date"] = day
+        d_frame.loc[exam_id_index, "time_slot"] = str(time)
+        #d_frame.loc[exam_id_index, "ISO_date"] = str(day) + "T" + time +":00.000Z"
 
         # we need to change the value in solved_enrollment_table
         df3 = md.download_output(
             method="dataframe", table="solved_enrollment_table")
         # change all rows where the exam_id (value) corresponds
-        df3.loc[df3["exam_id"] == value, "day_date"] = datetime.date(tag)
+        df3.loc[df3["exam_id"] == value, "day_date"] = datetime.date(day)
         # update solved_enrollment_table
         dbf.write_df(frame=df3, sql_table="solved_exam_ov", type="replace")
 
