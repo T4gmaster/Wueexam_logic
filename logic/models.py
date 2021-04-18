@@ -307,7 +307,7 @@ def heatmap_input_md(id_str: str):
         #get a list of all dates to consider
         df = md.download_output(method="dataframe", table="day_mapping")
         day_list = df[df["selected"] == "true"]["date"].tolist()
-        cost_df.columns = day_list #dates shown in heatmap
+
 
 
         import random
@@ -320,6 +320,7 @@ def heatmap_input_md(id_str: str):
             cost_df.append(row)
 
         cost_df = pd.DataFrame(cost_df)
+        cost_df.columns = day_list #dates shown in heatmap
         cost_df.loc[3, 3] = 0
         #####dis is a quatsch for fake-daten########
 
@@ -343,7 +344,7 @@ def heatmap_input_md(id_str: str):
 ###############################################
 
 
-def heatmap_correction_md(value: str, json_file: str, d_frame):
+def heatmap_correction_md(value: str, json_file: str):
     """Takes the exam id and changes the date
     output: datafram with changed value
     input:
@@ -367,6 +368,7 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
             tag.split()[1] + " " + slot.split()[0], '%d.%m.%Y %H:%M')
 
         # get the exams index for changes
+        d_frame = md.download_output(method="dataframe", table="solved_exam_ov")
         exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
 
         # change the values
