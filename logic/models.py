@@ -139,6 +139,7 @@ def update_table(sql_table: str, type: str, table: str, json_file):
                     list=[]
                     for key, value in i.items():
                         if key == "date":
+                            ###ISO_date conversion
                             #split up ISO_format to get date
                             date = i["date"].split("T")[0]
                             #get time from dict
@@ -359,8 +360,17 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
     try:
         # get values out of the json
         slot = json_file["Slot"]
+        print("slot---->",slot)
         tag = json_file["Tag"]
+        print("tag --->",tag)
         # split the day into a date with the correct time
+        #get time from dict
+        #time = str(datetime.strptime(i["time"],'%H:%M'))[11:]
+        #put date & time together in ISO_format again
+        #value = str(date) + 'T' + time + '.000Z'
+        #list.append(value)
+
+
         tag = datetime.strptime(
             tag.split()[1] + " " + slot.split()[0], '%d.%m.%Y %H:%M')
 
@@ -370,6 +380,7 @@ def heatmap_correction_md(value: str, json_file: str, d_frame):
         # change the values
         d_frame.loc[exam_id_index, "day_date"] = tag
         d_frame.loc[exam_id_index, "time_slot"] = str(slot)
+        #d_frame.loc[exam_id_index, "ISO_date"] = str(tag) + "T" + slot +":00.000Z"
 
         # we need to change the value in solved_enrollment_table
         df3 = md.download_output(

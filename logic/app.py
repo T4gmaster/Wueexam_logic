@@ -219,6 +219,7 @@ def heatmap_correction():
         if request.method == "POST":
             # print(exam_id)
             json_f = request.get_json(force=True)
+            print("json_f  ---->",json_f)
             df = md.download_output(method="dataframe", table="solved_exam_ov")
 
             message = md.heatmap_correction_md(
