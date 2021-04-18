@@ -30,23 +30,14 @@ app = Flask(__name__,
             template_folder="../frontend/dist")
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
+jwt = JWTManager(app)                                       #secure the routes
+api = Api(app, version=1.0, title="Login API")
 
 # config noch in externe Datei auslagern: https://hackersandslackers.com/configure-flask-applications/
 app.config['SECRET_KEY'] = 'ichbineinganzlangerundsichererstring123456'
 
 # alle routings werden an die index.html Datei umgeleitet und dann vom vue-router weiterverarbeitet
-##############TEST################################TEST##################
 
-jwt = JWTManager(app)
-api = Api(app, version=1.0, title="Login API")
-
-@api.route("/getitems")
-class GetItems(Resource):
-    @jwt_required
-    def get(self):
-        print("Nothing")
-        return {"store": store}, 200
 
 
 @api.route("/login")
@@ -60,21 +51,21 @@ class Login(Resource):
             return {"token": access_token}, 200
         return {"message":"username or password wrong"}
 
-##############TEST##################
-
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
 
-######################################################
-######################################################
-######################################################
 
 
-######################################################
-# upload stuff
-######################################################
+
+############################################################################################################
+############################################################################################################
+############################################################################################################
+# POST Methods
+############################################################################################################
+############################################################################################################
+############################################################################################################
 
 
 @app.route('/uploader', methods=['GET', 'POST'])
@@ -232,7 +223,30 @@ def heatmap_correction():
         print("there was a problem")
 
         return {"An error occurred"}, 200
+######################################################
 
+
+@app.route("/anzahl_studenten_10", methods=["GET", "POST"])
+def anzahl_studenten_10():
+    """List of students that have enrolled to more than ten exam"""
+
+    try:
+
+        if request.method == "POST":
+            j = request.get_json(force=True)
+            j_int = j["Anmeldung"]
+            df = md.download_output("dataframe", table="enrollment_table")
+            json_file = md.anzahl_studenten_10_md(df, param=j_int)
+
+            return json_file
+
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return {"An error occurred"}, 200
 ######################################################
 
 
@@ -254,13 +268,23 @@ def fixed_exam():
         print("there was a problem")
 
         return {"An error occurred"}, 200
-######################################################
 
 
-######################################################
-# Download stuff
-######################################################
+############################################################################################################
+
+############################################################################################################
+############################################################################################################
+############################################################################################################
+# GET Methods
+############################################################################################################
+############################################################################################################
+############################################################################################################
+
+
+
+
 @app.route("/pruefungsansicht", methods=["GET", "POST"])
+@jwt_required
 def pruefungsansicht():
     """Shows all entries from the WueExam.Output and returns it as a json
     input:
@@ -284,6 +308,7 @@ def pruefungsansicht():
 
 
 @app.route("/studentenansicht", methods=["GET", "POST"])
+@jwt_required
 def studentenansicht():
     """Shows all entries from the solved Enrollment table and returns it as a json
     input:
@@ -308,6 +333,7 @@ def studentenansicht():
 
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
+@jwt_required
 def anmeldeliste():
     """Gibt eine Json der Anmeldeliste wieder
     """
@@ -329,6 +355,7 @@ def anmeldeliste():
 
 
 @app.route("/anmeldungen_distribution", methods=["GET", "POST"])
+@jwt_required
 def anmeldungen_distribution():
     """Provides Data to FrontEnd for graph of enrollment distribution
     input: None
@@ -354,9 +381,213 @@ def anmeldungen_distribution():
         print("there was a problem")
 
         return {"An error occurred"}, 200
+
 ######################################################
+@app.route("/download_day_mapping", methods=["GET", "POST"])
+@jwt_required
+def fixed_exams_download():
+    """Download the table day_mapping.
+    >input: None
+    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
+    """
+    try:
+        if request.method == "GET":
+
+            df = md.download_output(method="dataframe", table="day_mapping")
+
+            js = df.to_json(orient="records")
+
+            return js
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return {"An error occurred"}, 200
+
+######################################################
+
+
+@app.route("/abbildung_pruefungsverteilung", methods=["GET", "POST"])
+@jwt_required
+def abb_pruefungsverteilung():
+    """Get the data for a graph to show the distribution of enrollments over exams
+    """
+    try:
+        if request.method == "GET":
+
+            js = md.abb_pruefungsverteilung_md()
+
+            return jsonify(js)
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return {"An error occurred"}, 200
+
+
+######################################################
+@app.route("/abbildung_dauer", methods=["GET", "POST"])
+@jwt_required
+def abb_scatterplot():
+    """Get the data for a graph to show the distribution of enrollments over exams
+    """
+    try:
+        if request.method == "GET":
+
+            js = md.abb_scatterplot_md()
+
+            return jsonify(js)
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+
+######################################################
+@app.route("/abbildung_piechart", methods=["GET", "POST"])
+@jwt_required
+def abb_piechart():
+    """Get the data for a graph to show the distribution of enrollments over exams
+    """
+    try:
+        if request.method == "GET":
+
+            js = md.abb_piechart_md()
+
+            return jsonify(js)
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+######################################################
+
+@app.route("/pruefungen_pro_tag", methods=["GET", "POST"])
+@jwt_required
+def pruefungen_p_tag():
+    """Get the data for a graph to show the distribution of enrollments over exams
+    """
+    try:
+        if request.method == "GET":
+
+            js = md.pruefungen_p_tag_md()
+
+            return jsonify(js)
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+######################################################
+
+
+@app.route("/faecherliste", methods=["GET", "POST"])
+@jwt_required
+def faecherliste():
+    """Liste aller Prüfungen mit Teilnehmeranzahl"""
+
+    try:
+
+        if request.method == "GET":
+            df = md.download_output("dataframe", table="enrollment_table")
+            df_grouped = md.group(
+                df, group_it_by=["EXAM", "EXAM_ID"], index_reset="Teilnehmer")
+            json_df_grouped = df_grouped.to_json(orient="records")
+
+            return json_df_grouped
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return {"An error occurred"}, 200
+
+######################################################
+
+
+@app.route("/kalender", methods=["GET", "POST"])
+@jwt_required
+def kalender():
+    """Display planned exams
+    output: json of rows with exam and its date per row
+    """
+    try:
+        if request.method == "GET":
+            df = md.download_output("dataframe", table="solved_exam_ov")
+            j = md.kalender_md(frame=df)
+
+            return j
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return {"An error occurred"}, 200
+
+######################################################
+
+
+@app.route("/fake_sentence", methods=["GET", "POST"])
+@jwt_required
+def fake_sentence():
+    """Irgendwelche Fake-Sätze für Adrian
+    """
+    try:
+        if request.method == "GET":
+
+            from faker import Faker
+            fake = Faker()
+            sentence = fake.text().split(".")[0] + "."
+            #import logging
+            #info = logging.info("Adrian geb das ma ans FE") + fake.text()[10]
+            # https://www.loggly.com/ultimate-guide/python-logging-basics/
+            # https://stackoverflow.com/questions/15727420/using-logging-in-multiple-modules
+            # https://docs.python.org/3/howto/logging.html#advanced-logging-tutorial
+            return sentence
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return {"An error occurred"}, 200
+
+
+######################################################
+@app.route("/fixed_exams_download", methods=["GET", "POST"])
+@jwt_required
+def fixed_exams_down():
+    """Download the table fixed_exams.
+    >input: None
+    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
+    """
+    try:
+        if request.method == "GET":
+            df = md.download_output(method="dataframe", table="fixed_exams")
+            js = df.to_json(orient="records")
+
+            return js
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return {"An error occurred"}, 200
+
+
+############################################################################################################
 # Single-Value-Return Functions
-######################################################
+############################################################################################################
+############################################################################################################
 
 
 @app.route("/anzahl_studenten", methods=["GET", "POST"])
@@ -427,226 +658,11 @@ def anzahl_anmeldungen():
 
         return {"An error occurred"}, 200
 
-######################################################
 
 
-@app.route("/anzahl_studenten_10", methods=["GET", "POST"])
-def anzahl_studenten_10():
-    """List of students that have enrolled to more than ten exam"""
-
-    try:
-
-        if request.method == "POST":
-            j = request.get_json(force=True)
-            j_int = j["Anmeldung"]
-            df = md.download_output("dataframe", table="enrollment_table")
-            json_file = md.anzahl_studenten_10_md(df, param=j_int)
-
-            return json_file
-
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("there was a problem")
-
-        return {"An error occurred"}, 200
-
-######################################################
-######################################################
 
 
-@app.route("/faecherliste", methods=["GET", "POST"])
-def faecherliste():
-    """Liste aller Prüfungen mit Teilnehmeranzahl"""
 
-    try:
-
-        if request.method == "GET":
-            df = md.download_output("dataframe", table="enrollment_table")
-            df_grouped = md.group(
-                df, group_it_by=["EXAM", "EXAM_ID"], index_reset="Teilnehmer")
-            json_df_grouped = df_grouped.to_json(orient="records")
-
-            return json_df_grouped
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("there was a problem")
-
-        return {"An error occurred"}, 200
-
-######################################################
-
-
-@app.route("/kalender", methods=["GET", "POST"])
-def kalender():
-    """Display planned exams
-    output: json of rows with exam and its date per row
-    """
-    try:
-        if request.method == "GET":
-            df = md.download_output("dataframe", table="solved_exam_ov")
-            j = md.kalender_md(frame=df)
-
-            return j
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("there was a problem")
-
-        return {"An error occurred"}, 200
-
-######################################################
-
-
-@app.route("/fake_sentence", methods=["GET", "POST"])
-def fake_sentence():
-    """Irgendwelche Fake-Sätze für Adrian
-    """
-    try:
-        if request.method == "GET":
-
-            from faker import Faker
-            fake = Faker()
-            sentence = fake.text().split(".")[0] + "."
-            #import logging
-            #info = logging.info("Adrian geb das ma ans FE") + fake.text()[10]
-            # https://www.loggly.com/ultimate-guide/python-logging-basics/
-            # https://stackoverflow.com/questions/15727420/using-logging-in-multiple-modules
-            # https://docs.python.org/3/howto/logging.html#advanced-logging-tutorial
-            return sentence
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return {"An error occurred"}, 200
-
-
-######################################################
-@app.route("/fixed_exams_download", methods=["GET", "POST"])
-def fixed_exams_down():
-    """Download the table fixed_exams.
-    >input: None
-    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
-    """
-    try:
-        if request.method == "GET":
-            df = md.download_output(method="dataframe", table="fixed_exams")
-            js = df.to_json(orient="records")
-
-            return js
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return {"An error occurred"}, 200
-
-
-######################################################
-@app.route("/download_day_mapping", methods=["GET", "POST"])
-def fixed_exams_download():
-    """Download the table day_mapping.
-    >input: None
-    >output: Json of type [{Key1:value, key2:value, ...}{Key1:value,...}]
-    """
-    try:
-        if request.method == "GET":
-
-            df = md.download_output(method="dataframe", table="day_mapping")
-
-            js = df.to_json(orient="records")
-
-            return js
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return {"An error occurred"}, 200
-
-######################################################
-
-
-@app.route("/abbildung_pruefungsverteilung", methods=["GET", "POST"])
-def abb_pruefungsverteilung():
-    """Get the data for a graph to show the distribution of enrollments over exams
-    """
-    try:
-        if request.method == "GET":
-
-            js = md.abb_pruefungsverteilung_md()
-
-            return jsonify(js)
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return {"An error occurred"}, 200
-
-
-######################################################
-@app.route("/abbildung_dauer", methods=["GET", "POST"])
-def abb_scatterplot():
-    """Get the data for a graph to show the distribution of enrollments over exams
-    """
-    try:
-        if request.method == "GET":
-
-            js = md.abb_scatterplot_md()
-
-            return jsonify(js)
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return "An error occurred"
-
-
-######################################################
-@app.route("/abbildung_piechart", methods=["GET", "POST"])
-def abb_piechart():
-    """Get the data for a graph to show the distribution of enrollments over exams
-    """
-    try:
-        if request.method == "GET":
-
-            js = md.abb_piechart_md()
-
-            return jsonify(js)
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return "An error occurred"
-
-######################################################
-
-
-@app.route("/pruefungen_pro_tag", methods=["GET", "POST"])
-@jwt_required
-def pruefungen_p_tag():
-    """Get the data for a graph to show the distribution of enrollments over exams
-    """
-    try:
-        if request.method == "GET":
-
-            js = md.pruefungen_p_tag_md()
-
-            return jsonify(js)
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return "An error occurred"
 
 ######################################################
 @app.route("/summe_ueberschneidungen", methods=["GET", "POST"])
@@ -666,11 +682,7 @@ def sum_ueberschneidung():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
-#####################################################
-# log Testing
-######################################################
-######################################################
-######################################################
+
 
 
 # App starten mit $ python app.py
