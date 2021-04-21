@@ -320,7 +320,7 @@ def heatmap_input_md(id_str: str):
 
         cost_df = pd.DataFrame(cost_df)
         cost_df.columns = day_list #dates shown in heatmap
-        cost_df.loc[3, 3] = 0
+        cost_df.loc[len(slots)-1, cost_df.columns[1]] = 0
         #####dis is a quatsch for fake-daten########
 
         names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
@@ -328,7 +328,7 @@ def heatmap_input_md(id_str: str):
         for i in range(len(cost_df.index)):
             names[i]["name"] = slots[i]
             for j in range(len(cost_df.columns)):
-                names[i]["data"].append({"x": cost_df.columns[j], "y": cost_df.iloc[i][j]})
+                names[i]["data"].append({"x": cost_df.columns[j], "y": cost_df.iloc[i,j]})
 
         jsonString = json.dumps(names)
 
