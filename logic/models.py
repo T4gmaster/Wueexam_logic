@@ -232,7 +232,7 @@ def anzahl_studenten_10_md(df, param: str):
     """Returns a list of students which have more enrollments than [param]
     """
     try:
-        df = df_frame.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
+        df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
                        "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
         df = df.groupby("Matrikelnummer").size().reset_index(name='Anmeldungen')
         students_over_x = df[df["count"] > param].sort_values(
