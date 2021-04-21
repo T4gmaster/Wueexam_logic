@@ -305,8 +305,8 @@ def heatmap_input_md(id_str: str):
 
         #get a list of all dates to consider
         df = md.download_output(method="dataframe", table="day_mapping")
-        day_list = df[df["selected"] == "true"]["date"].tolist()
-
+        day_list = df[df["selected"] == 1]["date"].tolist()
+        print(day_list)
 
         #####dis is a quatsch for fake-daten########
         import random
