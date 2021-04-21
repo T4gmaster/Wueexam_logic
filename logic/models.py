@@ -228,7 +228,7 @@ def group(frame, group_it_by: str, index_reset: str):
 # Special function for student with >10 enrollments
 
 
-def anzahl_studenten_10_md(df_frame, param: str):
+def anzahl_studenten_10_md(df, param: str):
     """Returns a list of students which have more enrollments than [param]
     """
     try:
