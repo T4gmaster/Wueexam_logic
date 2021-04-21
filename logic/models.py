@@ -234,8 +234,8 @@ def anzahl_studenten_10_md(df_frame, param: str):
     try:
         df = df_frame.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
                        "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
-
-        students_over_x = df[df["Anmeldungen"] > param].sort_values(
+        df = df.groupby("Matrikelnummer").size().reset_index(name='Anmeldungen')
+        students_over_x = df[df["count"] > param].sort_values(
             by="Anmeldungen", ascending=False)  # order and filter the second grouped data
         json_students_over_x = students_over_x.to_json(
             orient="records")  # convert to json

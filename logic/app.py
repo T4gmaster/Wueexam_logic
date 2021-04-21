@@ -223,31 +223,7 @@ def heatmap_correction():
         print("there was a problem")
 
         return {"An error occurred"}, 200
-######################################################
 
-
-@app.route("/anzahl_studenten_10", methods=["GET", "POST"])
-def anzahl_studenten_10():
-    """List of students that have enrolled to more than ten exam"""
-
-    try:
-
-        if request.method == "POST":
-            j = request.get_json(force=True)
-            j_int = j["Anmeldung"]
-            df = md.download_output("dataframe", table="enrollment_table")
-            json_file = md.anzahl_studenten_10_md(df, param=j_int)
-
-            return json_file
-
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("there was a problem")
-
-        return {"An error occurred"}, 200
-######################################################
 
 
 @app.route("/fixed_exam", methods=["POST", "GET"])
@@ -548,11 +524,6 @@ def fake_sentence():
             from faker import Faker
             fake = Faker()
             sentence = fake.text().split(".")[0] + "."
-            #import logging
-            #info = logging.info("Adrian geb das ma ans FE") + fake.text()[10]
-            # https://www.loggly.com/ultimate-guide/python-logging-basics/
-            # https://stackoverflow.com/questions/15727420/using-logging-in-multiple-modules
-            # https://docs.python.org/3/howto/logging.html#advanced-logging-tutorial
             return sentence
         return {"Method needs to be GET, not POST"}, 200
 
@@ -588,7 +559,28 @@ def fixed_exams_down():
 # Single-Value-Return Functions
 ############################################################################################################
 ############################################################################################################
+######################################################
 
+@app.route("/anzahl_studenten_10", methods=["GET", "POST"])
+def anzahl_studenten_10():
+    """List of students that have enrolled to more than ten exam"""
+
+    try:
+
+        if request.method == "POST":
+            j = request.get_json(force=True)
+            df = md.download_output("dataframe", table="enrollment_table")
+            json_file = md.anzahl_studenten_10_md(df, param=j["Anmeldung"])
+            return json_file
+
+        return {"Method needs to be GET, not POST"}, 200
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return {"An error occurred"}, 200
+######################################################
 
 @app.route("/anzahl_studenten", methods=["GET", "POST"])
 @jwt_required
