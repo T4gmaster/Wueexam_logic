@@ -474,7 +474,12 @@ def abb_scatterplot_md():
         for index,row in df.iterrows():
             if index not in list2:
                 sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
-                date_range = sub_frame.max() - sub_frame.min()
+                try:
+                    print("__________________________________________",sub_frame)
+                    print("sub_frame.iat[-1]",sub_frame.iat[-1])
+                    print("sub_frame.iat[0]",sub_frame.iat[0])   #may this is fater than min & max
+
+                #date_range = sub_frame.max() - sub_frame.min()
                 list.append(date_range.days)
                 list2.extend(sub_frame.index.values.tolist())
 
@@ -486,8 +491,9 @@ def abb_scatterplot_md():
             if pd.isna(key) == False or key == 0:
                 labels.append(key)
                 values.append(value)
-
-
+        #make it percentages
+        sum_val = sum(values)
+        values = [round(x/sum_val,ndigits=1) for x in values]
         js = {"labels":labels,"values":values}
         return js
         #dict = {"name": "Anmeldungen vs. Exam_Zeitraum", "data": list}
