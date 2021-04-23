@@ -234,9 +234,7 @@ def anzahl_studenten_10_md(df, param: str):
     try:
         df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
                        "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
-        print(df)
         df = df.groupby(["Matrikelnummer","Nachname","Vorname"]).size().reset_index(name='Anmeldungen')
-        print(df)
         students_over_x = df[df["Anmeldungen"] > param].sort_values(
             by="Anmeldungen", ascending=False)  # order and filter the second grouped data
         json_students_over_x = students_over_x.to_json(
@@ -475,7 +473,7 @@ def abb_scatterplot_md():
         drops = []      #list of indexes not to query again
         for index,row in df.iterrows():
             if index not in drops:
-                sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"].sort_values("day_date")
+                sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
                 if len(sub_frame.index) == 1:
                     range.append(1)
                 else:
