@@ -474,14 +474,18 @@ def abb_scatterplot_md():
         for index,row in df.iterrows():
             if index not in list2:
                 sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
+                list.append(date_range.days)
+                list2.extend(sub_frame.index.values.tolist())
                 try:
                     print("__________________________________________",sub_frame)
                     print("sub_frame.iat[-1]",sub_frame.iat[-1])
                     print("sub_frame.iat[0]",sub_frame.iat[0])   #may this is fater than min & max
-
+                except Exception:
+                    traceback.print_exc()
+                    print("There was a problem, please try again")
+                    return "An error occurred"
                 #date_range = sub_frame.max() - sub_frame.min()
-                list.append(date_range.days)
-                list2.extend(sub_frame.index.values.tolist())
+
 
         dict_data = Counter(list)
         dict_data = collections.OrderedDict(sorted(dict_data.items()))
