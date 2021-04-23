@@ -541,7 +541,7 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        print("int(df[df['count'] > 1].nunique()) --->",int(df[df["count"] > 1].nunique()))
+        print("int(df[df['count'] > 1].nunique()) --->",df[df["count"] > 1].nunique())
         print("int(df[df['count'] > 1].nunique()[0]) --->",int(df[df["count"] > 1].nunique()[0]), type(int(df[df["count"] > 1].nunique()[0])))
         wert = int(df[df["count"] > 1].nunique()[0])
         return wert
