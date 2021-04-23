@@ -234,7 +234,9 @@ def anzahl_studenten_10_md(df, param: str):
     try:
         df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
                        "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
-        df = df.groupby("Matrikelnummer","Nachname","Vorname").size().reset_index(name='Anmeldungen')
+        print(df)
+        df = df.groupby(["Matrikelnummer","Nachname","Vorname"]).size().reset_index(name='Anmeldungen')
+        print(df)
         students_over_x = df[df["Anmeldungen"] > param].sort_values(
             by="Anmeldungen", ascending=False)  # order and filter the second grouped data
         json_students_over_x = students_over_x.to_json(
@@ -484,9 +486,9 @@ def abb_scatterplot_md():
                 drops.extend(sub_frame.index.values.tolist())
                 #date_range = sub_frame.max() - sub_frame.min()
 
-
         dict_data = Counter(range)
         dict_data = collections.OrderedDict(sorted(dict_data.items()))
+
         labels = []
         values = []
         for key, value in dict_data.items():
@@ -541,6 +543,8 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
+        print("int(df[df["count"] > 1].nunique()) --->",int(df[df["count"] > 1].nunique()))
+        print("int(df[df["count"] > 1].nunique()[0]) --->",int(df[df["count"] > 1].nunique()[0]), type(int(df[df["count"] > 1].nunique()[0])))
         wert = int(df[df["count"] > 1].nunique()[0])
         return wert
 
