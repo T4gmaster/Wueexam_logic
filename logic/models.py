@@ -235,7 +235,7 @@ def anzahl_studenten_10_md(df, param: str):
         df = df.rename(columns={"MATRICULATION_NUMBER": "Matrikelnummer",
                        "LAST_NAME": "Nachname", "FIRST_NAME": "Vorname"})  # rename the 3 first columns
         df = df.groupby("Matrikelnummer").size().reset_index(name='Anmeldungen')
-        students_over_x = df[df["Anmdeldungen"] > param].sort_values(
+        students_over_x = df[df["Anmeldungen"] > param].sort_values(
             by="Anmeldungen", ascending=False)  # order and filter the second grouped data
         json_students_over_x = students_over_x.to_json(
             orient="records")  # convert to json
@@ -545,6 +545,22 @@ def sum_ueberschneidung_md():
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
         wert = len(df[df["count"]>1])
         return wert
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+###############################################
+def solver_output_md():
+    try:
+        df = md.download_output(method="dataframe", table="solver_output")
+        list = df["output"].tolist()
+        #put it in json format
+        dict_js = {}
+        for index, value in enumerate(list):
+            dict_js[index] = value
+        return dict_js
 
     except Exception:
         traceback.print_exc()
