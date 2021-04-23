@@ -682,7 +682,7 @@ def sum_ueberschneidung():
 
             js = md.sum_ueberschneidung_md()
 
-            return jsonify(js)
+            return js
         return {"Method needs to be GET, not POST"}, 200
 
     except Exception:
