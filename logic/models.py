@@ -544,7 +544,7 @@ def sum_ueberschneidung_md():
         print("int(df[df['count'] > 1].nunique()) --->",df[df["count"] > 1].nunique())
         print("int(df[df['count'] > 1].nunique()[0]) --->",int(df[df["count"] > 1].nunique()[0]), type(int(df[df["count"] > 1].nunique()[0])))
         wert = int(df[df["count"] > 1].nunique()[0])
-        return wert
+        return {wert}
 
     except Exception:
         traceback.print_exc()

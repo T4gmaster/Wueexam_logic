@@ -565,7 +565,7 @@ def solver_output():
     """
     try:
         js = md.solver_output_md()
-        return js
+        return {js}
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
