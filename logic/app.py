@@ -554,6 +554,8 @@ def fixed_exams_down():
         print("There was a problem, please try again")
         return {"An error occurred"}, 200
 
+
+######################################################
 @app.route("/solver_output", methods = ["GET"])
 #@jwt_required
 def solver_output():

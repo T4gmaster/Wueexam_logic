@@ -474,6 +474,7 @@ def abb_scatterplot_md():
         for index,row in df.iterrows():
             if index not in list2:
                 sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
+                date_range = sub_frame.max() - sub_frame.min()
                 list.append(date_range.days)
                 list2.extend(sub_frame.index.values.tolist())
                 try:
@@ -543,7 +544,7 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        wert = len(df[df["count"]>1])
+        wert = df[df["count"] > 1].nunique()[0]
         return wert
 
     except Exception:
