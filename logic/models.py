@@ -475,7 +475,7 @@ def abb_scatterplot_md():
         drops = []      #list of indexes not to query again
         for index,row in df.iterrows():
             if index not in drops:
-                sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"].sort_values(by="day_date")
+                sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"].sort_values("day_date")
                 if len(sub_frame.index) == 1:
                     range.append(1)
                 else:
