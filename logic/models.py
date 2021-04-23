@@ -489,7 +489,7 @@ def abb_scatterplot_md():
         labels = []
         values = []
         for key, value in dict_data.items():
-            if pd.isna(key) == False or key == 0:
+            if pd.isna(key) == False or key != 0:
                 labels.append(key)
                 values.append(value)
 
