@@ -552,10 +552,9 @@ def solver_output_md():
         df = md.download_output(method="dataframe", table="solver_output")
         list = df["output"].tolist()
         #put it in json format
-        dict_js = {}
-        for index, value in enumerate(list):
-            dict_js[index] = value
-        return list
+        dict_js = {"list":list}
+        print("dict_js --->",dict_js)
+        return dict_js
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
