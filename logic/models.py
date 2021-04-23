@@ -479,8 +479,8 @@ def abb_scatterplot_md():
                 list2.extend(sub_frame.index.values.tolist())
                 try:
                     print("__________________________________________",sub_frame)
-                    print("sub_frame.iat[-1]",sub_frame.iat[-1])
-                    print("sub_frame.iat[0]",sub_frame.iat[0])   #may this is fater than min & max
+                    print("sub_frame.iat[-1]",sub_frame.iat[-1,0])
+                    print("sub_frame.iat[0]",sub_frame.iat[0,0])   #may this is fater than min & max
                 except Exception:
                     traceback.print_exc()
                     print("There was a problem, please try again")
