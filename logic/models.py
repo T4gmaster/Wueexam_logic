@@ -543,8 +543,8 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        print("int(df[df["count"] > 1].nunique()) --->",int(df[df["count"] > 1].nunique()))
-        print("int(df[df["count"] > 1].nunique()[0]) --->",int(df[df["count"] > 1].nunique()[0]), type(int(df[df["count"] > 1].nunique()[0])))
+        print("int(df[df['count'] > 1].nunique()) --->",int(df[df["count"] > 1].nunique()))
+        print("int(df[df['count'] > 1].nunique()[0]) --->",int(df[df["count"] > 1].nunique()[0]), type(int(df[df["count"] > 1].nunique()[0])))
         wert = int(df[df["count"] > 1].nunique()[0])
         return wert
 
@@ -562,8 +562,7 @@ def solver_output_md():
         dict_js = {}
         for index, value in enumerate(list):
             dict_js[index] = value
-        return dict_js
-
+        return list
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
