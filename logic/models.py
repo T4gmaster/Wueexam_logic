@@ -478,7 +478,6 @@ def abb_scatterplot_md():
                     range.append(1)
                 else:
                     date_range = sub_frame.max() - sub_frame.min()
-                    date_range = sub_frame.iat[-1] - sub_frame.iat[0]
                     range.append(date_range.days)
 
                 drops.extend(sub_frame.index.values.tolist())
@@ -496,8 +495,7 @@ def abb_scatterplot_md():
 
         js = {"labels":labels,"values":values}
         return js
-        #dict = {"name": "Anmeldungen vs. Exam_Zeitraum", "data": list}
-        #return dict
+
 
     except Exception:
         traceback.print_exc()
@@ -539,10 +537,9 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        print("int(df[df['count'] > 1].nunique()) --->",df[df["count"] > 1].nunique())
-        print("int(df[df['count'] > 1].nunique()[0]) --->",int(df[df["count"] > 1].nunique()[0]), type(int(df[df["count"] > 1].nunique()[0])))
         wert = int(df[df["count"] > 1].nunique()[0])
-        return str(wert)
+        js = {"wert":wert}
+        return js
 
     except Exception:
         traceback.print_exc()
