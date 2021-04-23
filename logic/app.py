@@ -557,11 +557,11 @@ def fixed_exams_down():
 
 ######################################################
 @app.route("/solver_output", methods = ["GET"])
-#@jwt_required
+@jwt_required
 def solver_output():
     """Returns the table wueexam.solver_output in json ISO_format
     input: None
-    output: JSON of type {"line1":"string","line2":"string",...}
+    output: JSON of type {"0":"string","1":"string",...}
     """
     try:
         js = md.solver_output_md()
