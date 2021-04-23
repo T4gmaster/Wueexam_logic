@@ -469,23 +469,23 @@ def abb_scatterplot_md():
         #df["day_date"] = pd.to_datetime(df["day_date"], format="%Y-%M-%d H:M:S")
 
         # now looping and putting it in the right format
-        list = []
-        list2 = []
+        range = []   #list of date_ranges
+        drops = []      #list of indexes not to query again
         for index,row in df.iterrows():
-            if index not in list2:
-                sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"]
+            if index not in drops:
+                sub_frame = df[df["MATRICULATION_NUMBER"]==row["MATRICULATION_NUMBER"]]["day_date"].sort_values(by="day_date")
                 if len(sub_frame.index) == 1:
-                    list.append(1)
+                    range.append(1)
                 else:
                     date_range = sub_frame.max() - sub_frame.min()
                     date_range = sub_frame.iat[-1] - sub_frame.iat[0]
-                    list.append(date_range.days)
+                    range.append(date_range.days)
 
-                list2.extend(sub_frame.index.values.tolist())
+                drops.extend(sub_frame.index.values.tolist())
                 #date_range = sub_frame.max() - sub_frame.min()
 
 
-        dict_data = Counter(list)
+        dict_data = Counter(range)
         dict_data = collections.OrderedDict(sorted(dict_data.items()))
         labels = []
         values = []
@@ -494,8 +494,8 @@ def abb_scatterplot_md():
                 labels.append(key)
                 values.append(value)
         #make it percentages
-        sum_val = sum(values)
-        values = [round(x/sum_val,ndigits=1) for x in values]
+        anzahl_studenten = df["MATRICULATION_NUMBER"].nunique()
+        values = [round(x/anzahl_studenten,ndigits=1) for x in values]
         js = {"labels":labels,"values":values}
         return js
         #dict = {"name": "Anmeldungen vs. Exam_Zeitraum", "data": list}
@@ -541,7 +541,7 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        wert = df[df["count"] > 1].nunique()[0]
+        wert = int(df[df["count"] > 1].nunique()[0])
         return wert
 
     except Exception:
