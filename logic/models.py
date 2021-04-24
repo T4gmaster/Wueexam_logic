@@ -342,7 +342,7 @@ def heatmap_correction_md(value: str, json_file: str):
         #get respective day_id
         day_mapping = md.download_output(
             method="dataframe", table="day_mapping")
-        day_id_index = day_mapping.index[day_mapping["day_date"] == "02.02.2021"].tolist()[0]   #index of date in day_mapping
+        day_id_index = day_mapping.index[day_mapping["date"] == "02.02.2021"].tolist()[0]   #index of date in day_mapping
         day_id = day_mapping.loc[day_id_index,"day_ordered"]    #respective day id according to day_mapping
         # change the values
         d_frame.loc[exam_id_index, "day_date"] = day
