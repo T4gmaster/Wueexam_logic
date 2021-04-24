@@ -254,8 +254,9 @@ def anzahl(frame, column: str):
         return "An error occurred"
 
 ##########################################
-def kalender_md(frame):
+def kalender_md():
     try:
+        df = md.read_df(tablename="solved_exam_ov")
         frame["day_date"] = pd.to_datetime(frame['day_date'])
         frame["start_date"] = frame["day_date"]
         frame["start_date"] = frame["start_date"] + timedelta(hours=1)
@@ -400,7 +401,7 @@ def abb_pruefungsverteilung_md():
         return "An error occurred"
 
 ###############################################
-def abb_scatterplot_md():
+def abb_laenge_pruefungsphase_md():
     try:
 
         enrollments = md.download_output(
@@ -436,7 +437,10 @@ def abb_scatterplot_md():
 
         labels = []
         values = []
+        print("dict_data --->",dict_data)
         for key, value in dict_data.items():
+            print("key -->",key)
+            print("value --->",value)
             if pd.isna(key) == False or key != 0:
                 labels.append(key)
                 values.append(value)

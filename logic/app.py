@@ -415,13 +415,13 @@ def abb_pruefungsverteilung():
 ######################################################
 @app.route("/abbildung_dauer", methods=["GET", "POST"])
 @jwt_required
-def abb_scatterplot():
+def abb_laenge_pruefungsphase():
     """Get the data for a graph to show the distribution of enrollments over exams
     """
     try:
         if request.method == "GET":
 
-            js = md.abb_scatterplot_md()
+            js = md.abb_laenge_pruefungsphase_md()
 
             return jsonify(js)
         return {"Method needs to be GET, not POST"}, 200
@@ -510,8 +510,7 @@ def kalender():
     """
     try:
         if request.method == "GET":
-            df = md.download_output("dataframe", table="solved_exam_ov")
-            j = md.kalender_md(frame=df)
+            j = md.kalender_md()
 
             return j
         return {"Method needs to be GET, not POST"}, 200
@@ -576,7 +575,7 @@ def solver_output():
     """
     try:
         js = md.solver_output_md()
-        return {js}
+        return js
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
