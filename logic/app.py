@@ -237,7 +237,6 @@ def fixed_exam():
 
 ################################################################################
 @app.route("/room_availability", methods=["POST","GET"])
-#@jwt_required
 def room_availability():
     """Get a json from FE and put in the wueexam.room_availability Table
     input: json in format {"room":{"1":[{"slot1":80,"slot2":30,...},{}]},"room":{"1":{[]}}}
@@ -247,8 +246,8 @@ def room_availability():
         if request.method == "POST":
             json_file = request.get_json()
             message = md.update_rooms_md(json_file)
-
-            return {message},200
+            message = "this works"
+            return message
 
     except Exception:
         traceback.print_exc()
