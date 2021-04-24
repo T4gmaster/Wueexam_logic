@@ -331,69 +331,40 @@ def heatmap_correction_md(value: str, json_file: str):
     >value: is the exam_id
     """
     try:
-        # get values out of the json
-        print("json_file --->",json_file)
-        time = json_file["Slot"]
-        print("time---->",time)
-        day = json_file["Tag"]
-        print("day --->",day)
+        # get values out of the json and put in right format
+        time = json_file["Slot"].split()[0]     #HH:MM
+        day = json_file["Tag"]          #'YYYY-MM-DD'
+        iso_day = str(day) + "T" + time +":00.000Z"  #YYYY-MM-DDTHH:MM:SS.000Z
 
-        #das muss dann nach dem ersten split ggf weg
-        day = datetime.strptime(
-            day.split()[1] + " " + time.split()[0], '%d.%m.%Y %H:%M')
-
-        # get the exams index for changes
+        # get the exams index
         d_frame = md.download_output(method="dataframe", table="solved_exam_ov")
         exam_id_index = d_frame.index[d_frame['exam_id'] == value].tolist()[0]
-
+        #get respective day_id
+        day_mapping = md.download_output(
+            method="dataframe", table="day_mapping")
+        day_id_index = day_mapping.index[day_mapping["day_date"] == "02.02.2021"].tolist()[0]   #index of date in day_mapping
+        day_id = day_mapping.loc[day_id_index,"day_ordered"]    #respective day id according to day_mapping
         # change the values
         d_frame.loc[exam_id_index, "day_date"] = day
         d_frame.loc[exam_id_index, "time_slot"] = str(time)
-        #d_frame.loc[exam_id_index, "ISO_date"] = str(day) + "T" + time +":00.000Z"
-
-        # we need to change the value in solved_enrollment_table
-        df3 = md.download_output(
-            method="dataframe", table="solved_enrollment_table")
-        # change all rows where the exam_id (value) corresponds
-        df3.loc[df3["exam_id"] == value, "day_date"] = datetime.date(day)
-        # update solved_enrollment_table
-        dbf.write_df(frame=df3, sql_table="solved_exam_ov", type="replace")
-
+        d_frame.loc[exam_id_index, "ISO_date"] = iso_date
+        d_frame.loc[exam_id_index, "day_id"] = day_id
         # update solved_exam_ov
         message = dbf.write_df(
             frame=d_frame, sql_table="solved_exam_ov", type="replace")
 
-        # trying to match the day_ids
-        try:
-            solved_exams = md.download_output(
-                method="dataframe", table="solved_exam_ov")
-            day_mapping = md.download_output(
-                method="dataframe", table="day_mapping")
-            print("solved_exams--->", solved_exams)
-            print("day_mapping --->", day_mapping)
+        ######
+        # we also need to change the value in solved_enrollment_table
+        df3 = md.download_output(
+            method="dataframe", table="solved_enrollment_table")
+        # change all rows where the exam_id (value) corresponds
+        df3.loc[df3["exam_id"] == value, "day_date"] = day
+        df3.loc[df3["exam_id"] == value, "ISO_date"] = iso_date
+        df3.loc[df3["exam_id"]  == value, "day_id"] = day_id
 
-            list = []
-            for i in solved_exams.index:
-                list.append(datetime.date(solved_exams["day_date"].loc[i]))
-            solved_exams["the_date"] = list
-
-            list = []
-            for i in day_mapping.index:
-                list.append(datetime.date(day_mapping["date"].loc[i]))
-            day_mapping["the_date"] = list
-
-            df3 = solved_exams.merge(
-                day_mapping, left_on="the_date", how="left", right_on="the_date")
-            df3["day_id"] = df3["day"].astype(int)
-            df3 = df3[["day_id", "day_date", "exam_id", "exam_name"]]
-
-            # upload it
-            message = dbf.write_df(
-                frame=df3, sql_table="solved_exam_ov", type="replace")
-        except Exception:
-            traceback.print_exc()
-            print("There was a problem, please try again")
-            return "An error occurred"
+        #replace day_id
+        # update solved_enrollment_table
+        dbf.write_df(frame=df3, sql_table="solved_enrollment_table", type="replace")
 
         return message
 
