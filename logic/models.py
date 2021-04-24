@@ -36,8 +36,6 @@ import collections
 
 ##########################################
 # Upload Excel to Database
-
-
 def upload_to_db(path: str, mapping: str, sql_table: str):
     """Takes in a local path of an excel.
     Converts that excel to a Dataframe.
@@ -93,8 +91,6 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
 
 ##########################################
 # Update an existing Table and its values
-
-
 def update_table(sql_table: str, type: str, table: str, json_file):
     """Update a table from a Frontend JSON Object entirely
     """
@@ -174,8 +170,6 @@ def update_table(sql_table: str, type: str, table: str, json_file):
 ##########################################
 ##########################################
 # get WueExam.Output from db
-
-
 def download_output(method: str, table: str):
     """Downloads Data from WueExam.Output
     Must be called once for each job it should do.
@@ -212,8 +206,6 @@ def download_output(method: str, table: str):
 
 ##########################################
 # Group a table by certain values
-
-
 def group(frame, group_it_by: str, index_reset: str):
     try:
         df = frame.groupby(group_it_by).size().reset_index(name=index_reset)
@@ -226,8 +218,6 @@ def group(frame, group_it_by: str, index_reset: str):
 
 ##########################################
 # Special function for student with >10 enrollments
-
-
 def anzahl_studenten_10_md(df, param: str):
     """Returns a list of students which have more enrollments than [param]
     """
@@ -249,8 +239,6 @@ def anzahl_studenten_10_md(df, param: str):
 
 ##########################################
 # Count occurences in a Dataframe and return a single value
-
-
 def anzahl(frame, column: str):
     """Counts the unique values in a DataFrame column and
     returns it as a single valuein json form
@@ -266,8 +254,6 @@ def anzahl(frame, column: str):
         return "An error occurred"
 
 ##########################################
-
-
 def kalender_md(frame):
     try:
         frame["day_date"] = pd.to_datetime(frame['day_date'])
@@ -293,8 +279,6 @@ def kalender_md(frame):
         return "An error occurred"
 
 ###############################################
-
-
 def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
@@ -340,8 +324,6 @@ def heatmap_input_md(id_str: str):
         return "An error occurred"
 
 ###############################################
-
-
 def heatmap_correction_md(value: str, json_file: str):
     """Takes the exam id and changes the date
     output: datafram with changed value
@@ -350,17 +332,13 @@ def heatmap_correction_md(value: str, json_file: str):
     """
     try:
         # get values out of the json
+        print("json_file --->",json_file)
         time = json_file["Slot"]
         print("time---->",time)
         day = json_file["Tag"]
         print("day --->",day)
-        # split the day into a date with the correct time
-        #get time from dict
-        #put date & time together in ISO_format again
-        #value = str(date) + 'T' + time + ':00.000Z'
-        #list.append(value)
 
-
+        #das muss dann nach dem ersten split ggf weg
         day = datetime.strptime(
             day.split()[1] + " " + time.split()[0], '%d.%m.%Y %H:%M')
 
@@ -425,8 +403,6 @@ def heatmap_correction_md(value: str, json_file: str):
         return "An error occurred"
 
 ###############################################
-
-
 def abb_pruefungsverteilung_md():
     try:
 
@@ -451,6 +427,7 @@ def abb_pruefungsverteilung_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+
 ###############################################
 def abb_scatterplot_md():
     try:
@@ -501,9 +478,8 @@ def abb_scatterplot_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+
 ###############################################
-
-
 def abb_piechart_md():
     try:
         df = md.download_output(method="dataframe", table="enrollment_table")
@@ -517,9 +493,8 @@ def abb_piechart_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+
 ###############################################
-
-
 def pruefungen_p_tag_md():
     try:
         df = md.download_output(method="dataframe", table="solved_exam_ov")
@@ -530,7 +505,6 @@ def pruefungen_p_tag_md():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
-
 
 ###############################################
 def sum_ueberschneidung_md():
@@ -555,6 +529,50 @@ def solver_output_md():
         dict_js = {"list":list}
         print("dict_js --->",dict_js)
         return dict_js
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+###############################################
+def update_rooms_md(json_file):
+    try:
+        room = []
+        day_nr = []
+        slot = []
+        capacity = []
+        #unpack the dictionary
+        for i in json_file:                     # unpack room
+            for j in json_file[i]:              #unpack day_nr
+                for k in json_file[i][j]:       #unpack slot list
+                    dict = json_file[i][j][0]     #unpack capacity  #0 because its a dict in a list
+                    for l in dict.items():      #unpack slots & append everything to lists
+                        room.append(i)
+                        day_nr.append(j)
+                        slot.append(l[0])
+                        capacity.append(l[1])
+        #get it into the dataframe
+        df = pd.DataFrame(data = {"room":room,"day_nr":day_nr,"slot":slot,"capacity":capacity})
+        #write df in database
+        message = dbf.write_df(sql_table="room_availability", type="replace", frame=df)
+        return message
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
+
+###############################################
+def update_parameters_md(json_file:str):
+
+    try:
+        days_before = json_file["days_before"]
+        normalization = json_file["normalization"]
+        df = pd.DataFrame.from_dict([days_before])   #brackets make scalar values work
+        df2 = pd.DataFrame.from_dict([normalization]) #brackets make scalar values work
+        #write into db
+        message = dbf.write_df(sql_table="days_before", type="replace",frame=df)
+        message = dbf.write_df(sql_table="weights", type="replace",frame=df2)
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")

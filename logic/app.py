@@ -12,17 +12,15 @@ from flask_cors import CORS
 import pandas as pd
 import json
 import traceback
-# https://stackoverflow.com/questions/1483429/how-to-print-an-exception-in-python
 from faker import Faker
 
-##############TEST##################
+##############Security##################
 from flask_restx import Resource, Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import ( JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity, get_jwt_claims)
 
-store = [{"item":"banana","price":1000},{"item":"banana","price":7000}]
 user = {"name":"test","password":"test1"}
-##############TEST##################
+##############Security##################
 # Output Dateien werden im Frontend gesucht
 app = Flask(__name__,
             # Verweis auf build server Pfad von FE
@@ -57,8 +55,6 @@ def catch_all(path):
     return render_template("index.html")
 
 
-
-
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
@@ -66,7 +62,6 @@ def catch_all(path):
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
-
 
 @app.route('/uploader', methods=['GET', 'POST'])
 def upload_to_df():
@@ -96,23 +91,20 @@ def upload_to_df():
         print("There was a problem, please try again")
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/update_parameter", methods=["GET", "POST"])
 def update_parameters():
-    """Gibt die Werte aus dem FE in die Tabelle wueexam.solver_parameters
-    input: JSON mit {days, days_before, solver_msg, timelimit}
-    output: Werte an die Tabelle wueexam.solver_parameters
-    athor: Luc
+    """Gibt die Werte aus dem FE in die Tabelle wueexam.weights und wueexam.days_before
+    input: JSON mit {"days_before":{}, "normalization":{}}
+    output: Werte an die Tabelle wueexam.weights und wueexam.days_before
     """
     try:
 
         if request.method == "POST":
 
             j = request.get_json(force=True)
-            message = md.update_table(
-                json_file=j, sql_table="solver_parameters", type="replace", table="wide")
+            message = md.update_parameters_md(json_file=j)
             return jsonify(message)
 
         return {"Method needs to be GET, not POST"}, 200
@@ -122,9 +114,8 @@ def update_parameters():
         print("a Problem occured.")
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/anmeldung_nachtrag", methods=["GET", "POST"])
 def anmeldung_nachtrag():
     """Upload addtional student enrollments into "enrollment_table" in the db.
@@ -148,9 +139,9 @@ def anmeldung_nachtrag():
         print("there was a problem")
 
         return {"An error occurred"}, 200
+
+
 ######################################################
-
-
 @app.route("/day_mapping", methods=["GET", "POST"])
 def day_mapping():
     """Upload the Nr-Data Pair for the exam-phase to the table wueexam.day_mapping.
@@ -180,7 +171,6 @@ def day_mapping():
 global exam_id
 exam_id = "default value - please change me"
 
-
 @app.route("/heatmap_input", methods=["GET", "POST"])
 def heatmap_input():
     """Function for the calculation of the heatmap
@@ -198,9 +188,8 @@ def heatmap_input():
 
     return {"Method needs to be GET, not POST"}, 200
 
+
 ######################################################
-
-
 @app.route("/heatmap_correction", methods=["GET", "POST"])
 def heatmap_correction():
     """Change exam date after selection in the heatmap
@@ -225,7 +214,7 @@ def heatmap_correction():
         return {"An error occurred"}, 200
 
 
-
+################################################################################
 @app.route("/fixed_exam", methods=["POST", "GET"])
 def fixed_exam():
     """Get exams with fixed dates an upload it to a table in the DB
@@ -246,6 +235,28 @@ def fixed_exam():
         return {"An error occurred"}, 200
 
 
+################################################################################
+@app.route("/room_availability", methods=["POST","GET"])
+#@jwt_required
+def room_availability():
+    """Get a json from FE and put in the wueexam.room_availability Table
+    input: json in format {"room":{"1":[{"slot1":80,"slot2":30,...},{}]},"room":{"1":{[]}}}
+    output: Dataframe with->    room| day_nr | slot | capacity
+    """
+    try:
+        if request.method == "POST":
+            json_file = request.get_json()
+            message = md.update_rooms_md(json_file)
+
+            return {message},200
+
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+
+        return {"An error occurred"}, 200
+
+
 ############################################################################################################
 
 ############################################################################################################
@@ -255,9 +266,6 @@ def fixed_exam():
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
-
-
-
 
 @app.route("/pruefungsansicht", methods=["GET", "POST"])
 @jwt_required
@@ -280,9 +288,8 @@ def pruefungsansicht():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/studentenansicht", methods=["GET", "POST"])
 @jwt_required
 def studentenansicht():
@@ -307,6 +314,7 @@ def studentenansicht():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
 @app.route("/anmeldeliste", methods=["GET", "POST"])
 @jwt_required
@@ -326,6 +334,7 @@ def anmeldeliste():
         print("there was a problem")
 
         return {"An error occurred"}, 200
+
 
 ######################################################
 
@@ -358,6 +367,7 @@ def anmeldungen_distribution():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
 @app.route("/download_day_mapping", methods=["GET", "POST"])
 @jwt_required
@@ -381,9 +391,8 @@ def fixed_exams_download():
         print("There was a problem, please try again")
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/abbildung_pruefungsverteilung", methods=["GET", "POST"])
 @jwt_required
 def abb_pruefungsverteilung():
@@ -442,6 +451,7 @@ def abb_piechart():
         print("There was a problem, please try again")
         return "An error occurred"
 
+
 ######################################################
 
 @app.route("/pruefungen_pro_tag", methods=["GET", "POST"])
@@ -461,6 +471,7 @@ def pruefungen_p_tag():
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+
 
 ######################################################
 
@@ -487,6 +498,7 @@ def faecherliste():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
 
 
@@ -510,9 +522,8 @@ def kalender():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/fake_sentence", methods=["GET", "POST"])
 @jwt_required
 def fake_sentence():
@@ -595,8 +606,9 @@ def anzahl_studenten_10():
         print("there was a problem")
 
         return {"An error occurred"}, 200
-######################################################
 
+
+######################################################
 @app.route("/anzahl_studenten", methods=["GET", "POST"])
 @jwt_required
 def anzahl_studenten():
@@ -617,9 +629,8 @@ def anzahl_studenten():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/anzahl_pruefungen", methods=["GET", "POST"])
 @jwt_required
 def anzahl_pruefungen():
@@ -640,9 +651,8 @@ def anzahl_pruefungen():
 
         return {"An error occurred"}, 200
 
+
 ######################################################
-
-
 @app.route("/anzahl_anmeldungen", methods=["GET", "POST"])
 @jwt_required
 def anzahl_anmeldungen():
@@ -664,11 +674,6 @@ def anzahl_anmeldungen():
         print("there was a problem")
 
         return {"An error occurred"}, 200
-
-
-
-
-
 
 
 ######################################################
