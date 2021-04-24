@@ -260,19 +260,19 @@ def kalender_md():
         if real == True:
             df = md.read_df(tablename="solved_exam_ov")
             #create columns for json output
-            df["start_datetime"] = pd.to_datetime(df['ISO_date'])
-            df["end_datetime"] = df["start_datetime"] + timedelta(hours=2)
+            df["start_date"] = pd.to_datetime(df['ISO_date'])
+            df["end_date"] = df["start_date"] + timedelta(hours=2)
 
-            df["start_datetime"] = df["start_datetime"].astype(str).apply(lambda x: x[0:16]) #"2021-04-01 12:00"
-            df["end_datetime"] = df["end_datetime"].astype(str).apply(lambda x: x[0:16]) #"2021-04-01 14:00"
+            df["start_date"] = df["start_date"].astype(str).apply(lambda x: x[0:16]) #"2021-04-01 12:00"
+            df["end_date"] = df["end_date"].astype(str).apply(lambda x: x[0:16]) #"2021-04-01 14:00"
             #sort by date
-            df = df.sort_values(by="start_datetime").reset_index(drop=True)
+            df = df.sort_values(by="start_date").reset_index(drop=True)
             df["text"] = df["exam_name"]
             df["id"] = df.index + 1     #first element needs to be 1
 
-            json_exam_plan = df[["id", "start_datetime","end_datetime", "text"]].to_json(orient="records")
+            json_exam_plan = df[["id", "start_date","end_date", "text"]].to_json(orient="records")
         else:
-            json_exam_plan = '[{"id":1,"start_datetime":"2021-04-01 12:00","end_datetime":"2021-04-01 14:00:00+00:00","text":"exam_1"},{"id":2,"start_datetime":"2021-04-01 14:00","end_datetime":"2021-04-01 16:00:00+00:00","text":"exam_3"},{"id":3,"start_datetime":"2021-04-01 18:00","end_datetime":"2021-04-01 20:00:00+00:00","text":"exam_2"}]'
+            json_exam_plan = '[{"id":1,"start_date":"2021-04-01 12:00","end_date":"2021-04-01 14:00:00+00:00","text":"exam_1"},{"id":2,"start_date":"2021-04-01 14:00","end_date":"2021-04-01 16:00:00+00:00","text":"exam_3"},{"id":3,"start_date":"2021-04-01 18:00","end_date":"2021-04-01 20:00:00+00:00","text":"exam_2"}]'
         print(json_exam_plan)
         return json_exam_plan
 
