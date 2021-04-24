@@ -245,6 +245,7 @@ def room_availability():
     try:
         if request.method == "POST":
             json_file = request.get_json()
+            print("json_file -->",json_file)
             message = md.update_rooms_md(json_file)
             message = "this works"
             return message

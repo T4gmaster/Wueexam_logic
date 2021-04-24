@@ -521,12 +521,11 @@ def update_rooms_md(json_file):
         for i in json_file:                     # unpack room
             for j in json_file[i]:              #unpack day_nr
                 for k in json_file[i][j]:       #unpack slot list
-                    dict = json_file[i][j][0]     #unpack capacity  #0 because its a dict in a list
-                    for l in dict.items():      #unpack slots & append everything to lists
+                    for key, value in json_file[i][j].items():      #unpack slots & append everything to lists
                         room.append(i)
                         day_nr.append(j)
-                        slot.append(l[0])
-                        capacity.append(l[1])
+                        slot.append(key)
+                        capacity.append(value)
         #get it into the dataframe
         df = pd.DataFrame(data = {"room":room,"day_nr":day_nr,"slot":slot,"capacity":capacity})
         #write df in database
