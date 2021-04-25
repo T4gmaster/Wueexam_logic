@@ -314,7 +314,7 @@ def heatmap_input_md(id_str: str):
         cost_df.loc[len(slots)-1, cost_df.columns[1]] = 0
         #####dis is a quatsch for fake-daten########
         ############################################
-        
+
         names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
         # this creates the needed datastructure for the heatmap
         for i in range(len(cost_df.index)):
@@ -573,5 +573,5 @@ def rooms_update_md(j):
     #slot 5
     df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(json["slots"]["five"])
 
-    message = dbf.write_df(sql_table="room_availability",type="replace",df)
+    message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
     return message
