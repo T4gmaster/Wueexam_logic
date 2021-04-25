@@ -446,9 +446,7 @@ def abb_laenge_pruefungsphase_md():
         values = []
         print("dict_data --->",dict_data)
         for key, value in dict_data.items():
-            print("key -->",key)
-            print("value --->",value)
-            if pd.isna(key) == False or key != "0":
+            if pd.isna(key) == False or key != "0" or key != 0:
                 labels.append(key)
                 values.append(value)
 
