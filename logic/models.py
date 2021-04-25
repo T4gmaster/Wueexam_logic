@@ -350,7 +350,7 @@ def heatmap_correction_md(value: str, json_file: str):
         #get respective day_id
         day_mapping = md.download_output(
             method="dataframe", table="day_mapping")
-        day_id_index = day_mapping.index[day_mapping["date"] == "02.02.2021"].tolist()[0]   #index of date in day_mapping
+        day_id_index = day_mapping.index[day_mapping["date"] == day].tolist()[0]   #index of date in day_mapping
         day_id = day_mapping.loc[day_id_index,"day_ordered"]    #respective day id according to day_mapping
         # change the values
         d_frame.loc[exam_id_index, "day_date"] = day
@@ -561,15 +561,15 @@ def update_parameters_md(json_file:str):
 def rooms_update_md(j):
     df = dbf.read_df(tablename="room_availability")
     #slot 1
-    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(json["slots"]["one"])
+    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j["slots"]["one"])
     #slot 2
-    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(json["slots"]["two"])
+    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(j["slots"]["two"])
     #slot 3
-    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(json["slots"]["three"])
+    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(j["slots"]["three"])
     #slot 4
-    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(json["slots"]["four"])
+    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(j["slots"]["four"])
     #slot 5
-    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(json["slots"]["five"])
+    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j["slots"]["five"])
 
     message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
     return message
