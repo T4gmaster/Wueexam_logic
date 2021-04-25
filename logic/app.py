@@ -530,28 +530,6 @@ def kalender():
 
         return {"An error occurred"}, 200
 
-
-######################################################
-@app.route("/fake_sentence", methods=["GET", "POST"])
-@jwt_required
-def fake_sentence():
-    """Irgendwelche Fake-Sätze für Adrian
-    """
-    try:
-        if request.method == "GET":
-
-            from faker import Faker
-            fake = Faker()
-            sentence = fake.text().split(".")[0] + "."
-            return sentence
-        return {"Method needs to be GET, not POST"}, 200
-
-    except Exception:
-        traceback.print_exc()
-        print("There was a problem, please try again")
-        return {"An error occurred"}, 200
-
-
 ######################################################
 @app.route("/fixed_exams_download", methods=["GET", "POST"])
 @jwt_required
