@@ -272,7 +272,7 @@ def kalender_md():
 
             json_exam_plan = df[["id", "start_date","end_date", "text"]].to_json(orient="records")
         else:
-            json_exam_plan = '[{"id":1,"start_date":"2021-04-01 12:00","end_date":"2021-04-01 14:00:00+00:00","text":"exam_1"},{"id":2,"start_date":"2021-04-01 14:00","end_date":"2021-04-01 16:00:00+00:00","text":"exam_3"},{"id":3,"start_date":"2021-04-01 18:00","end_date":"2021-04-01 20:00:00+00:00","text":"exam_2"}]'
+            json_exam_plan = '[{"id":1,"start_date":"2021-04-01 12:00","end_date":"2021-04-01 14:00","text":"exam_1"},{"id":2,"start_date":"2021-04-01 14:00","end_date":"2021-04-01 16:00","text":"exam_3"},{"id":3,"start_date":"2021-04-01 18:00","end_date":"2021-04-01 20:00","text":"exam_2"}]'
         print(json_exam_plan)
         return json_exam_plan
 
@@ -287,14 +287,18 @@ def heatmap_input_md(id_str: str):
     """
 
     try:
-        slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
-                 '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
+
 
         #get a list of all dates to consider
-        df = md.download_output(method="dataframe", table="day_mapping")
-        day_list = df[df["selected"] == 1]["date"].tolist()
-        print(day_list)
+        day_list = md.download_output(method="dataframe", table="day_mapping")
+        day_list = day_list[day_list["selected"] == 1]["date"].tolist()
+        #get a list of slots to consider
+        #slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
+        #   '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
+        slots = md.download_output(method="dataframe", table="slots")
+        slots = slots["slots"].tolist()
 
+        ############################################
         #####dis is a quatsch for fake-daten########
         import random
         cost_df = []
@@ -309,7 +313,8 @@ def heatmap_input_md(id_str: str):
         cost_df.columns = day_list #dates shown in heatmap
         cost_df.loc[len(slots)-1, cost_df.columns[1]] = 0
         #####dis is a quatsch for fake-daten########
-
+        ############################################
+        
         names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
         # this creates the needed datastructure for the heatmap
         for i in range(len(cost_df.index)):
@@ -528,6 +533,7 @@ def update_rooms_md(json_file):
                         capacity.append(value)
         #get it into the dataframe
         df = pd.DataFrame(data = {"room":room,"day_nr":day_nr,"slot":slot,"capacity":capacity})
+        df = df.drop_duplicates(ignore_index=True)
         #write df in database
         message = dbf.write_df(sql_table="room_availability", type="replace", frame=df)
         return message
@@ -552,3 +558,20 @@ def update_parameters_md(json_file:str):
         traceback.print_exc()
         print("There was a problem, please try again")
         return "An error occurred"
+
+###############################################
+def rooms_update_md(j):
+    df = dbf.read_df(tablename="room_availability")
+    #slot 1
+    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(json["slots"]["one"])
+    #slot 2
+    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(json["slots"]["two"])
+    #slot 3
+    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(json["slots"]["three"])
+    #slot 4
+    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(json["slots"]["four"])
+    #slot 5
+    df.loc[(df["room"] == json["room"]) & (df["day_nr"] == str(json["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(json["slots"]["five"])
+
+    message = dbf.write_df(sql_table="room_availability",type="replace",df)
+    return message

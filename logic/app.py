@@ -253,9 +253,18 @@ def room_availability():
     except Exception:
         traceback.print_exc()
         print("there was a problem")
-
         return {"An error occurred"}, 200
 
+@app.route("/rooms_update",methods=["GET","POST"])
+def rooms_update():
+    try:
+        json_file = request.get_json()
+        message = md.rooms_update_md(j = json_file)
+        return message
+    except Exception:
+        traceback.print_exc()
+        print("there was a problem")
+        return {"An error occurred"}, 200
 
 ############################################################################################################
 
