@@ -560,6 +560,7 @@ def update_parameters_md(json_file:str):
 ###############################################
 def rooms_update_md(j):
     df = dbf.read_df(tablename="room_availability")
+    print("json ---> ",j)
     #slot 1
     df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j["slots"]["one"])
     #slot 2
