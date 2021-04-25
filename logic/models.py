@@ -420,7 +420,7 @@ def abb_laenge_pruefungsphase_md():
                       left_on='EXAM_ID', right_on='exam_id')
         # convert to datetime fr calculations
 
-        df["day_date"] = pd.to_datetime(df["day_date"], format="%d.%M.%Y")
+        df["day_date"] = pd.to_datetime(df["day_date"], format="%Y-%M-%d")
         # ValueError: time data '2021-02-05 18:00:00' does not match format '%d.%M.%Y' (match)
         #df["day_date"] = pd.to_datetime(df["day_date"], format="%Y-%M-%d H:M:S")
 
