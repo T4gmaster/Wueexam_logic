@@ -547,11 +547,16 @@ def update_parameters_md(json_file:str):
     try:
         days_before = json_file["days_before"]
         normalization = json_file["normalization"]
+        solver_parameters = json_file["solver_parameters"]
         df = pd.DataFrame.from_dict([days_before])   #brackets make scalar values work
         df2 = pd.DataFrame.from_dict([normalization]) #brackets make scalar values work
+        df3 = pd.DataFrame.from_dict([solver_parameters]) #brackets make scalar values work
         #write into db
         message = dbf.write_df(sql_table="days_before", type="replace",frame=df)
         message = dbf.write_df(sql_table="weights", type="replace",frame=df2)
+        message = dbf.write_df(sql_table="solver_parameters",type="reaplce", frame=df2)
+
+        return message
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
