@@ -578,3 +578,8 @@ def rooms_update_md(j):
 
     message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
     return message
+
+def solver_kpi_md():
+    df = dbf.read_df(tablename="solver_kpi")
+    json_file = df.to_json(orient="records")
+    return dict

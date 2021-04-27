@@ -680,6 +680,18 @@ def sum_ueberschneidung():
         print("There was a problem, please try again")
         return "An error occurred"
 
+@app.route("/solver_kpi", methods=["GET","POST"])
+#@jwt_required
+def solver_kpi():
+    try:
+        if request.method == "GET":
+            json_file = md.solver_kpi_md()
+
+            return json_file
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 
 # App starten mit $ python app.py
