@@ -560,17 +560,16 @@ def update_parameters_md(json_file:str):
 ###############################################
 def rooms_update_md(j):
     df = dbf.read_df(tablename="room_availability")
-    print("json ---> ",j)
     #slot 1
-    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j["slots"]["one"])
+    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j[0]["slots"]["one"])
     #slot 2
-    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(j["slots"]["two"])
+    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(j[0]["slots"]["two"])
     #slot 3
-    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(j["slots"]["three"])
+    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(j[0]["slots"]["three"])
     #slot 4
-    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(j["slots"]["four"])
+    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(j[0]["slots"]["four"])
     #slot 5
-    df.loc[(df["room"] == j["room"]) & (df["day_nr"] == str(j["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j["slots"]["five"])
+    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j[0]["slots"]["five"])
 
     message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
     return message
