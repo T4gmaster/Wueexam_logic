@@ -581,5 +581,7 @@ def rooms_update_md(j):
 
 def solver_kpi_md():
     df = dbf.read_df(tablename="solver_kpi")
+    print(df)
     json_file = df.to_json(orient="records")
+    print(json_file)
     return dict
