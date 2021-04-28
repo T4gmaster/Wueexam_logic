@@ -681,7 +681,7 @@ def sum_ueberschneidung():
         return "An error occurred"
 
 @app.route("/solver_kpi", methods=["GET","POST"])
-#@jwt_required
+@jwt_required
 def solver_kpi():
     try:
         if request.method == "GET":
