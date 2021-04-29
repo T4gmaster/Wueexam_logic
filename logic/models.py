@@ -595,7 +595,7 @@ def solver_kpi_md():
         #create a dict of the exams in the list
         mapping = solved_exam_ov[solved_exam_ov["exam_id"].isin(list)].to_dict("records")[0]
         #change the value of "infringing_exams"
-        df["infringing_exams"] = str(mapping)
+        df["infringing_exams"] = mapping
         #create json from the solver_kpi Table
         json_file = df.to_json(orient="records")
 
