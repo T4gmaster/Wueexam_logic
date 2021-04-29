@@ -564,24 +564,44 @@ def update_parameters_md(json_file:str):
 
 ###############################################
 def rooms_update_md(j):
-    df = dbf.read_df(tablename="room_availability")
-    #slot 1
-    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j[0]["slots"]["one"])
-    #slot 2
-    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(j[0]["slots"]["two"])
-    #slot 3
-    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(j[0]["slots"]["three"])
-    #slot 4
-    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(j[0]["slots"]["four"])
-    #slot 5
-    df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j[0]["slots"]["five"])
+    try:
+        df = dbf.read_df(tablename="room_availability")
+        #slot 1
+        df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j[0]["slots"]["one"])
+        #slot 2
+        df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 2"),"capacity"] = int(j[0]["slots"]["two"])
+        #slot 3
+        df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 3"),"capacity"] = int(j[0]["slots"]["three"])
+        #slot 4
+        df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(j[0]["slots"]["four"])
+        #slot 5
+        df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j[0]["slots"]["five"])
 
-    message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
-    return message
+        message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
+        return message
+        
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
 
 def solver_kpi_md():
-    df = dbf.read_df(tablename="solver_kpi")
-    print(df)
-    json_file = df.to_json(orient="records")
-    print(json_file)
-    return json_file
+    try:
+        solved_exam_ov = dbf.read_df("solved_exam_ov") #download the exams list
+        df = dbf.read_df(tablename="solver_kpi")     #download the kpis
+        #extract list of infringing fixed_exams
+        list = df["infringing_exams"].to_list()[0]
+        list = [str(x) for x in list]
+        #create a dict of the exams in the list
+        mapping = solved_exam_ov[solved_exam_ov["exam_id"].isin(list)].to_dict("records)
+        #create json from the solver_kpi Table
+        json_file = df.to_json(orient="records")
+        #change the value of "infringing_exams"
+        json_file[0]["infringing_exams"] = str(mapping)
+        print(json_file)
+        return json_file
+
+    except Exception:
+        traceback.print_exc()
+        print("There was a problem, please try again")
+        return "An error occurred"
