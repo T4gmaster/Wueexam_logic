@@ -597,7 +597,7 @@ def solver_kpi_md():
         #create json from the solver_kpi Table
         json_file = df.to_json(orient="records")
         #change the value of "infringing_exams"
-        json_file[0]["infringing_exams"] = str(mapping)
+        json_file[0]["infringing_exams"] = mapping
         print(json_file)
         return json_file
 
