@@ -296,7 +296,7 @@ def heatmap_input_md(id_str: str):
         #slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
         #   '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
         slots = md.download_output(method="dataframe", table="slots")
-        slots = slots["slots"].tolist()
+        slots = slots["slot_text"].tolist()
 
         ############################################
         #####dis is a quatsch for fake-daten########
