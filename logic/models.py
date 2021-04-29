@@ -579,7 +579,7 @@ def rooms_update_md(j):
 
         message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
         return message
-        
+
     except Exception:
         traceback.print_exc()
         print("There was a problem, please try again")
@@ -593,7 +593,7 @@ def solver_kpi_md():
         list = df["infringing_exams"].to_list()[0]
         list = [str(x) for x in list]
         #create a dict of the exams in the list
-        mapping = solved_exam_ov[solved_exam_ov["exam_id"].isin(list)].to_dict("records)
+        mapping = solved_exam_ov[solved_exam_ov["exam_id"].isin(list)].to_dict("records")
         #create json from the solver_kpi Table
         json_file = df.to_json(orient="records")
         #change the value of "infringing_exams"
