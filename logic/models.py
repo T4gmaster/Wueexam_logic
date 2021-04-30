@@ -295,7 +295,7 @@ def heatmap_input_md(id_str: str):
         #get a list of slots to consider
         #slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
         #   '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
-        slots = md.download_output(method="dataframe", table="slots")
+        slots = md.download_output(method="dataframe", table="slots").sort_values("slot_id")
         slots = slots["slot_text"].tolist()
 
         ############################################
@@ -566,6 +566,7 @@ def update_parameters_md(json_file:str):
 def rooms_update_md(j):
     try:
         df = dbf.read_df(tablename="room_availability")
+        print(j)
         #slot 1
         df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 1"),"capacity"] = int(j[0]["slots"]["one"])
         #slot 2
@@ -576,6 +577,8 @@ def rooms_update_md(j):
         df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 4"),"capacity"] = int(j[0]["slots"]["four"])
         #slot 5
         df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j[0]["slots"]["five"])
+
+        df.loc[(df["room"] == j[0]["room"]) & (df["day_nr"] == str(j[0]["day"])) & (df["slot"] == "slot 5"),"capacity"] = int(j[0]["slots"]["six"])
 
         message = dbf.write_df(frame=df, sql_table="room_availability",type="replace")
         return message

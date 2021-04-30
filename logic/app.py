@@ -260,6 +260,7 @@ def rooms_update():
         json_file = request.get_json()
         message = md.rooms_update_md(j = json_file)
         return message
+
     except Exception:
         traceback.print_exc()
         print("there was a problem")
