@@ -449,7 +449,8 @@ def abb_laenge_pruefungsphase_md():
             if pd.isna(key) == False or key != "0" or key != 0:
                 labels.append(key)
                 values.append(value)
-
+            else:
+                print("None")
         js = {"labels":labels,"values":values}
         return js
 
