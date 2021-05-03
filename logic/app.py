@@ -584,18 +584,18 @@ def solver_output():
 ############################################################################################################
 ############################################################################################################
 #tes-tteil
-@safe_it
 @app.route("/anzahl_studenten_10", methods=["GET", "POST"])
+@safe_it
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
-        if request.method == "POST":
-            j = request.get_json(force=True)
-            df = md.download_output("dataframe", table="enrollment_table")
-            print(1/0)
-            json_file = md.anzahl_studenten_10_md(df, param=j["Anmeldung"])
-            return json_file
+    if request.method == "POST":
+        j = request.get_json(force=True)
+        df = md.download_output("dataframe", table="enrollment_table")
+        print(1/0)
+        json_file = md.anzahl_studenten_10_md(df, param=j["Anmeldung"])
+        return json_file
 
-        return {"Method needs to be GET, not POST"}, 200
+    return {"Method needs to be GET, not POST"}, 200
 
 
 ######################################################
