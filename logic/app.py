@@ -70,6 +70,7 @@ def safe_it(func):
             traceback.print_exc()
             print("There was a problem, please try again")
             return {"An error occurred"}, 200
+    wrapper.__name__ = func.__name__
     return wrapper
 
 ############################################################################################################
@@ -193,7 +194,7 @@ def heatmap_correction():
     if request.method == "POST":
         # print(exam_id)
         json_f = request.get_json(force=True)
-        
+
         message = md.heatmap_correction_md(
             value=exam_id, json_file=json_f)
         print("all worked")
