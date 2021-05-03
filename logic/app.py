@@ -53,7 +53,19 @@ class Login(Resource):
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
-
+#######################TEST############################
+#######################TEST############################
+#######################TEST############################
+def safe_it(func):
+    def wrapper(*args, **kwargs):
+        try:
+            result = func(*args,**kwargs)
+            return result
+        except Exception:
+            traceback.print_exc()
+            print("There was a problem, please try again")
+            return {"An error occurred"}, 200
+    return wrapper
 
 ############################################################################################################
 ############################################################################################################
@@ -571,27 +583,42 @@ def solver_output():
 # Single-Value-Return Functions
 ############################################################################################################
 ############################################################################################################
-######################################################
-
+#tes-tteil
+@safe_it
 @app.route("/anzahl_studenten_10", methods=["GET", "POST"])
 def anzahl_studenten_10():
     """List of students that have enrolled to more than ten exam"""
-
-    try:
-
         if request.method == "POST":
             j = request.get_json(force=True)
             df = md.download_output("dataframe", table="enrollment_table")
+            print(1/0)
             json_file = md.anzahl_studenten_10_md(df, param=j["Anmeldung"])
             return json_file
 
         return {"Method needs to be GET, not POST"}, 200
 
-    except Exception:
-        traceback.print_exc()
-        print("there was a problem")
 
-        return {"An error occurred"}, 200
+######################################################
+#einkommentieren, wenn test fertig
+#@app.route("/anzahl_studenten_10", methods=["GET", "POST"])
+#def anzahl_studenten_10():
+#    """List of students that have enrolled to more than ten exam"""
+
+#    try:
+#
+#        if request.method == "POST":
+#            j = request.get_json(force=True)
+#            df = md.download_output("dataframe", table="enrollment_table")
+#            json_file = md.anzahl_studenten_10_md(df, param=j["Anmeldung"])
+#            return json_file
+#
+#        return {"Method needs to be GET, not POST"}, 200
+#
+#    except Exception:
+#        traceback.print_exc()
+#        print("there was a problem")
+#
+#        return {"An error occurred"}, 200
 
 
 ######################################################
