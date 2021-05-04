@@ -15,6 +15,7 @@ def get_excel(path: str):
     > path: Must be a string of the xls.
 
     Author: Luc(16.01.21)"""
+
     #file_Obj = open(path, "r", encoding="utf-8")
     #data = file_Obj.read()
 
