@@ -15,9 +15,12 @@ def get_excel(path: str):
     > path: Must be a string of the xls.
 
     Author: Luc(16.01.21)"""
-    file_Obj = open(path, "r", encoding="utf-8")
-    data = file_Obj.read()
-    df = pd.read_excel(data)
+    #file_Obj = open(path, "r", encoding="utf-8")
+    #data = file_Obj.read()
+
+
+
+    df = pd.read_excel(path)
     df = pd.DataFrame(df)
     #file = pd.read_excel(path)
 
