@@ -70,7 +70,7 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
                     # rename the columns by the best matched names
                     df = df.rename(columns={df.columns[i]: result[0][0]})
 
-                    print("{df.columns[i]",{df.columns[i])
+                    print("{df.columns[i]",df.columns[i])
                     print("result[0][0] --->",result[0][0])
                     print("______________________________")
 
