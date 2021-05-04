@@ -239,7 +239,7 @@ def rooms_update():
     """
     json_file = request.get_json()
     message = md.rooms_update_md(j = json_file)
-    return message
+    return {"All is fine"}, 200
 
 ############################################################################################################
 
