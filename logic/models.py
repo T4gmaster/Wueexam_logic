@@ -55,6 +55,7 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
                 # list of the column names from user input
                 columns_mapping = [mapping['EXAM'], mapping['EXAM_ID'], mapping['LAST_NAME'],
                                    mapping['FIRST_NAME'], mapping['COURSE'], mapping['MATRICULATION_NUMBER']]
+                print("columns_mapping --->",columns_mapping)
                 matches = []
 
                 for i in range(len(df.columns)):
@@ -69,6 +70,12 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
                     # rename the columns by the best matched names
                     df = df.rename(columns={df.columns[i]: result[0][0]})
 
+                    print("{df.columns[i]",{df.columns[i])
+                    print("result[0][0] --->",result[0][0])
+                    print("______________________________")
+
+                print("df.columns --->",df.columns)
+                print(df.head(5))
                 # rename again to fit the Business Logic / Data models
                 df = df.rename(columns={mapping["EXAM"]: "EXAM", mapping['EXAM_ID']: 'EXAM_ID', mapping['LAST_NAME']: 'LAST_NAME',
                                mapping['FIRST_NAME']: 'FIRST_NAME', mapping['COURSE']: 'COURSE', mapping['MATRICULATION_NUMBER']: 'MATRICULATION_NUMBER'})

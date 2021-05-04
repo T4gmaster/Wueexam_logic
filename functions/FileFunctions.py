@@ -19,11 +19,8 @@ def get_excel(path: str):
     #file_Obj = open(path, "r", encoding="utf-8")
     #data = file_Obj.read()
 
-
-
     df = pd.read_excel(path)
     df = pd.DataFrame(df)
-    #file = pd.read_excel(path)
 
     #fehlt: perform computations on df (Bereinigung)
     return df
