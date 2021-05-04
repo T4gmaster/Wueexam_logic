@@ -287,21 +287,32 @@ def heatmap_input_md(id_str: str):
 
         #get a list of all dates to consider
         day_list = md.download_output(method="dataframe", table="day_mapping")
+        day_ids = day_list[day_list["selected"] == 1]["day_ordered"].tolist()
         day_list = day_list[day_list["selected"] == 1]["date"].tolist()
+
         #get a list of slots to consider
         #slots = ['08:00 - 10:00', '10:00 -12:00', '12:00 - 14:00',
         #   '14:00 - 16:00', '16:00 - 18:00', '18:00 - 20:00']
         slots = md.download_output(method="dataframe", table="slots").sort_values("slot_id")
+        slot_ids = slots["slot_id"].tolist()
         slots = slots["slot_text"].tolist()
+
 
         ############################################
         #####dis is a quatsch for fake-daten########
-        import random
+
+         heatmap_df = dbf.read_df('heatmap_reschedule')
+
+        exam_heatmap_df = heatmap_df[heatmap_df['exam_id']==id_str]
+
+        dict_times = {}
+
         cost_df = []
-        for t in range(len(slots)):
+        for t in slot_ids:
             row = {}
-            for d in range(len(day_list)):
-                row[d] = random.random() * 100
+            slot_heatmap_df = exam_heatmap_df[exam_heatmap_df['slot_id']==t]
+            for d in day_ids:
+                row[d] = slot_heatmap_df[slot_heatmap_df['day_id']==d].iloc[0].value
 
             cost_df.append(row)
 
