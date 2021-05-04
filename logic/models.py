@@ -81,7 +81,7 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
             except Exception:
                 traceback.print_exc()
                 print("There was a problem, please try again")
-                return "An error occurred"
+                return {"An error occurred"}
         return df
 
     except Exception:
@@ -256,7 +256,7 @@ def anzahl(frame, column: str):
 ##########################################
 def kalender_md():
     try:
-        df = md.read_df(tablename="solved_exam_ov")
+        df = dbf.read_df(tablename="solved_exam_ov")
         #create columns for json output
         df["start_date"] = pd.to_datetime(df['ISO_date'])
         df["end_date"] = df["start_date"] + timedelta(hours=2)
@@ -269,7 +269,7 @@ def kalender_md():
         df["id"] = df.index + 1     #first element needs to be 1
 
         json_exam_plan = df[["id", "start_date","end_date", "text"]].to_json(orient="records")
-        
+
         return json_exam_plan
 
     except Exception:
@@ -338,7 +338,7 @@ def heatmap_correction_md(value: str, json_file: str):
         # get values out of the json and put in right format
         time = json_file["Slot"].split()[0]     #HH:MM
         day = json_file["Tag"]          #'YYYY-MM-DD'
-        iso_day = str(day) + "T" + time +":00.000Z"  #YYYY-MM-DDTHH:MM:SS.000Z
+        iso_date = str(day) + "T" + time +":00.000Z"  #YYYY-MM-DDTHH:MM:SS.000Z
 
         # get the exams index
         d_frame = md.download_output(method="dataframe", table="solved_exam_ov")
