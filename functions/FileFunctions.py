@@ -15,9 +15,11 @@ def get_excel(path: str):
     > path: Must be a string of the xls.
 
     Author: Luc(16.01.21)"""
+    with open(path, mode="r", encoding="utf-8") as file:
+        df = pd.read_excel(file)
+        df = pd.DataFrame(file)
+    #file = pd.read_excel(path)
 
-    file = pd.read_excel(path)
-    df = pd.DataFrame(file)
     #fehlt: perform computations on df (Bereinigung)
     return df
 
