@@ -18,7 +18,7 @@ import Wueexam_logic.functions.FileFunctions as ff
 import Wueexam_logic.functions.DbFunctions as dbf
 import models as md
 import Wueexam_logic as pd
-import numpy as np.
+import numpy as np
 # packages
 from datetime import datetime as dt
 import pandas as pd
