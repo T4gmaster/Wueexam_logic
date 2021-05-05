@@ -18,15 +18,9 @@ def get_excel(path: str):
 
     #file_Obj = open(path, "r", encoding="utf-8")
     #data = file_Obj.read()
-    print("*******************************************START READ")
+
     df = pd.read_excel(path)
     df = pd.DataFrame(df)
-
-    for index, row in df.iterrows():
-        for col in df.columns:
-            row[col] = str(row[col])
-    print("******************************************READ DONE")
-
 
     #fehlt: perform computations on df (Bereinigung)
     return df

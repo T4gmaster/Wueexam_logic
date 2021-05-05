@@ -85,11 +85,6 @@ def upload_to_db(path: str, mapping: str, sql_table: str):
                 df = df[['EXAM', 'EXAM_ID', 'LAST_NAME',
                          'FIRST_NAME', 'MATRICULATION_NUMBER', 'COURSE']]
 
-                #loop over to avoid errors
-                for index, row in df.iterrows():
-                    for col in df.columns:
-                        row[col] = str(row[col]).encode('utf-8').strip()
-
                 # write the DataFrame to the db
                 dbf.write_df(sql_table, frame=df, type="replace")
 
