@@ -18,8 +18,9 @@ def get_excel(path: str):
 
     #file_Obj = open(path, "r", encoding="utf-8")
     #data = file_Obj.read()
-
+    print("*******************************************START READ")
     df = pd.read_excel(path,encoding='utf-8')
+    print("******************************************READ DONE")
     df = pd.DataFrame(df)
 
     #fehlt: perform computations on df (Bereinigung)
