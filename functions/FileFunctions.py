@@ -24,7 +24,7 @@ def get_excel(path: str):
 
     for index, row in df.iterrows():
         for col in df.columns:
-            row[col] = str(row[col]).encode('utf-8')
+            row[col] = str(row[col])
     print("******************************************READ DONE")
 
 
