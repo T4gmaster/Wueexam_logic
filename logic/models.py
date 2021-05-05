@@ -290,9 +290,7 @@ def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
 
-    try:
-
-
+    try
         #get a list of all dates to consider
         day_list = md.download_output(method="dataframe", table="day_mapping")
         day_ids = day_list[day_list["selected"] == 1]["day_ordered"].tolist()
@@ -305,37 +303,29 @@ def heatmap_input_md(id_str: str):
         slot_ids = slots["slot_id"].tolist()
         slots = slots["slot_text"].tolist()
 
-
-        ############################################
-        #####dis is a quatsch for fake-daten########
-
-        heatmap_df = dbf.read_df('heatmap_reschedule')
-
-        exam_heatmap_df = heatmap_df[heatmap_df['exam_id']==id_str]
-
+        #load heatmap data
+        heatmap_df = md.download_output(method="dataframe", table="heatmap_reschedule")
+        exam_heatmap_df = heatmap_df[heatmap_df['exam_id'] == id_str]
         dict_times = {}
 
         cost_df = []
         for t in slot_ids:
             row = {}
-            slot_heatmap_df = exam_heatmap_df[exam_heatmap_df['slot_id']==t]
+            slot_heatmap_df = exam_heatmap_df[exam_heatmap_df['slot_id'] == str(t)]
             for d in day_ids:
-                row[d] = slot_heatmap_df[slot_heatmap_df['day_id']==d].iloc[0].value
-
+                row[d] = slot_heatmap_df[slot_heatmap_df['day_id'] == str(d - 1)].iloc[0].value
             cost_df.append(row)
 
         cost_df = pd.DataFrame(cost_df)
-        cost_df.columns = day_list #dates shown in heatmap
-        cost_df.loc[len(slots)-1, cost_df.columns[1]] = 0
-        #####dis is a quatsch for fake-daten########
-        ############################################
+        cost_df.columns = day_list  # dates shown in heatmap
+        cost_df.loc[len(slots) - 1, cost_df.columns[1]] = 0
 
         names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
         # this creates the needed datastructure for the heatmap
         for i in range(len(cost_df.index)):
             names[i]["name"] = slots[i]
             for j in range(len(cost_df.columns)):
-                names[i]["data"].append({"x": cost_df.columns[j], "y": cost_df.iloc[i,j]})
+                names[i]["data"].append({"x": str(cost_df.columns[j]), "y": cost_df.iloc[i,j]})
 
         jsonString = json.dumps(names)
 
