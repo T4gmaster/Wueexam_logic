@@ -306,14 +306,40 @@ def heatmap_input_md(id_str: str):
         #load heatmap data
         heatmap_df = md.download_output(method="dataframe", table="heatmap_reschedule")
         exam_heatmap_df = heatmap_df[heatmap_df['exam_id'] == id_str]
-        dict_times = {}
 
         cost_df = []
+        max_val = 0
+        sum = 0
+        sum_div = 0
+
+        for index, row in exam_heatmap_df.iterrows():
+            val = row['value']
+            if val < 1000000:
+                sum += val
+                sum_div += 1
+
+        #calculate a bar for values that are still in the foucs
+        avg = sum / sum_div
+        bar = avg * 2
+
+        #find the max value below the bar for normation
+        for t in slot_ids:
+            slot_heatmap_df = exam_heatmap_df[exam_heatmap_df['slot_id'] == str(t)]
+            for d in day_ids:
+                val = slot_heatmap_df[slot_heatmap_df['day_id'] == str(d - 1)].iloc[0].value
+                if val > max_val and val <= bar:
+                    max_val = val
+
+        #norm the values to a scale below 100
         for t in slot_ids:
             row = {}
             slot_heatmap_df = exam_heatmap_df[exam_heatmap_df['slot_id'] == str(t)]
             for d in day_ids:
                 row[d] = slot_heatmap_df[slot_heatmap_df['day_id'] == str(d - 1)].iloc[0].value
+                if row[d] <= bar:
+                    row[d] = float(np.ceil(((row[d] / max_val) * 100)))
+                else:
+                    row[d] = float(1000000)
             cost_df.append(row)
 
         cost_df = pd.DataFrame(cost_df)
