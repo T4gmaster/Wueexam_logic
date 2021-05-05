@@ -20,8 +20,13 @@ def get_excel(path: str):
     #data = file_Obj.read()
     print("*******************************************START READ")
     df = pd.read_excel(path)
-    print("******************************************READ DONE")
     df = pd.DataFrame(df)
+
+    for index, row in df.iterrows():
+        for col in df.columns:
+            row[col] = str(row[col]).encode('utf-8')
+    print("******************************************READ DONE")
+
 
     #fehlt: perform computations on df (Bereinigung)
     return df
