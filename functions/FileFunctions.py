@@ -19,7 +19,7 @@ def get_excel(path: str):
     #file_Obj = open(path, "r", encoding="utf-8")
     #data = file_Obj.read()
     print("*******************************************START READ")
-    df = pd.read_excel(path,encoding='utf-8')
+    df = pd.read_excel(path)
     print("******************************************READ DONE")
     df = pd.DataFrame(df)
 
