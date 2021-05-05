@@ -290,7 +290,7 @@ def heatmap_input_md(id_str: str):
     """Takes the exam for which everything is calculated and return the data for the heatmap
     """
 
-    try
+    try:
         #get a list of all dates to consider
         day_list = md.download_output(method="dataframe", table="day_mapping")
         day_ids = day_list[day_list["selected"] == 1]["day_ordered"].tolist()
