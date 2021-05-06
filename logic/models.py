@@ -291,8 +291,6 @@ def heatmap_input_md(id_str: str):
     """
 
     try:
-
-
         #get a list of all dates to consider
         day_list = md.download_output(method="dataframe", table="day_mapping")
         day_ids = day_list[day_list["selected"] == 1]["day_ordered"].tolist()
@@ -507,7 +505,7 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        wert = int(df[df["count"] > 1].nunique()[0])
+        wert = int(df[df["count"] > 1]["student_matr"].nunique())
         js = {"wert":wert}
         return js
 
