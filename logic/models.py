@@ -348,10 +348,6 @@ def heatmap_input_md(id_str: str):
 
         cost_df = pd.DataFrame(cost_df)
         cost_df.columns = day_list  # dates shown in heatmap
-        #hier das war nur für den fake, da muss noch korrigiert werden
-        #kann das daher weg?
-        #es setzt in spalte 1 und slot n-1 den wert auf null
-        cost_df.loc[len(slots) - 1, cost_df.columns[1]] = 0
 
         names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
         # this creates the needed datastructure for the heatmap
