@@ -348,6 +348,9 @@ def heatmap_input_md(id_str: str):
 
         cost_df = pd.DataFrame(cost_df)
         cost_df.columns = day_list  # dates shown in heatmap
+        #hier das war nur für den fake, da muss noch korrigiert werden
+        #kann das daher weg?
+        #es setzt in spalte 1 und slot n-1 den wert auf null
         cost_df.loc[len(slots) - 1, cost_df.columns[1]] = 0
 
         names = [{"name": "", "data": []} for i in range(len(cost_df.index))]
@@ -527,7 +530,7 @@ def sum_ueberschneidung_md():
     try:
         df = md.download_output(method="dataframe", table="solved_enrollment_table")
         df = df.groupby(["student_matnr","day_date"]).size().reset_index(name='count')
-        wert = int(df[df["count"] > 1]["student_matr"].nunique())
+        wert = int(df[df["count"] > 1]["student_matnr"].nunique())
         js = {"wert":wert}
         return js
 
