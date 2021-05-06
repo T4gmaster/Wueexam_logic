@@ -481,11 +481,11 @@ def abb_laenge_pruefungsphase_md():
         print("dict_data --->",dict_data)
         for key, value in dict_data.items():
             print("key,value--->",key,value)
-            if pd.isna(key) == False or key != "0" or key != 0:
+            if key == 0 or key == "0":
+                print("nope")
+            else:
                 labels.append(key)
                 values.append(value)
-            else:
-                print("None")
         js = {"labels":labels,"values":values}
         return js
 
