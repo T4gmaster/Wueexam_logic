@@ -20,7 +20,6 @@ if not local:
     host = os.environ["MYSQL_HOST"]
     conn_url = "mysql://" + user + ":" + password + "@" + host + "/" + database
     engine = create_engine(conn_url, pool_pre_ping=True)
-    print("conn_url",conn_url)
 else:
     import pymysql
     pymysql.install_as_MySQLdb()
