@@ -1,7 +1,5 @@
 # import docker compose environment variable
 import os
-print("MYSQL_USER --->", os.environ["MYSQL_USER"])
-print("MYSQLPASSWORD",os.environ["MYSQL_PASSWORD"])
 # requirements
 from sqlalchemy import create_engine
 import pandas as pd
