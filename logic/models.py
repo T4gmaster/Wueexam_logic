@@ -573,6 +573,7 @@ def update_rooms_md(json_file):
 def update_parameters_md(json_file:str):
 
     try:
+        print(json_file)
         days_before = json_file["days_before"]
         normalization = json_file["normalization"]
         solver_parameters = json_file["solver_parameters"]
