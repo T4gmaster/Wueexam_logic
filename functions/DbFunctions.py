@@ -1,5 +1,4 @@
 # import docker compose environment variable
-print("banana")
 import os
 # requirements
 from sqlalchemy import create_engine
