@@ -583,7 +583,7 @@ def update_parameters_md(json_file:str):
         #write into db
         message = dbf.write_df(sql_table="days_before", type="replace",frame=df)
         message = dbf.write_df(sql_table="weights", type="replace",frame=df2)
-        message = dbf.write_df(sql_table="solver_parameters",type="reaplce", frame=df2)
+        message = dbf.write_df(sql_table="solver_parameters",type="replace", frame=df2)
 
         return message
     except Exception:
